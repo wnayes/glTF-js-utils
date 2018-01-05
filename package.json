@@ -1,0 +1,28 @@
+{
+  "name": "glTF-js-utils",
+  "version": "1.0.0",
+  "description": "JavaScript helper code for working with the glTF format.",
+  "main": ".src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Will Nayes",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wnayes/gltf-js-utils.git"
+  },
+  "devDependencies": {
+    "@types/jszip": "^3.1.2",
+    "eslint": "^4.7.2",
+    "ts-loader": "^3.2.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.1.0"
+  },
+  "dependencies": {
+    "@types/three": "^0.84.35"
+  }
+}
