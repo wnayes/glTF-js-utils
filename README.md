@@ -1,4 +1,4 @@
-glTF-js-utils
+gltf-js-utils
 =============
 
 Helper library for creating glTF 2.0 models with JavaScript.
