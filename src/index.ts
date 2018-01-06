@@ -268,6 +268,7 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
         vertexColorBufferView.startAccessor();
 
       lastMaterialIndex = materialIndex;
+      lastMaterial = mesh.material[lastMaterialIndex];
     }
 
     // Positions
@@ -311,14 +312,14 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
       case VertexColorMode.FaceColors:
         // Just duplicate the face colors 3 times.
         for (let v = 0; v < 3; v++) {
-          addColorToBufferView(vertexColorBufferView, color);
+          addColorToBufferView(vertexColorBufferView, color || new RGBColor());
         }
         break;
 
       case VertexColorMode.VertexColors:
-        addColorToBufferView(vertexColorBufferView, v1.color);
-        addColorToBufferView(vertexColorBufferView, v2.color);
-        addColorToBufferView(vertexColorBufferView, v3.color);
+        addColorToBufferView(vertexColorBufferView, v1.color || new RGBColor());
+        addColorToBufferView(vertexColorBufferView, v2.color || new RGBColor());
+        addColorToBufferView(vertexColorBufferView, v3.color || new RGBColor());
         break;
 
       // NoColors? We won't have an accessor.

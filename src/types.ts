@@ -41,18 +41,18 @@ export enum AlphaMode {
 
 export class RGBColor {
   /** Red, between 0 and 1. */
-  public r: number;
+  public r: number = 1;
 
   /** Green, between 0 and 1 */
-  public g: number;
+  public g: number = 1;
 
   /** Blue, between 0 and 1 */
-  public b: number;
+  public b: number = 1;
 }
 
 export class RGBAColor extends RGBColor {
   /** Alpha, between 0 and 1 */
-  public a: number;
+  public a: number = 1;
 }
 
 // Matches THREE Colors

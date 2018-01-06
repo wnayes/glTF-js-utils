@@ -139,6 +139,12 @@ var AlphaMode;
 })(AlphaMode || (AlphaMode = {}));
 var RGBColor = /** @class */ (function () {
     function RGBColor() {
+        /** Red, between 0 and 1. */
+        this.r = 1;
+        /** Green, between 0 and 1 */
+        this.g = 1;
+        /** Blue, between 0 and 1 */
+        this.b = 1;
     }
     return RGBColor;
 }());
@@ -146,7 +152,10 @@ var RGBColor = /** @class */ (function () {
 var RGBAColor = /** @class */ (function (_super) {
     __extends(RGBAColor, _super);
     function RGBAColor() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        /** Alpha, between 0 and 1 */
+        _this.a = 1;
+        return _this;
     }
     return RGBAColor;
 }(RGBColor));
@@ -670,6 +679,7 @@ function addMesh(gltf, mesh) {
             if (currentMaterial.vertexColorMode !== __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].NoColors)
                 vertexColorBufferView.startAccessor();
             lastMaterialIndex = materialIndex;
+            lastMaterial = mesh.material[lastMaterialIndex];
         }
         // Positions
         vertexBufferView.push(v1.x);
@@ -703,13 +713,13 @@ function addMesh(gltf, mesh) {
             case __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].FaceColors:
                 // Just duplicate the face colors 3 times.
                 for (var v = 0; v < 3; v++) {
-                    addColorToBufferView(vertexColorBufferView, color);
+                    addColorToBufferView(vertexColorBufferView, color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
                 }
                 break;
             case __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].VertexColors:
-                addColorToBufferView(vertexColorBufferView, v1.color);
-                addColorToBufferView(vertexColorBufferView, v2.color);
-                addColorToBufferView(vertexColorBufferView, v3.color);
+                addColorToBufferView(vertexColorBufferView, v1.color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
+                addColorToBufferView(vertexColorBufferView, v2.color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
+                addColorToBufferView(vertexColorBufferView, v3.color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
                 break;
         }
     });
