@@ -1,11 +1,12 @@
 import { Texture } from "./texture";
-import { AlphaMode } from "./types";
+import { AlphaMode, VertexColorMode } from "./types";
 
 export class Material {
   public name: string = "";
   public alphaCutoff: number = 0.5;
   public alphaMode: AlphaMode = AlphaMode.OPAQUE;
   public doubleSided: boolean = false;
+  public vertexColorMode: VertexColorMode = VertexColorMode.NoColors;
 
   public pbrMetallicRoughness: PBRMetallicRoughness = {
     metallicFactor: 1.0,
@@ -20,6 +21,6 @@ export class Material {
 export interface PBRMetallicRoughness {
   metallicFactor: number;
   roughnessFactor: number;
-  baseColorFactor?: number[];
+  baseColorFactor?: [number, number, number, number];
   baseColorTexture?: Texture;
 }

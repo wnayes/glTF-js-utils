@@ -5,7 +5,7 @@ import { Mesh } from "./mesh";
 import { Material } from "./material";
 import { Texture } from "./texture";
 import { Vertex } from "./vertex";
-import { AlphaMode, RGBColor, WrappingMode } from "./types";
+import { AlphaMode, RGBColor, VertexColorMode, WrappingMode } from "./types";
 
 export function glTFAssetFromTHREE(obj: THREE.Object3D): GLTFAsset {
   const asset = new GLTFAsset();
@@ -46,10 +46,16 @@ function MeshFromTHREE(obj: THREE.Mesh): Mesh {
     for (let i = 0; i < threeGeometry.faces.length; i++) {
       const face = threeGeometry.faces[i];
 
+      const faceColor = new RGBColor();
+      faceColor.r = face.color.r;
+      faceColor.g = face.color.g;
+      faceColor.b = face.color.b;
+
       mesh.addFace(
         VertexFromTHREE(threeGeometry, i, face.a, 0),
         VertexFromTHREE(threeGeometry, i, face.b, 1),
         VertexFromTHREE(threeGeometry, i, face.c, 2),
+        faceColor,
         face.materialIndex
       );
     }
@@ -89,6 +95,17 @@ function MaterialFromTHREE(threeMaterial: THREE.Material): Material {
     if (threeMaterial.transparent) {
       material.alphaMode = AlphaMode.MASK;
       material.alphaCutoff = threeMaterial.alphaTest;
+    }
+
+    material.vertexColorMode = (threeMaterial.vertexColors as any) as VertexColorMode;
+
+    if (threeMaterial.color && threeMaterial.vertexColors === 0 /* THREE.NoColors */) {
+      material.pbrMetallicRoughness.baseColorFactor = [
+        threeMaterial.color.r,
+        threeMaterial.color.g,
+        threeMaterial.color.b,
+        1
+      ];
     }
 
     if (threeMaterial.map) {

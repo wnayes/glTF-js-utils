@@ -81,10 +81,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ComponentType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DataType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return MeshMode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return WrappingMode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return WrappingMode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlphaMode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return RGBColor; });
-/* unused harmony export RGBAColor */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return RGBColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return RGBAColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return VertexColorMode; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -150,6 +151,13 @@ var RGBAColor = /** @class */ (function (_super) {
     return RGBAColor;
 }(RGBColor));
 
+// Matches THREE Colors
+var VertexColorMode;
+(function (VertexColorMode) {
+    VertexColorMode[VertexColorMode["NoColors"] = 0] = "NoColors";
+    VertexColorMode[VertexColorMode["FaceColors"] = 1] = "FaceColors";
+    VertexColorMode[VertexColorMode["VertexColors"] = 2] = "VertexColors";
+})(VertexColorMode || (VertexColorMode = {}));
 
 
 /***/ }),
@@ -342,17 +350,19 @@ var Mesh = /** @class */ (function () {
         this.material = [];
         this.mode = __WEBPACK_IMPORTED_MODULE_0__types__["d" /* MeshMode */].TRIANGLES;
         this._vertices = [];
+        this._faceColors = [];
         this._materialIndices = [];
     }
-    Mesh.prototype.addFace = function (v1, v2, v3, materialIndex) {
+    Mesh.prototype.addFace = function (v1, v2, v3, color, materialIndex) {
         this._vertices.push(v1);
         this._vertices.push(v2);
         this._vertices.push(v3);
+        this._faceColors.push(color);
         this._materialIndices.push(materialIndex);
     };
     Mesh.prototype.forEachFace = function (fn) {
         for (var i = 0; i < this._vertices.length / 3; i++) {
-            fn(this._vertices[(i * 3)], this._vertices[(i * 3) + 1], this._vertices[(i * 3) + 2], this._materialIndices[i]);
+            fn(this._vertices[(i * 3)], this._vertices[(i * 3) + 1], this._vertices[(i * 3) + 2], this._faceColors[i], this._materialIndices[i]);
         }
     };
     return Mesh;
@@ -374,6 +384,7 @@ var Material = /** @class */ (function () {
         this.alphaCutoff = 0.5;
         this.alphaMode = __WEBPACK_IMPORTED_MODULE_0__types__["a" /* AlphaMode */].OPAQUE;
         this.doubleSided = false;
+        this.vertexColorMode = __WEBPACK_IMPORTED_MODULE_0__types__["g" /* VertexColorMode */].NoColors;
         this.pbrMetallicRoughness = {
             metallicFactor: 1.0,
             roughnessFactor: 1.0,
@@ -394,8 +405,8 @@ var Material = /** @class */ (function () {
 
 var Texture = /** @class */ (function () {
     function Texture() {
-        this.wrapS = __WEBPACK_IMPORTED_MODULE_0__types__["f" /* WrappingMode */].CLAMP_TO_EDGE;
-        this.wrapT = __WEBPACK_IMPORTED_MODULE_0__types__["f" /* WrappingMode */].CLAMP_TO_EDGE;
+        this.wrapS = __WEBPACK_IMPORTED_MODULE_0__types__["h" /* WrappingMode */].CLAMP_TO_EDGE;
+        this.wrapT = __WEBPACK_IMPORTED_MODULE_0__types__["h" /* WrappingMode */].CLAMP_TO_EDGE;
     }
     return Texture;
 }());
@@ -452,8 +463,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Quaternion", function() { return __WEBPACK_IMPORTED_MODULE_7__math__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__threejs__ = __webpack_require__(10);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "glTFAssetFromTHREE", function() { return __WEBPACK_IMPORTED_MODULE_8__threejs__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__buffer__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__types__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__types__ = __webpack_require__(0);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "AlphaMode", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ComponentType", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DataType", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["c"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MeshMode", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["d"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "RGBColor", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["f"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "RGBAColor", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["e"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "VertexColorMode", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["g"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "WrappingMode", function() { return __WEBPACK_IMPORTED_MODULE_9__types__["h"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__buffer__ = __webpack_require__(11);
+
 
 
 
@@ -597,24 +617,29 @@ function addNode(gltf, node) {
 function addMesh(gltf, mesh) {
     if (!gltf.meshes)
         gltf.meshes = [];
-    if (mesh.mode !== __WEBPACK_IMPORTED_MODULE_10__types__["d" /* MeshMode */].TRIANGLES)
+    if (mesh.mode !== __WEBPACK_IMPORTED_MODULE_9__types__["d" /* MeshMode */].TRIANGLES)
         throw "MeshMode other than TRIANGLES not currently supported";
-    var materials = addMaterials(gltf, mesh.material);
+    addMaterials(gltf, mesh.material);
     var gltfMesh = {
         primitives: [],
     };
     var addedIndex = gltf.meshes.length;
     gltf.meshes.push(gltfMesh);
-    var meshBuffer = new __WEBPACK_IMPORTED_MODULE_9__buffer__["a" /* Buffer */]();
+    var meshBuffer = new __WEBPACK_IMPORTED_MODULE_10__buffer__["a" /* Buffer */]();
     var meshBufferIndex = addBuffer(gltf, meshBuffer);
-    var vertexBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_10__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_10__types__["c" /* DataType */].VEC3);
+    var vertexBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_9__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_9__types__["c" /* DataType */].VEC3);
     var vertexBufferIndex = addBufferView(gltf, vertexBufferView, meshBufferIndex);
-    var vertexNormalBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_10__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_10__types__["c" /* DataType */].VEC3);
+    var vertexNormalBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_9__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_9__types__["c" /* DataType */].VEC3);
     var vertexNormalBufferIndex = addBufferView(gltf, vertexNormalBufferView, meshBufferIndex);
-    var vertexUVBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_10__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_10__types__["c" /* DataType */].VEC2);
+    var vertexUVBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_9__types__["b" /* ComponentType */].FLOAT, __WEBPACK_IMPORTED_MODULE_9__types__["c" /* DataType */].VEC2);
     var vertexUVBufferIndex = addBufferView(gltf, vertexUVBufferView, meshBufferIndex);
+    var vertexColorBufferView = meshBuffer.addBufferView(__WEBPACK_IMPORTED_MODULE_9__types__["b" /* ComponentType */].UNSIGNED_BYTE, __WEBPACK_IMPORTED_MODULE_9__types__["c" /* DataType */].VEC3);
+    var vertexColorBufferIndex = addBufferView(gltf, vertexColorBufferView, meshBufferIndex);
+    var lastMaterial;
     var lastMaterialIndex = null;
-    mesh.forEachFace(function (v1, v2, v3, materialIndex) {
+    mesh.forEachFace(function (v1, v2, v3, color, materialIndex) {
+        var currentMaterial = mesh.material[materialIndex];
+        lastMaterial = mesh.material[lastMaterialIndex];
         // Need to start new accessors
         if (lastMaterialIndex !== materialIndex) {
             // And end the previous ones.
@@ -622,7 +647,7 @@ function addMesh(gltf, mesh) {
                 var vertexBufferAccessorInfo = vertexBufferView.endAccessor();
                 var vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
                 var vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
-                gltfMesh.primitives.push({
+                var primitive = {
                     attributes: {
                         POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
                         NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
@@ -630,11 +655,20 @@ function addMesh(gltf, mesh) {
                     },
                     material: lastMaterialIndex,
                     mode: mesh.mode,
-                });
+                };
+                // Only add color data if it is per-face/vertex.
+                if (lastMaterial.vertexColorMode !== __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].NoColors) {
+                    var vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
+                    primitive.attributes["COLOR_0"] =
+                        addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
+                }
+                gltfMesh.primitives.push(primitive);
             }
             vertexBufferView.startAccessor();
             vertexNormalBufferView.startAccessor();
             vertexUVBufferView.startAccessor();
+            if (currentMaterial.vertexColorMode !== __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].NoColors)
+                vertexColorBufferView.startAccessor();
             lastMaterialIndex = materialIndex;
         }
         // Positions
@@ -664,12 +698,26 @@ function addMesh(gltf, mesh) {
         vertexUVBufferView.push(v2.v);
         vertexUVBufferView.push(v3.u);
         vertexUVBufferView.push(v3.v);
+        // Vertex colors
+        switch (currentMaterial.vertexColorMode) {
+            case __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].FaceColors:
+                // Just duplicate the face colors 3 times.
+                for (var v = 0; v < 3; v++) {
+                    addColorToBufferView(vertexColorBufferView, color);
+                }
+                break;
+            case __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].VertexColors:
+                addColorToBufferView(vertexColorBufferView, v1.color);
+                addColorToBufferView(vertexColorBufferView, v2.color);
+                addColorToBufferView(vertexColorBufferView, v3.color);
+                break;
+        }
     });
     if (lastMaterialIndex !== null) {
         var vertexBufferAccessorInfo = vertexBufferView.endAccessor();
         var vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
         var vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
-        gltfMesh.primitives.push({
+        var primitive = {
             attributes: {
                 POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
                 NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
@@ -677,13 +725,32 @@ function addMesh(gltf, mesh) {
             },
             material: lastMaterialIndex,
             mode: mesh.mode,
-        });
+        };
+        // Only add color data if it is per-face/vertex.
+        if (lastMaterial.vertexColorMode !== __WEBPACK_IMPORTED_MODULE_9__types__["g" /* VertexColorMode */].NoColors) {
+            var vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
+            primitive.attributes["COLOR_0"] =
+                addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
+        }
+        gltfMesh.primitives.push(primitive);
     }
     finalizeBuffer(gltf, meshBufferIndex);
     finalizeBufferView(gltf, vertexBufferIndex);
     finalizeBufferView(gltf, vertexNormalBufferIndex);
     finalizeBufferView(gltf, vertexUVBufferIndex);
+    finalizeBufferView(gltf, vertexColorBufferIndex);
     return addedIndex;
+}
+function addColorToBufferView(bufferView, color) {
+    bufferView.push((color.r * 255) | 0);
+    bufferView.push((color.g * 255) | 0);
+    bufferView.push((color.b * 255) | 0);
+    // if (color instanceof RGBAColor) {
+    //   bufferView.push((color.a * 255) | 0);
+    // }
+    // else {
+    //   bufferView.push(0xFF);
+    // }
 }
 function addBuffer(gltf, buffer) {
     if (!gltf.buffers)
@@ -748,16 +815,19 @@ function addMaterial(gltf, material) {
     var gltfMaterial = {};
     if (material.name)
         gltfMaterial.name = material.name;
-    if (material.alphaMode !== __WEBPACK_IMPORTED_MODULE_10__types__["a" /* AlphaMode */].OPAQUE)
+    if (material.alphaMode !== __WEBPACK_IMPORTED_MODULE_9__types__["a" /* AlphaMode */].OPAQUE)
         gltfMaterial.alphaMode = material.alphaMode;
     if (material.alphaCutoff !== 0.5)
         gltfMaterial.alphaCutoff = material.alphaCutoff;
     if (material.doubleSided)
         gltfMaterial.doubleSided = true;
     if (material.pbrMetallicRoughness) {
-        gltfMaterial.pbrMetallicRoughness = {};
-        //gltfMaterial.pbrMetallicRoughness.baseColorFactor = material.pbrMetallicRoughness.baseColorFactor;
+        if (material.pbrMetallicRoughness.baseColorFactor) {
+            ensure(gltfMaterial, "pbrMetallicRoughness", {});
+            gltfMaterial.pbrMetallicRoughness.baseColorFactor = material.pbrMetallicRoughness.baseColorFactor;
+        }
         if (material.pbrMetallicRoughness.baseColorTexture) {
+            ensure(gltfMaterial, "pbrMetallicRoughness", {});
             var textureIndex = addTexture(gltf, material.pbrMetallicRoughness.baseColorTexture);
             gltfMaterial.pbrMetallicRoughness.baseColorTexture = { index: textureIndex };
         }
@@ -765,6 +835,9 @@ function addMaterial(gltf, material) {
     var addedIndex = gltf.materials.length;
     gltf.materials.push(gltfMaterial);
     return addedIndex;
+}
+function ensure(obj, prop, defaultValue) {
+    obj[prop] = obj[prop] || defaultValue;
 }
 function addTexture(gltf, texture) {
     if (!gltf.textures)
@@ -889,7 +962,11 @@ function MeshFromTHREE(obj) {
     if (isTHREEGeometry(threeGeometry)) {
         for (var i = 0; i < threeGeometry.faces.length; i++) {
             var face = threeGeometry.faces[i];
-            mesh.addFace(VertexFromTHREE(threeGeometry, i, face.a, 0), VertexFromTHREE(threeGeometry, i, face.b, 1), VertexFromTHREE(threeGeometry, i, face.c, 2), face.materialIndex);
+            var faceColor = new __WEBPACK_IMPORTED_MODULE_7__types__["f" /* RGBColor */]();
+            faceColor.r = face.color.r;
+            faceColor.g = face.color.g;
+            faceColor.b = face.color.b;
+            mesh.addFace(VertexFromTHREE(threeGeometry, i, face.a, 0), VertexFromTHREE(threeGeometry, i, face.b, 1), VertexFromTHREE(threeGeometry, i, face.c, 2), faceColor, face.materialIndex);
         }
         mesh.material = MaterialsFromTHREE(obj.material);
     }
@@ -918,6 +995,15 @@ function MaterialFromTHREE(threeMaterial) {
         if (threeMaterial.transparent) {
             material.alphaMode = __WEBPACK_IMPORTED_MODULE_7__types__["a" /* AlphaMode */].MASK;
             material.alphaCutoff = threeMaterial.alphaTest;
+        }
+        material.vertexColorMode = threeMaterial.vertexColors;
+        if (threeMaterial.color && threeMaterial.vertexColors === 0 /* THREE.NoColors */) {
+            material.pbrMetallicRoughness.baseColorFactor = [
+                threeMaterial.color.r,
+                threeMaterial.color.g,
+                threeMaterial.color.b,
+                1
+            ];
         }
         if (threeMaterial.map) {
             var texture = new __WEBPACK_IMPORTED_MODULE_5__texture__["a" /* Texture */]();
@@ -950,7 +1036,7 @@ function VertexFromTHREE(threeGeometry, faceIndex, vertexIndex, vertexRelIndex) 
         vertex.normalZ = threeFace.vertexNormals[vertexRelIndex].z;
     }
     if (threeFace.vertexColors[vertexRelIndex]) {
-        vertex.color = new __WEBPACK_IMPORTED_MODULE_7__types__["e" /* RGBColor */]();
+        vertex.color = new __WEBPACK_IMPORTED_MODULE_7__types__["f" /* RGBColor */]();
         vertex.color.r = threeFace.vertexColors[vertexRelIndex].r;
         vertex.color.g = threeFace.vertexColors[vertexRelIndex].g;
         vertex.color.b = threeFace.vertexColors[vertexRelIndex].b;
@@ -960,12 +1046,12 @@ function VertexFromTHREE(threeGeometry, faceIndex, vertexIndex, vertexRelIndex) 
 function WrappingModeFromTHREE(mode) {
     switch (mode) {
         case 1000:// THREE.RepeatWrapping
-            return __WEBPACK_IMPORTED_MODULE_7__types__["f" /* WrappingMode */].REPEAT;
+            return __WEBPACK_IMPORTED_MODULE_7__types__["h" /* WrappingMode */].REPEAT;
         case 1002:// THREE.MirroredRepeatWrapping
-            return __WEBPACK_IMPORTED_MODULE_7__types__["f" /* WrappingMode */].MIRRORED_REPEAT;
+            return __WEBPACK_IMPORTED_MODULE_7__types__["h" /* WrappingMode */].MIRRORED_REPEAT;
         case 1001: // THREE.ClampToEdgeWrapping
         default:
-            return __WEBPACK_IMPORTED_MODULE_7__types__["f" /* WrappingMode */].CLAMP_TO_EDGE;
+            return __WEBPACK_IMPORTED_MODULE_7__types__["h" /* WrappingMode */].CLAMP_TO_EDGE;
     }
 }
 function isTHREEMesh(obj) {

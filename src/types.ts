@@ -40,11 +40,24 @@ export enum AlphaMode {
 }
 
 export class RGBColor {
+  /** Red, between 0 and 1. */
   public r: number;
+
+  /** Green, between 0 and 1 */
   public g: number;
+
+  /** Blue, between 0 and 1 */
   public b: number;
 }
 
 export class RGBAColor extends RGBColor {
+  /** Alpha, between 0 and 1 */
   public a: number;
+}
+
+// Matches THREE Colors
+export enum VertexColorMode {
+  NoColors = 0,
+  FaceColors = 1,
+  VertexColors = 2,
 }
