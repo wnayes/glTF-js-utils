@@ -25,9 +25,6 @@ import { Buffer, BufferView, BufferAccessorInfo } from "./buffer";
 import * as jsz from "jszip";
 
 export interface GLTFExportOptions {
-  /** When passed, create a ZIP file with the glTF and assets. */
-  jsZip?: jsz;
-
   /** Controls how buffers are outputted. */
   bufferOutputType?: BufferOutputType;
 
@@ -56,17 +53,15 @@ export enum ImageOutputType {
 
 export type GLTFExportType = { [filename: string]: any };
 
+const MODEL_NAME = "model.gltf";
+
 /**
  * Creates a glTF model from a GLTFAsset structure.
  * @param asset GLTFAsset model structure
  * @param options
  * @returns An object, each key pointing to a file.
- * If options includes a JSZip reference, the a Promise to receive a ZIP blob
- * is returned instead.
  */
-export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions & { jsZip: undefined }): GLTFExportType;
-export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions & { jsZip: jsz }): Promise<Blob>;
-export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFExportType | Promise<Blob> {
+export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFExportType {
   options = options || {};
 
   const gltf: glTF = {
@@ -114,23 +109,29 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFE
     return value;
   }, jsonSpacing);
 
-  const modelName = "model.gltf";
-  output[modelName] = gltfString;
-
-  if (options.jsZip) {
-    const zip = new options.jsZip();
-    for (let filename in output) {
-      if (filename !== modelName && typeof output[filename] === "string") { // An image
-        zip.file(filename, output[filename], { base64: true });
-      }
-      else {
-        zip.file(filename, output[filename]);
-      }
-    }
-    return zip.generateAsync({ type: "blob" });
-  }
+  output[MODEL_NAME] = gltfString;
 
   return output;
+}
+
+/**
+ * Creates a ZIP file of a glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @param options
+ * @returns A Promise to receive a ZIP blob is returned instead.
+ */
+export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExportOptions): Promise<Blob> {
+  const output = exportGLTF(asset, options);
+  const zip = new jsZip();
+  for (let filename in output) {
+    if (filename !== MODEL_NAME && typeof output[filename] === "string") { // An image
+      zip.file(filename, output[filename], { base64: true });
+    }
+    else {
+      zip.file(filename, output[filename]);
+    }
+  }
+  return zip.generateAsync({ type: "blob" });
 }
 
 function addScenes(gltf: glTF, asset: GLTFAsset): void {

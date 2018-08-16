@@ -67,10 +67,8 @@ const gltf = GLTFUtils.exportGLTF(asset, {
 //   "model.gltf": string /* JSON glTF string, all data embedded */
 // }
 
-// Export to a ZIP file:
-GLTFUtils.exportGLTF(asset, {
-  jsZip: JSZip /* JSZip reference */
-}).then(blob => {
+// Export to a ZIP file (requires JSZip reference):
+GLTFUtils.exportGLTFZip(asset, JSZip).then(blob => {
   // Use FileSaver as an example.
   saveAs(blob, "model.zip");
 });
