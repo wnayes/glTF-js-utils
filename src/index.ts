@@ -63,6 +63,8 @@ export type GLTFExportType = { [filename: string]: any };
  * If options includes a JSZip reference, the a Promise to receive a ZIP blob
  * is returned instead.
  */
+export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions & { jsZip: undefined }): GLTFExportType;
+export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions & { jsZip: jsz }): Promise<Blob>;
 export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFExportType | Promise<Blob> {
   options = options || {};
 
