@@ -14,14 +14,18 @@ export class XYZPair {
   }
 }
 
-export class Quaternion extends XYZPair {
+export class Quaternion {
   public constructor(x: number, y: number, z: number, w: number) {
-    super(x, y, z);
-
+    this.x = x;
+    this.y = y;
+    this.z = z;
     this.w = w;
   }
 
-  public w: number = 1;
+  public x: number;
+  public y: number;
+  public z: number;
+  public w: number;
 
   public toArray(): [number, number, number, number] {
     return [this.x, this.y, this.z, this.w];

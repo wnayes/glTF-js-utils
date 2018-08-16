@@ -87,9 +87,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return RGBAColor; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return VertexColorMode; });
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -293,16 +296,6 @@ var Node = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Quaternion; });
 /* harmony export (immutable) */ __webpack_exports__["d"] = toQuaternion;
 /* harmony export (immutable) */ __webpack_exports__["c"] = degreesToRadians;
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var XYZPair = /** @class */ (function () {
     function XYZPair(x, y, z) {
         this.x = 0;
@@ -318,19 +311,18 @@ var XYZPair = /** @class */ (function () {
     return XYZPair;
 }());
 
-var Quaternion = /** @class */ (function (_super) {
-    __extends(Quaternion, _super);
+var Quaternion = /** @class */ (function () {
     function Quaternion(x, y, z, w) {
-        var _this = _super.call(this, x, y, z) || this;
-        _this.w = 1;
-        _this.w = w;
-        return _this;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
     }
     Quaternion.prototype.toArray = function () {
         return [this.x, this.y, this.z, this.w];
     };
     return Quaternion;
-}(XYZPair));
+}());
 
 function toQuaternion(x, y, z) {
     var cy = Math.cos(z * 0.5);
@@ -535,7 +527,7 @@ function exportGLTF(asset, options) {
             if (options.bufferOutputType === BufferOutputType.DataURI) {
                 return encodeBase64DataUri(value);
             }
-            else {
+            else { // BufferOutputType.External
                 var filename = "data" + currentData + ".bin";
                 currentData++;
                 output[filename] = value;
@@ -546,7 +538,7 @@ function exportGLTF(asset, options) {
             if (options.imageOutputType === ImageOutputType.DataURI) {
                 return imageToDataURI(value);
             }
-            else {
+            else { // ImageOutputType.External
                 var filename = "img" + currentImg + ".png";
                 currentImg++;
                 output[filename] = imageToDataURI(value);
@@ -562,7 +554,7 @@ function exportGLTF(asset, options) {
     if (options.jsZip) {
         var zip = new options.jsZip();
         for (var filename in output) {
-            if (filename !== modelName && typeof output[filename] === "string") {
+            if (filename !== modelName && typeof output[filename] === "string") { // An image
                 zip.file(filename, output[filename], { base64: true });
             }
             else {
@@ -721,6 +713,7 @@ function addMesh(gltf, mesh) {
                 addColorToBufferView(vertexColorBufferView, v2.color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
                 addColorToBufferView(vertexColorBufferView, v3.color || new __WEBPACK_IMPORTED_MODULE_9__types__["f" /* RGBColor */]());
                 break;
+            // NoColors? We won't have an accessor.
         }
     });
     if (lastMaterialIndex !== null) {
@@ -1055,9 +1048,9 @@ function VertexFromTHREE(threeGeometry, faceIndex, vertexIndex, vertexRelIndex) 
 }
 function WrappingModeFromTHREE(mode) {
     switch (mode) {
-        case 1000:// THREE.RepeatWrapping
+        case 1000: // THREE.RepeatWrapping
             return __WEBPACK_IMPORTED_MODULE_7__types__["h" /* WrappingMode */].REPEAT;
-        case 1002:// THREE.MirroredRepeatWrapping
+        case 1002: // THREE.MirroredRepeatWrapping
             return __WEBPACK_IMPORTED_MODULE_7__types__["h" /* WrappingMode */].MIRRORED_REPEAT;
         case 1001: // THREE.ClampToEdgeWrapping
         default:
