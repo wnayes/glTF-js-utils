@@ -2,7 +2,7 @@
   "name": "gltf-js-utils",
   "version": "1.0.0",
   "description": "JavaScript helper code for working with the glTF format.",
-  "main": ".src/index.js",
+  "main": "dist/gltfutils.js",
   "scripts": {
     "build": "webpack",
     "test": "mocha"
