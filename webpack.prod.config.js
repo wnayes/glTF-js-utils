@@ -1,6 +1,7 @@
-var path = require("path");
+const path = require("path");
 
 module.exports = {
+  mode: "production",
   entry: "./src/index.ts",
   module: {
     rules: [
@@ -17,7 +18,7 @@ module.exports = {
   output: {
     libraryTarget: "umd",
     library: "GLTFUtils",
-    filename: "gltfutils.js",
+    filename: "gltfutils.min.js",
     path: path.resolve(__dirname, "dist")
   }
 };
