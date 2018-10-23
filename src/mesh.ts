@@ -7,18 +7,22 @@ export class Mesh {
   public mode: MeshMode = MeshMode.TRIANGLES;
 
   private _vertices: Vertex[] = [];
-  private _faceColors: (RGBColor | RGBAColor)[] = [];
+  private _faceColors: (RGBColor | RGBAColor | undefined)[] = [];
   private _materialIndices: number[] = [];
 
-  public addFace(v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor, materialIndex: number): void {
+  public addFace(v1: Vertex, v2: Vertex, v3: Vertex, color?: RGBColor | RGBAColor, materialIndex?: number): void {
     this._vertices.push(v1);
     this._vertices.push(v2);
     this._vertices.push(v3);
+
     this._faceColors.push(color);
+
+    if (typeof materialIndex === "undefined")
+      materialIndex = -1;
     this._materialIndices.push(materialIndex);
   }
 
-  public forEachFace(fn: (v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor, materialIndex: number) => void): void {
+  public forEachFace(fn: (v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => void): void {
     for (let i = 0; i < this._vertices.length / 3; i++) {
       fn(
         this._vertices[(i * 3)],

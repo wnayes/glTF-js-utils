@@ -228,51 +228,68 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   const vertexUVBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC2);
   const vertexUVBufferIndex = addBufferView(gltf, vertexUVBufferView, meshBufferIndex);
 
-  const vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC3);
-  const vertexColorBufferIndex = addBufferView(gltf, vertexColorBufferView, meshBufferIndex);
+  let vertexColorBufferView: BufferView | undefined;
+  let vertexColorBufferIndex: number | undefined;
 
-  let lastMaterial: Material;
+  function _ensureColorBufferView() {
+    if (vertexColorBufferView)
+      return;
+
+    vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC3);
+    vertexColorBufferIndex = addBufferView(gltf, vertexColorBufferView, meshBufferIndex);
+  }
+
+  function _completeMeshPrimitive(materialIndex: number): glTFMeshPrimitives {
+    const vertexBufferAccessorInfo = vertexBufferView.endAccessor();
+    const vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
+    const vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
+
+    const primitive: glTFMeshPrimitives = {
+      attributes: {
+        POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
+        NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
+        TEXCOORD_0: addAccessor(gltf, vertexUVBufferIndex, vertexUVBufferAccessorInfo),
+      },
+      mode: mesh.mode,
+    };
+    if (materialIndex >= 0) {
+      primitive.material = materialIndex;
+
+      // Only add color data if it is per-face/vertex.
+      const material = mesh.material[materialIndex];
+      if (material.vertexColorMode !== VertexColorMode.NoColors) {
+        const vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
+        primitive.attributes["COLOR_0"] =
+          addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
+      }
+    }
+
+    return primitive;
+  }
+
   let lastMaterialIndex: number | null = null;
-  mesh.forEachFace((v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor, materialIndex: number) => {
-    const currentMaterial = mesh.material[materialIndex];
-    lastMaterial = mesh.material[lastMaterialIndex];
+  mesh.forEachFace((v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => {
+    let currentMaterial: Material | null = null;
+    if (materialIndex >= 0)
+      currentMaterial = mesh.material[materialIndex];
 
     // Need to start new accessors
     if (lastMaterialIndex !== materialIndex) {
       // And end the previous ones.
       if (lastMaterialIndex !== null) {
-        const vertexBufferAccessorInfo = vertexBufferView.endAccessor();
-        const vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
-        const vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
-
-        const primitive: glTFMeshPrimitives = {
-          attributes: {
-            POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
-            NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
-            TEXCOORD_0: addAccessor(gltf, vertexUVBufferIndex, vertexUVBufferAccessorInfo),
-          },
-          material: lastMaterialIndex,
-          mode: mesh.mode,
-        };
-
-        // Only add color data if it is per-face/vertex.
-        if (lastMaterial.vertexColorMode !== VertexColorMode.NoColors) {
-          const vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
-          primitive.attributes["COLOR_0"] =
-            addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
-        }
-
+        const primitive = _completeMeshPrimitive(lastMaterialIndex);
         gltfMesh.primitives.push(primitive);
       }
 
       vertexBufferView.startAccessor();
       vertexNormalBufferView.startAccessor();
       vertexUVBufferView.startAccessor();
-      if (currentMaterial.vertexColorMode !== VertexColorMode.NoColors)
+      if (currentMaterial && currentMaterial.vertexColorMode !== VertexColorMode.NoColors) {
+        _ensureColorBufferView();
         vertexColorBufferView.startAccessor();
+      }
 
       lastMaterialIndex = materialIndex;
-      lastMaterial = mesh.material[lastMaterialIndex];
     }
 
     // Positions
@@ -311,47 +328,29 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
     vertexUVBufferView.push(v3.u);
     vertexUVBufferView.push(v3.v);
 
-    // Vertex colors
-    switch (currentMaterial.vertexColorMode) {
-      case VertexColorMode.FaceColors:
-        // Just duplicate the face colors 3 times.
-        for (let v = 0; v < 3; v++) {
-          addColorToBufferView(vertexColorBufferView, color || new RGBColor());
-        }
-        break;
+    if (currentMaterial) {
+      // Vertex colors
+      switch (currentMaterial.vertexColorMode) {
+        case VertexColorMode.FaceColors:
+          // Just duplicate the face colors 3 times.
+          for (let v = 0; v < 3; v++) {
+            addColorToBufferView(vertexColorBufferView, color || new RGBColor());
+          }
+          break;
 
-      case VertexColorMode.VertexColors:
-        addColorToBufferView(vertexColorBufferView, v1.color || new RGBColor());
-        addColorToBufferView(vertexColorBufferView, v2.color || new RGBColor());
-        addColorToBufferView(vertexColorBufferView, v3.color || new RGBColor());
-        break;
+        case VertexColorMode.VertexColors:
+          addColorToBufferView(vertexColorBufferView, v1.color || new RGBColor());
+          addColorToBufferView(vertexColorBufferView, v2.color || new RGBColor());
+          addColorToBufferView(vertexColorBufferView, v3.color || new RGBColor());
+          break;
 
-      // NoColors? We won't have an accessor.
+        // NoColors? We won't have an accessor.
+      }
     }
   });
 
   if (lastMaterialIndex !== null) {
-    const vertexBufferAccessorInfo = vertexBufferView.endAccessor();
-    const vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
-    const vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
-
-    const primitive: glTFMeshPrimitives = {
-      attributes: {
-        POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
-        NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
-        TEXCOORD_0: addAccessor(gltf, vertexUVBufferIndex, vertexUVBufferAccessorInfo),
-      },
-      material: lastMaterialIndex,
-      mode: mesh.mode,
-    };
-
-    // Only add color data if it is per-face/vertex.
-    if (lastMaterial.vertexColorMode !== VertexColorMode.NoColors) {
-      const vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
-      primitive.attributes["COLOR_0"] =
-        addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
-    }
-
+    const primitive = _completeMeshPrimitive(lastMaterialIndex);
     gltfMesh.primitives.push(primitive);
   }
 
@@ -359,7 +358,8 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   finalizeBufferView(gltf, vertexBufferIndex);
   finalizeBufferView(gltf, vertexNormalBufferIndex);
   finalizeBufferView(gltf, vertexUVBufferIndex);
-  finalizeBufferView(gltf, vertexColorBufferIndex);
+  if (typeof vertexColorBufferIndex === "number")
+    finalizeBufferView(gltf, vertexColorBufferIndex);
 
   return addedIndex;
 }
