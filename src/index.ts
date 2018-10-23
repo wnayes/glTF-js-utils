@@ -82,7 +82,7 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFE
   const jsonSpacing = options.hasOwnProperty("jsonSpacing") ? options.jsonSpacing : 4;
   const gltfString = JSON.stringify(gltf, (key: string, value: any) => {
     if (value instanceof ArrayBuffer) {
-      if (options.bufferOutputType === BufferOutputType.DataURI) {
+      if (options!.bufferOutputType === BufferOutputType.DataURI) {
         return encodeBase64DataUri(value);
       }
       else { // BufferOutputType.External
@@ -93,7 +93,7 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): GLTFE
       }
     }
     if (value instanceof HTMLImageElement || value instanceof HTMLCanvasElement) {
-      if (options.imageOutputType === ImageOutputType.DataURI) {
+      if (options!.imageOutputType === ImageOutputType.DataURI) {
         return imageToDataURI(value);
       }
       else { // ImageOutputType.External
@@ -258,9 +258,9 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
       // Only add color data if it is per-face/vertex.
       const material = mesh.material[materialIndex];
       if (material.vertexColorMode !== VertexColorMode.NoColors) {
-        const vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
+        const vertexColorBufferAccessorInfo = vertexColorBufferView!.endAccessor();
         primitive.attributes["COLOR_0"] =
-          addAccessor(gltf, vertexColorBufferIndex, vertexColorBufferAccessorInfo);
+          addAccessor(gltf, vertexColorBufferIndex!, vertexColorBufferAccessorInfo);
       }
     }
 
@@ -286,7 +286,7 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
       vertexUVBufferView.startAccessor();
       if (currentMaterial && currentMaterial.vertexColorMode !== VertexColorMode.NoColors) {
         _ensureColorBufferView();
-        vertexColorBufferView.startAccessor();
+        vertexColorBufferView!.startAccessor();
       }
 
       lastMaterialIndex = materialIndex;
@@ -334,14 +334,14 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
         case VertexColorMode.FaceColors:
           // Just duplicate the face colors 3 times.
           for (let v = 0; v < 3; v++) {
-            addColorToBufferView(vertexColorBufferView, color || new RGBColor());
+            addColorToBufferView(vertexColorBufferView!, color || new RGBColor());
           }
           break;
 
         case VertexColorMode.VertexColors:
-          addColorToBufferView(vertexColorBufferView, v1.color || new RGBColor());
-          addColorToBufferView(vertexColorBufferView, v2.color || new RGBColor());
-          addColorToBufferView(vertexColorBufferView, v3.color || new RGBColor());
+          addColorToBufferView(vertexColorBufferView!, v1.color || new RGBColor());
+          addColorToBufferView(vertexColorBufferView!, v2.color || new RGBColor());
+          addColorToBufferView(vertexColorBufferView!, v3.color || new RGBColor());
           break;
 
         // NoColors? We won't have an accessor.
@@ -390,7 +390,7 @@ function addBuffer(gltf: glTF, buffer: Buffer): number {
 }
 
 function finalizeBuffer(gltf: glTF, bufferIndex: number): void {
-  const gltfBuffer = gltf.buffers[bufferIndex];
+  const gltfBuffer = gltf.buffers![bufferIndex];
   const buffer: Buffer = gltfBuffer.extras;
   const arrayBuffer = buffer.getArrayBuffer();
 
@@ -414,7 +414,7 @@ function addBufferView(gltf: glTF, bufferView: BufferView, bufferIndex: number):
 }
 
 function finalizeBufferView(gltf: glTF, bufferViewIndex: number): void {
-  const gltfBufferView = gltf.bufferViews[bufferViewIndex];
+  const gltfBufferView = gltf.bufferViews![bufferViewIndex];
   const bufferView: BufferView = gltfBufferView.extras;
 
   gltfBufferView.byteOffset = bufferView.getByteOffset();
@@ -461,11 +461,12 @@ function addMaterial(gltf: glTF, material: Material): number {
     gltfMaterial.doubleSided = true;
   if (material.pbrMetallicRoughness) {
     if (material.pbrMetallicRoughness.baseColorFactor) {
-      ensure(gltfMaterial, "pbrMetallicRoughness", {});
+      gltfMaterial.pbrMetallicRoughness = {};
       gltfMaterial.pbrMetallicRoughness.baseColorFactor = material.pbrMetallicRoughness.baseColorFactor;
     }
     if (material.pbrMetallicRoughness.baseColorTexture) {
-      ensure(gltfMaterial, "pbrMetallicRoughness", {});
+      if (!gltfMaterial.pbrMetallicRoughness)
+        gltfMaterial.pbrMetallicRoughness = {};
       const textureIndex = addTexture(gltf, material.pbrMetallicRoughness.baseColorTexture);
       gltfMaterial.pbrMetallicRoughness.baseColorTexture = { index: textureIndex };
     }
@@ -475,10 +476,6 @@ function addMaterial(gltf: glTF, material: Material): number {
   gltf.materials.push(gltfMaterial);
 
   return addedIndex;
-}
-
-function ensure(obj: any, prop: string, defaultValue: any): void {
-  obj[prop] = obj[prop] || defaultValue;
 }
 
 function addTexture(gltf: glTF, texture: Texture): number {
@@ -542,7 +539,7 @@ function imageToDataURI(image: HTMLImageElement | HTMLCanvasElement): string {
     canvas = document.createElement("canvas");
     canvas.width = image.width;
     canvas.height = image.height;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d")!;
     context.drawImage(image, 0, 0, image.width, image.height);
   }
   else {

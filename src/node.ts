@@ -3,12 +3,12 @@ import { Mesh } from "./mesh";
 
 export class Node {
   public name: string = "";
-  public mesh: Mesh;
+  public mesh?: Mesh;
 
   private _nodes: Node[] = [];
-  private _translation: XYZPair;
-  private _rotation: Quaternion;
-  private _scale: XYZPair;
+  private _translation?: XYZPair;
+  private _rotation?: Quaternion;
+  private _scale?: XYZPair;
 
   public addNode(node: Node): void {
     if (this._nodes.indexOf(node) >= 0)

@@ -109,8 +109,7 @@ function MaterialFromTHREE(threeMaterial: THREE.Material): Material {
     }
 
     if (threeMaterial.map) {
-      const texture = new Texture();
-      texture.image = threeMaterial.map.image;
+      const texture = new Texture(threeMaterial.map.image);
       texture.wrapS = WrappingModeFromTHREE(threeMaterial.map.wrapS);
       texture.wrapT = WrappingModeFromTHREE(threeMaterial.map.wrapT);
       material.pbrMetallicRoughness.baseColorTexture = texture;

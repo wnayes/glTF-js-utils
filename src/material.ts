@@ -13,9 +13,9 @@ export class Material {
     roughnessFactor: 1.0,
   };
 
-  public normalTexture: Texture;
-  public occlusionTexture: Texture;
-  public emissiveTexture: Texture;
+  public normalTexture?: Texture;
+  public occlusionTexture?: Texture;
+  public emissiveTexture?: Texture;
 }
 
 export interface PBRMetallicRoughness {

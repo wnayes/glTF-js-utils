@@ -23,8 +23,7 @@ node.setScale(x, y, z);
 scene.addNode(node);
 
 const material = new GLTFUtils.Material();
-const texture = new GLTFUtils.Texture();
-texture.image = image; // HTMLImageElement
+const texture = new GLTFUtils.Texture(image); // HTMLImageElement
 texture.wrapS = GLTFUtils.WrappingMode.CLAMP_TO_EDGE;
 texture.wrapT = GLTFUtils.WrappingMode.REPEAT;
 material.pbrMetallicRoughness.baseColorTexture = texture;

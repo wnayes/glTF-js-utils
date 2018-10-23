@@ -12,5 +12,5 @@ export class Vertex {
   public normalY: number = 0;
   public normalZ: number = 0;
 
-  public color: RGBColor | RGBAColor;
+  public color?: RGBColor | RGBAColor;
 }
