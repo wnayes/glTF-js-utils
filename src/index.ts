@@ -12,6 +12,7 @@ export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, Vert
 import { GLTFAsset } from "./asset";
 import { addScenes } from "./gltf";
 import { glTF } from "./gltftypes";
+import { imageToDataURI, encodeBase64DataUri } from "./imageutils";
 
 import * as jsz from "jszip";
 
@@ -123,31 +124,4 @@ export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExport
     }
   }
   return zip.generateAsync({ type: "blob" });
-}
-
-function imageToDataURI(image: HTMLImageElement | HTMLCanvasElement): string {
-  let canvas;
-  if (image instanceof HTMLImageElement) {
-    canvas = document.createElement("canvas");
-    canvas.width = image.width;
-    canvas.height = image.height;
-    const context = canvas.getContext("2d")!;
-    context.drawImage(image, 0, 0, image.width, image.height);
-  }
-  else {
-    canvas = image;
-  }
-
-  return canvas.toDataURL();
-}
-
-function encodeBase64DataUri(buf: ArrayBuffer): string {
-  const codes: string[] = [];
-  const uint8arr = new Uint8Array(buf);
-  for (let i = 0; i < uint8arr.length; i++) {
-    codes.push(String.fromCharCode(uint8arr[i]));
-  }
-  const b64 = btoa(codes.join(""));
-  const uri = "data:application/octet-stream;base64," + b64;
-  return uri;
 }
