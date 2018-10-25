@@ -1,20 +1,32 @@
-import { glTF, glTFScene, glTFNode, glTFMesh, glTFMeshPrimitives, glTFMaterial } from "./gltftypes";
+import { glTF, glTFScene, glTFNode, glTFMesh, glTFMeshPrimitives, glTFMaterial, glTFImage } from "./gltftypes";
 import { GLTFAsset } from "./asset";
 import { Node } from "./node";
 import { Scene } from "./scene";
-import { MeshMode, ComponentType, DataType, VertexColorMode, RGBColor, RGBAColor, AlphaMode } from "./types";
+import { MeshMode, ComponentType, DataType, VertexColorMode, RGBColor, RGBAColor, AlphaMode, ImageOutputType, BufferOutputType } from "./types";
 import { Mesh } from "./mesh";
 import { Buffer, BufferView, BufferAccessorInfo } from "./buffer";
 import { Vertex } from "./vertex";
 import { Material } from "./material";
 import { Texture } from "./texture";
+import { imageToArrayBuffer, imageToDataURI } from "./imageutils";
 
 export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   gltf.scene = asset.defaultScene;
 
+  const doingGLB =
+    gltf.extras.options.bufferOutputType === BufferOutputType.GLB
+    || gltf.extras.options.imageOutputType === ImageOutputType.GLB;
+  if (doingGLB) {
+    gltf.extras.binChunkBuffer = addBuffer(gltf);
+  }
+
   asset.forEachScene((scene: Scene) => {
     addScene(gltf, scene);
   });
+
+  if (doingGLB) {
+    gltf.extras.binChunkBuffer!.finalize();
+  }
 }
 
 function addScene(gltf: glTF, scene: Scene): void {
@@ -91,27 +103,25 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   const addedIndex = gltf.meshes.length;
   gltf.meshes.push(gltfMesh);
 
-  const meshBuffer = new Buffer();
-  const meshBufferIndex = addBuffer(gltf, meshBuffer);
+  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  let meshBuffer: Buffer;
+  if (singleGLBBuffer) {
+    meshBuffer = gltf.extras.binChunkBuffer!;
+  }
+  else {
+    meshBuffer = addBuffer(gltf);
+  }
 
   const vertexBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
-  const vertexBufferIndex = addBufferView(gltf, vertexBufferView, meshBufferIndex);
-
   const vertexNormalBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
-  const vertexNormalBufferIndex = addBufferView(gltf, vertexNormalBufferView, meshBufferIndex);
-
   const vertexUVBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC2);
-  const vertexUVBufferIndex = addBufferView(gltf, vertexUVBufferView, meshBufferIndex);
 
   let vertexColorBufferView: BufferView | undefined;
-  let vertexColorBufferIndex: number | undefined;
-
   function _ensureColorBufferView() {
     if (vertexColorBufferView)
       return;
 
     vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC3);
-    vertexColorBufferIndex = addBufferView(gltf, vertexColorBufferView, meshBufferIndex);
   }
 
   function _completeMeshPrimitive(materialIndex: number): glTFMeshPrimitives {
@@ -121,9 +131,9 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
 
     const primitive: glTFMeshPrimitives = {
       attributes: {
-        POSITION: addAccessor(gltf, vertexBufferIndex, vertexBufferAccessorInfo),
-        NORMAL: addAccessor(gltf, vertexNormalBufferIndex, vertexNormalBufferAccessorInfo),
-        TEXCOORD_0: addAccessor(gltf, vertexUVBufferIndex, vertexUVBufferAccessorInfo),
+        POSITION: addAccessor(gltf, vertexBufferView.getIndex(), vertexBufferAccessorInfo),
+        NORMAL: addAccessor(gltf, vertexNormalBufferView.getIndex(), vertexNormalBufferAccessorInfo),
+        TEXCOORD_0: addAccessor(gltf, vertexUVBufferView.getIndex(), vertexUVBufferAccessorInfo),
       },
       mode: mesh.mode,
     };
@@ -135,7 +145,7 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
       if (material.vertexColorMode !== VertexColorMode.NoColors) {
         const vertexColorBufferAccessorInfo = vertexColorBufferView!.endAccessor();
         primitive.attributes["COLOR_0"] =
-          addAccessor(gltf, vertexColorBufferIndex!, vertexColorBufferAccessorInfo);
+          addAccessor(gltf, vertexColorBufferView!.getIndex(), vertexColorBufferAccessorInfo);
       }
     }
 
@@ -229,12 +239,14 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
     gltfMesh.primitives.push(primitive);
   }
 
-  finalizeBuffer(gltf, meshBufferIndex);
-  finalizeBufferView(gltf, vertexBufferIndex);
-  finalizeBufferView(gltf, vertexNormalBufferIndex);
-  finalizeBufferView(gltf, vertexUVBufferIndex);
-  if (typeof vertexColorBufferIndex === "number")
-    finalizeBufferView(gltf, vertexColorBufferIndex);
+  vertexBufferView.finalize();
+  vertexNormalBufferView.finalize();
+  vertexUVBufferView.finalize();
+  if (vertexColorBufferView)
+    vertexColorBufferView.finalize();
+
+  if (!singleGLBBuffer)
+    meshBuffer.finalize();
 
   return addedIndex;
 }
@@ -251,50 +263,8 @@ function addColorToBufferView(bufferView: BufferView, color: RGBColor | RGBAColo
   // }
 }
 
-function addBuffer(gltf: glTF, buffer: Buffer): number {
-  if (!gltf.buffers)
-    gltf.buffers = [];
-
-  const addedIndex = gltf.buffers.length;
-  gltf.buffers.push({
-    byteLength: -1,
-    extras: buffer, // Removed after finalized
-  });
-
-  return addedIndex;
-}
-
-function finalizeBuffer(gltf: glTF, bufferIndex: number): void {
-  const gltfBuffer = gltf.buffers![bufferIndex];
-  const buffer: Buffer = gltfBuffer.extras;
-  const arrayBuffer = buffer.getArrayBuffer();
-
-  gltfBuffer.byteLength = arrayBuffer.byteLength;
-  (gltfBuffer.uri as any) = arrayBuffer; // Still not totally finalized, see stringify
-  delete gltfBuffer.extras;
-}
-
-function addBufferView(gltf: glTF, bufferView: BufferView, bufferIndex: number): number {
-  if (!gltf.bufferViews)
-    gltf.bufferViews = [];
-
-  const addedIndex = gltf.bufferViews.length;
-  gltf.bufferViews.push({
-    buffer: bufferIndex,
-    byteLength: -1,
-    extras: bufferView, // Removed after finalized
-  });
-
-  return addedIndex;
-}
-
-function finalizeBufferView(gltf: glTF, bufferViewIndex: number): void {
-  const gltfBufferView = gltf.bufferViews![bufferViewIndex];
-  const bufferView: BufferView = gltfBufferView.extras;
-
-  gltfBufferView.byteOffset = bufferView.getByteOffset();
-  gltfBufferView.byteLength = bufferView.getSize();
-  delete gltfBufferView.extras;
+function addBuffer(gltf: glTF): Buffer {
+  return new Buffer(gltf);
 }
 
 function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAccessorInfo): number {
@@ -372,13 +342,32 @@ function addImage(gltf: glTF, image: HTMLImageElement | HTMLCanvasElement): numb
   if (!gltf.images)
     gltf.images = [];
 
-  const gltfImage = {};
-  (gltfImage as any).uri = image; // Processed later
-
   for (let i = 0; i < gltf.images.length; i++) {
-    if (image === (gltf.images[i].uri as any)) {
+    if (image === gltf.images[i].extras) {
       return i; // Already had an identical image.
     }
+  }
+
+  const gltfImage: glTFImage = {
+    extras: image as any, // For duplicate detection
+  };
+  switch (gltf.extras.options.imageOutputType) {
+    case ImageOutputType.GLB:
+      const bufferView = gltf.extras.binChunkBuffer!.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.SCALAR);
+      bufferView.writeAsync(imageToArrayBuffer(image)).then(() => {
+        bufferView.finalize();
+      });
+      gltfImage.bufferView = bufferView.getIndex();
+      gltfImage.mimeType = "image/png";
+      break;
+
+    case ImageOutputType.DataURI:
+      gltfImage.uri = imageToDataURI(image);
+      break;
+
+    default: // ImageOutputType.External
+      gltfImage.uri = (image as any); // Processed later
+      break;
   }
 
   const addedIndex = gltf.images.length;

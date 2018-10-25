@@ -1,10 +1,37 @@
 import { ComponentType, DataType } from "./types";
+import { glTFBuffer, glTF, glTFBufferView } from "./gltftypes";
 
 export class Buffer {
+  private _gltf: glTF;
+  private _gltfBuffer: glTFBuffer;
+  private _index: number;
   private _bufferViews: BufferView[] = [];
+  private _finalizePromise?: Promise<void>;
+  private _finalized: boolean = false;
+
+  public constructor(gltf: glTF) {
+    this._gltf = gltf;
+
+    if (!gltf.buffers)
+      gltf.buffers = [];
+
+    this._index = gltf.buffers.length;
+    const gltfBuffer = {
+      byteLength: -1,
+    };
+    gltf.buffers.push(gltfBuffer);
+    this._gltfBuffer = gltfBuffer;
+  }
+
+  public getIndex(): number {
+    return this._index;
+  }
 
   public addBufferView(componentType: ComponentType, dataType: DataType): BufferView {
-    const view = new BufferView(this, componentType, dataType);
+    if (this._finalizePromise)
+      throw new Error("Cannot add buffer view after finalizing buffer");
+
+    const view = new BufferView(this, this._gltf, componentType, dataType);
     this._bufferViews.push(view);
     return view;
   }
@@ -20,7 +47,21 @@ export class Buffer {
     throw "Given bufferView was not present in this buffer";
   }
 
+  public getViewFinalizePromises(targetBufferView?: BufferView): Promise<void>[] {
+    const promises = [];
+    for (const view of this._bufferViews) {
+      if (targetBufferView && view === targetBufferView) {
+        return promises;
+      }
+      promises.push(view.finalized);
+    }
+    return promises;
+  }
+
   public getArrayBuffer(): ArrayBuffer {
+    if (!this._finalized)
+      throw new Error("Cannot get ArrayBuffer from Buffer before it is finalized");
+
     let byteLength = this._getTotalSize();
     const buffer = new ArrayBuffer(byteLength);
 
@@ -31,6 +72,25 @@ export class Buffer {
     }
 
     return buffer;
+  }
+
+  public finalize(): Promise<void> {
+    if (this._finalizePromise)
+      throw new Error(`Buffer ${this._index} was already finalized`);
+
+    this._finalizePromise = new Promise((resolve) => {
+      resolve(Promise.all(this.getViewFinalizePromises()));
+    }).then(() => {
+      this._finalized = true;
+
+      const arrayBuffer = this.getArrayBuffer();
+
+      this._gltfBuffer.byteLength = arrayBuffer.byteLength;
+      if (this._index !== 0 || !this._gltf.extras.binChunkBuffer)
+        (this._gltfBuffer.uri as any) = arrayBuffer; // Still not totally finalized, see stringify
+    });
+    this._gltf.extras.promises.push(this._finalizePromise);
+    return this._finalizePromise;
   }
 
   private _getTotalSize(): number {
@@ -48,26 +108,55 @@ export class BufferView {
   private _dataType: DataType;
   private _data: number[] = [];
   private _accessorIndex: number = -1;
+  private _gltfBufferView: glTFBufferView;
+  private _index: number;
+  private _asyncWritePromise?: Promise<void>;
+  private _finalized: boolean = false;
+  private _finalizedPromise?: Promise<void>;
+  private _finalizedPromiseResolve?: any;
 
-  public constructor(buffer: Buffer, componentType: ComponentType, dataType: DataType) {
+  public constructor(buffer: Buffer, gltf: glTF, componentType: ComponentType, dataType: DataType) {
     this._buffer = buffer;
     this._componentType = componentType;
     this._dataType = dataType;
+
+    if (!gltf.bufferViews)
+      gltf.bufferViews = [];
+
+    this._index = gltf.bufferViews.length;
+    this._gltfBufferView = {
+      buffer: buffer.getIndex(),
+      byteLength: -1,
+    };
+    gltf.bufferViews.push(this._gltfBufferView);
+  }
+
+  public getIndex(): number {
+    return this._index;
   }
 
   public push(item: number): void {
     this._data.push(item);
   }
 
-  public getSize(): number {
+  public getDataSize(): number {
     return this._data.length * this._sizeOfComponentType();
   }
 
+  public getSize(): number {
+    // Technically there are some cases where the data could be more compact,
+    // but to be safe, we just always align each view to 4 bytes.
+    return makeDivisibleBy(this.getDataSize(), 4);
+  }
+
   public getByteOffset(): number {
+    if (!this._finalized)
+      throw new Error("Cannot get BufferView offset until it is finalized");
+
     return this._buffer.getByteOffset(this);
   }
 
-  public write(buffer: ArrayBuffer, startIndex: number): void {
+  public write(buffer: ArrayBuffer, startIndex: number = this.getSize()): void {
     const dataView = new DataView(buffer, startIndex);
 
     const sizeOfComponentType = this._sizeOfComponentType();
@@ -75,6 +164,16 @@ export class BufferView {
       const val = this._data[i];
       this._writeValue(dataView, i * sizeOfComponentType, val);
     }
+  }
+
+  public writeAsync(buffer: Promise<ArrayBuffer>, startIndex: number = this.getSize()): Promise<void> {
+    if (this._asyncWritePromise)
+      throw new Error("Can't write multiple buffer view values asynchronously");
+    this._asyncWritePromise = buffer.then((arrayBuffer: ArrayBuffer) => {
+      this.write(arrayBuffer, startIndex);
+      delete this._asyncWritePromise;
+    });
+    return this._asyncWritePromise;
   }
 
   public startAccessor(): void {
@@ -104,6 +203,39 @@ export class BufferView {
     this._accessorIndex = -1;
 
     return info;
+  }
+
+  public get finalized(): Promise<void> {
+    if (!this._finalizedPromise) {
+      if (this._finalized) {
+        return this._finalizedPromise = Promise.resolve();
+      }
+      else {
+        return this._finalizedPromise = new Promise<void>((resolve) => {
+          this._finalizedPromiseResolve = resolve;
+        });
+      }
+    }
+    return this._finalizedPromise;
+  }
+
+  public finalize(): Promise<void> {
+    const gltfBufferView = this._gltfBufferView;
+
+    return new Promise((resolve) => {
+      const prereqs = this._buffer.getViewFinalizePromises(this);
+      if (this._asyncWritePromise)
+        prereqs.push(this._asyncWritePromise);
+      resolve(Promise.all(prereqs));
+    }).then(() => {
+      this._finalized = true;
+
+      gltfBufferView.byteOffset = this.getByteOffset();
+      gltfBufferView.byteLength = this.getDataSize();
+
+      if (this._finalizedPromiseResolve)
+        this._finalizedPromiseResolve();
+    });
   }
 
   private _getElementSize(): number {
@@ -190,4 +322,8 @@ export interface BufferAccessorInfo {
   componentType: ComponentType;
   count: number;
   type: DataType;
+}
+
+function makeDivisibleBy(num: number, by: number) {
+  return by * Math.ceil(num / by);
 }

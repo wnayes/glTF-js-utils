@@ -1,3 +1,29 @@
+export enum BufferOutputType {
+  /** Create separate files for binary buffers (default) */
+  External,
+
+  /** Embed buffers as data URIs. */
+  DataURI,
+
+  /**
+   * Embed buffers as chunks in a GLB buffer.
+   */
+  GLB,
+}
+
+export enum ImageOutputType {
+  /** Create separate files for images (default) */
+  External,
+
+  /** Embed images as data URIs. */
+  DataURI,
+
+  /**
+   * Embed images as chunks in a GLB buffer.
+   */
+  GLB,
+}
+
 export enum ComponentType {
   BYTE = 5120,
   UNSIGNED_BYTE = 5121,

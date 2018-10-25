@@ -1,4 +1,5 @@
-import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode } from "./types";
+import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType } from "./types";
+import { Buffer } from "./buffer";
 
 export interface glTF {
   asset: {
@@ -20,6 +21,15 @@ export interface glTF {
   skins?: any[];
   cameras?: any[];
   animations?: any[];
+  /** Extras used specifically by gltf-js-utils. */
+  extras: {
+    options: {
+       bufferOutputType?: BufferOutputType;
+       imageOutputType?: ImageOutputType;
+    },
+    binChunkBuffer: Buffer | null;
+    promises: Promise<any>[];
+  };
 }
 
 export interface glTFBuffer {
@@ -105,8 +115,9 @@ export interface glTFTexture {
 export interface glTFImage {
   name?: string;
   uri?: string;
-  mimeType?: string;
+  mimeType?: "image/png" | "image/jpeg";
   bufferView?: number;
+  extras?: any;
 }
 
 export interface glTFSampler {

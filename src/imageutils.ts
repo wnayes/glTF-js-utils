@@ -1,8 +1,44 @@
+import { rejects } from "assert";
+
+type ImageType = HTMLImageElement | HTMLCanvasElement;
+
 /**
  * Converts an image into a Data URI string.
  * @param image
  */
-export function imageToDataURI(image: HTMLImageElement | HTMLCanvasElement): string {
+export function imageToDataURI(image: ImageType): string {
+  const canvas = _imageTypeToCanvas(image);
+  return canvas.toDataURL();
+}
+
+/**
+ * Converts an image into an ArrayBuffer.
+ * @param image
+ */
+export function imageToArrayBuffer(image: ImageType): Promise<ArrayBuffer> {
+  const canvas = _imageTypeToCanvas(image);
+
+  let promiseResolve: any, promiseReject: any;
+  const promise = new Promise<ArrayBuffer>((resolve, reject) => {
+    promiseResolve = resolve;
+    promiseReject = reject;
+  })
+  canvas.toBlob((blob: Blob | null) => {
+    if (!blob) {
+      promiseReject("Unable to convert image to PNG");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.addEventListener("loadend", () => {
+      promiseResolve(reader.result as ArrayBuffer);
+    });
+    reader.readAsArrayBuffer(blob);
+  }, "image/png");
+  return promise;
+}
+
+function _imageTypeToCanvas(image: ImageType): HTMLCanvasElement {
   let canvas;
   if (image instanceof HTMLImageElement) {
     canvas = document.createElement("canvas");
@@ -14,8 +50,7 @@ export function imageToDataURI(image: HTMLImageElement | HTMLCanvasElement): str
   else {
     canvas = image;
   }
-
-  return canvas.toDataURL();
+  return canvas;
 }
 
 /**
