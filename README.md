@@ -9,8 +9,10 @@ Includes a basic Three.js to glTF converter.
 
 #### Creating glTF from scratch
 
+Create a `GLTFAsset` structure using the provided types.
+
 ```javascript
-import * as GLTFUtils from "glTF-js-utils";
+import * as GLTFUtils from "gltf-js-utils";
 
 const asset = new GLTFUtils.GLTFAsset();
 const scene = new GLTFUtils.Scene();
@@ -43,9 +45,14 @@ const v2 = new GLTFUtils.Vertex();
 mesh.addFace(v1, v2, v3, faceMaterialIndex /* 0 */);
 mesh.addFace(v4, v5, v6, faceMaterialIndex);
 // ...
+```
 
-// Export to a collection of individual files/data:
-const gltf = GLTFUtils.exportGLTF(asset);
+##### Export to a collection of individual files/data
+
+With the default options, you'll receive an object keyed with the glTF JSON and binary buffers.
+
+```javascript
+const gltfFiles = await GLTFUtils.exportGLTF(asset);
 // {
 //   "model.gltf": string /* JSON glTF string */
 //   "data1.bin": ArrayBuffer /* ArrayBuffer of buffer data */
@@ -56,17 +63,27 @@ const gltf = GLTFUtils.exportGLTF(asset);
 //   "img2.png": /* Texture image */
 //   ...
 // }
+```
 
-// Export using data URIs (no extra files created):
-const gltf = GLTFUtils.exportGLTF(asset, {
+##### Export using data URIs
+
+Buffers and/or images can be embedded within the JSON as data URIs.
+
+```javascript
+const gltfFiles = await GLTFUtils.exportGLTF(asset, {
   bufferOutputType: GLTFUtils.BufferOutputType.DataURI,
   imageOutputType: GLTFUtils.BufferOutputType.DataURI,
 });
 // {
 //   "model.gltf": string /* JSON glTF string, all data embedded */
 // }
+```
 
-// Export to a ZIP file (requires JSZip reference):
+##### Export to a ZIP file
+
+Requires a `JSZip` reference. The result will be a ZIP blob.
+
+```javascript
 GLTFUtils.exportGLTFZip(asset, JSZip).then(blob => {
   // Use FileSaver as an example.
   saveAs(blob, "model.zip");
@@ -76,20 +93,43 @@ GLTFUtils.exportGLTFZip(asset, JSZip).then(blob => {
 #### Create glTF from Three.js object
 
 ```javascript
-import { glTFAssetFromTHREE, exportGLTF } from "glTF-js-utils";
+import { glTFAssetFromTHREE, exportGLTF } from "gltf-js-utils";
 
 // Create a Three.js Scene or Object3D structure...
 const scene = new THREE.Scene();
 ...
 
-exportGLTF(glTFAssetFromTHREE(scene));
+const gltfFiles = await exportGLTF(glTFAssetFromTHREE(scene));
+```
+
+#### Create a GLB container
+
+Calling `exportGLB` will produce a single GLB model in an ArrayBuffer.
+
+```javascript
+const glbArrayBuffer = await GLTFUtils.exportGLB(asset);
+```
+
+You can also use `exportGLTF` with the GLB output type to selectively keep some assets external.
+
+```javascript
+const gltfFiles = await GLTFUtils.exportGLTF(asset, {
+  bufferOutputType: GLTFUtils.BufferOutputType.GLB,
+  imageOutputType: GLTFUtils.BufferOutputType.External,
+});
+// {
+//   "model.glb": ArrayBuffer
+//   ...
+//   // Only images follow, data bins are in the GLB file
+//   "img1.png": /* Texture image */
+//   "img2.png": /* Texture image */
+// }
 ```
 
 ## Limitations
 
 * Overall glTF support is limited (no cameras, skins, animations)
 * Three.js export is limited to basic functionality (`MeshBasicMaterial`)
-* No GLB container support
 
 ## Development
 
