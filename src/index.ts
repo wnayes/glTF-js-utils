@@ -61,13 +61,14 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
   addScenes(gltf, asset);
 
   const promises = gltf.extras.promises;
-  delete gltf.extras;
 
   let currentData = 1;
   let currentImg = 1;
 
   return Promise.all(promises).then(() => {
     const output: { [filename: string]: any } = {};
+
+    delete gltf.extras;
 
     const jsonSpacing = typeof options!.jsonSpacing === "number" ? options!.jsonSpacing : 4;
     const gltfString = JSON.stringify(gltf, (key: string, value: any) => {
