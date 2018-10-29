@@ -1,4 +1,4 @@
-import { glTF, glTFScene, glTFNode, glTFMesh, glTFMeshPrimitives, glTFMaterial, glTFImage } from "./gltftypes";
+import { glTF, glTFScene, glTFNode, glTFMesh, glTFMeshPrimitives, glTFMaterial, glTFImage, glTFAttribute, glTFAccessor } from "./gltftypes";
 import { GLTFAsset } from "./asset";
 import { Node } from "./node";
 import { Scene } from "./scene";
@@ -121,7 +121,7 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
     if (vertexColorBufferView)
       return;
 
-    vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC3);
+    vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC4);
   }
 
   function _completeMeshPrimitive(materialIndex: number): glTFMeshPrimitives {
@@ -166,12 +166,12 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
         gltfMesh.primitives.push(primitive);
       }
 
-      vertexBufferView.startAccessor();
-      vertexNormalBufferView.startAccessor();
-      vertexUVBufferView.startAccessor();
+      vertexBufferView.startAccessor("POSITION");
+      vertexNormalBufferView.startAccessor("NORMAL");
+      vertexUVBufferView.startAccessor("TEXCOORD_0");
       if (currentMaterial && currentMaterial.vertexColorMode !== VertexColorMode.NoColors) {
         _ensureColorBufferView();
-        vertexColorBufferView!.startAccessor();
+        vertexColorBufferView!.startAccessor("COLOR_0");
       }
 
       lastMaterialIndex = materialIndex;
@@ -255,12 +255,12 @@ function addColorToBufferView(bufferView: BufferView, color: RGBColor | RGBAColo
   bufferView.push((color.r * 255) | 0);
   bufferView.push((color.g * 255) | 0);
   bufferView.push((color.b * 255) | 0);
-  // if (color instanceof RGBAColor) {
-  //   bufferView.push((color.a * 255) | 0);
-  // }
-  // else {
-  //   bufferView.push(0xFF);
-  // }
+  if ("a" in color) {
+    bufferView.push((color.a * 255) | 0);
+  }
+  else {
+    bufferView.push(0xFF);
+  }
 }
 
 function addBuffer(gltf: glTF): Buffer {
@@ -272,13 +272,23 @@ function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAc
     gltf.accessors = [];
 
   const addedIndex = gltf.accessors.length;
-  gltf.accessors.push({
+
+  const componentType = accessorInfo.componentType;
+  const accessor: glTFAccessor = {
     bufferView: bufferViewIndex,
     byteOffset: accessorInfo.byteOffset,
-    componentType: accessorInfo.componentType,
+    componentType: componentType,
     count: accessorInfo.count,
     type: accessorInfo.type,
-  });
+    min: accessorInfo.min,
+    max: accessorInfo.max,
+  };
+
+  if (accessorInfo.normalized) {
+    accessor.normalized = true;
+  }
+
+  gltf.accessors.push(accessor);
 
   return addedIndex;
 }

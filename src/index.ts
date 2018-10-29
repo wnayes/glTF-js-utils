@@ -142,7 +142,8 @@ export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExport
 export function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer> {
   return exportGLTF(asset, {
     bufferOutputType: BufferOutputType.GLB,
-    imageOutputType: ImageOutputType.GLB
+    imageOutputType: ImageOutputType.GLB,
+    jsonSpacing: 0,
   }).then(output => {
     for (let filename in output) {
       if (filename === MODEL_NAME || filename === BIN_CHUNK_NAME)

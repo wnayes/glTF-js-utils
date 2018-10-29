@@ -1,5 +1,5 @@
 import { ComponentType, DataType } from "./types";
-import { glTFBuffer, glTF, glTFBufferView } from "./gltftypes";
+import { glTFBuffer, glTF, glTFBufferView, glTFAttribute } from "./gltftypes";
 
 export class Buffer {
   private _gltf: glTF;
@@ -67,7 +67,7 @@ export class Buffer {
 
     let currentIndex = 0;
     for (const bufferView of this._bufferViews) {
-      bufferView.write(buffer, currentIndex);
+      bufferView.writeOutToBuffer(buffer, currentIndex);
       currentIndex += bufferView.getSize();
     }
 
@@ -86,8 +86,7 @@ export class Buffer {
       const arrayBuffer = this.getArrayBuffer();
 
       this._gltfBuffer.byteLength = arrayBuffer.byteLength;
-      if (this._index !== 0 || !this._gltf.extras.binChunkBuffer)
-        (this._gltfBuffer.uri as any) = arrayBuffer; // Still not totally finalized, see stringify
+      this._gltfBuffer.uri = (arrayBuffer as any); // Still not totally finalized, see stringify
     });
     this._gltf.extras.promises.push(this._finalizePromise);
     return this._finalizePromise;
@@ -107,13 +106,19 @@ export class BufferView {
   private _componentType: ComponentType;
   private _dataType: DataType;
   private _data: number[] = [];
-  private _accessorIndex: number = -1;
   private _gltfBufferView: glTFBufferView;
   private _index: number;
+
   private _asyncWritePromise?: Promise<void>;
+
   private _finalized: boolean = false;
   private _finalizedPromise?: Promise<void>;
   private _finalizedPromiseResolve?: any;
+
+  private _accessorIndex: number = -1;
+  private _accessorAttr: glTFAttribute | null = null;
+  private _accessorMin: number[] | null = null;
+  private _accessorMax: number[] | null = null;
 
   public constructor(buffer: Buffer, gltf: glTF, componentType: ComponentType, dataType: DataType) {
     this._buffer = buffer;
@@ -128,6 +133,12 @@ export class BufferView {
       buffer: buffer.getIndex(),
       byteLength: -1,
     };
+
+    const elementSize = this._getElementSize();
+    if (elementSize >= 4) { // Not a very good check.
+      this._gltfBufferView.byteStride = elementSize;
+    }
+
     gltf.bufferViews.push(this._gltfBufferView);
   }
 
@@ -136,7 +147,25 @@ export class BufferView {
   }
 
   public push(item: number): void {
+    const writeIndex = this._data.length;
+
     this._data.push(item);
+
+    if (this._accessorIndex >= 0) {
+      const minmaxIndex = writeIndex % this._numComponentsForDataType();
+
+      const currentMin = this._accessorMin![minmaxIndex];
+      if (typeof currentMin !== "number")
+        this._accessorMin![minmaxIndex] = item;
+      else
+        this._accessorMin![minmaxIndex] = Math.min(currentMin, item);
+
+      const currentMax = this._accessorMax![minmaxIndex];
+      if (typeof currentMax !== "number")
+        this._accessorMax![minmaxIndex] = item;
+      else
+        this._accessorMax![minmaxIndex] = Math.max(currentMax, item);
+    }
   }
 
   public getDataSize(): number {
@@ -156,7 +185,7 @@ export class BufferView {
     return this._buffer.getByteOffset(this);
   }
 
-  public write(buffer: ArrayBuffer, startIndex: number = this.getSize()): void {
+  public writeOutToBuffer(buffer: ArrayBuffer, startIndex: number = this.getSize()): void {
     const dataView = new DataView(buffer, startIndex);
 
     const sizeOfComponentType = this._sizeOfComponentType();
@@ -170,17 +199,23 @@ export class BufferView {
     if (this._asyncWritePromise)
       throw new Error("Can't write multiple buffer view values asynchronously");
     this._asyncWritePromise = buffer.then((arrayBuffer: ArrayBuffer) => {
-      this.write(arrayBuffer, startIndex);
+      const uintArray = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < uintArray.byteLength; i++) {
+        this._data.push(uintArray[i]);
+      }
       delete this._asyncWritePromise;
     });
     return this._asyncWritePromise;
   }
 
-  public startAccessor(): void {
+  public startAccessor(attr: glTFAttribute): void {
     if (this._accessorIndex >= 0)
       throw "Accessor was started without ending the previous one";
 
     this._accessorIndex = this._data.length;
+    this._accessorAttr = attr;
+    this._accessorMin = new Array(this._numComponentsForDataType());
+    this._accessorMax = new Array(this._numComponentsForDataType());
   }
 
   public endAccessor(): BufferAccessorInfo {
@@ -193,14 +228,39 @@ export class BufferView {
     if (numElements % 1)
       throw "An accessor was ended with missing component values";
 
-    const info = {
+    for (let i = 0; i < this._accessorMin!.length; i++) {
+      if (typeof this._accessorMin![i] !== "number")
+        this._accessorMin![i] = 0;
+      if (typeof this._accessorMax![i] !== "number")
+        this._accessorMax![i] = 0;
+    }
+
+    const info: BufferAccessorInfo = {
       byteOffset: elementSize * (this._accessorIndex / numComponentsForDataType), // All previous data
       componentType: this._componentType,
       count: numElements,
       type: this._dataType,
+      min: this._accessorMin!,
+      max: this._accessorMax!,
     };
 
+    switch (this._accessorAttr) {
+      case "TEXCOORD_0":
+      case "TEXCOORD_1":
+      case "COLOR_0":
+        switch (this._componentType) {
+          case ComponentType.UNSIGNED_BYTE:
+          case ComponentType.UNSIGNED_SHORT:
+            info.normalized = true;
+            break;
+        }
+        break;
+    }
+
     this._accessorIndex = -1;
+    this._accessorAttr = null;
+    this._accessorMin = null;
+    this._accessorMax = null;
 
     return info;
   }
@@ -322,6 +382,9 @@ export interface BufferAccessorInfo {
   componentType: ComponentType;
   count: number;
   type: DataType;
+  min: number[];
+  max: number[];
+  normalized?: boolean;
 }
 
 function makeDivisibleBy(num: number, by: number) {

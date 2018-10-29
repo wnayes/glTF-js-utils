@@ -75,8 +75,8 @@ export interface glTFAccessor {
   normalized?: boolean;
   count: number;
   type: DataType;
-  max?: number;
-  min?: number;
+  max?: number[];
+  min?: number[];
   sparse?: object;
 }
 
