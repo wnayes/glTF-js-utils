@@ -13,7 +13,7 @@ export { ImageOutputType, BufferOutputType } from "./types";
 import { GLTFAsset } from "./asset";
 import { addScenes } from "./gltf";
 import { glTF } from "./gltftypes";
-import { imageToDataURI, encodeBase64DataUri } from "./imageutils";
+import { encodeBase64DataUri, arrayBufferIsPNG } from "./imageutils";
 import { ImageOutputType, BufferOutputType } from "./types";
 
 import * as jsz from "jszip";
@@ -33,7 +33,8 @@ export interface GLTFExportOptions {
 
 export type GLTFExportType = { [filename: string]: any };
 
-const MODEL_NAME = "model.gltf";
+const MODEL_NAME_GLTF = "model.gltf";
+const MODEL_NAME_GLB = "model.glb";
 const BIN_CHUNK_NAME = "BIN";
 
 /**
@@ -65,6 +66,8 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
   let currentData = 1;
   let currentImg = 1;
 
+  let binChunkBuffer: ArrayBuffer | null = null;
+
   return Promise.all(promises).then(() => {
     const output: { [filename: string]: any } = {};
 
@@ -76,14 +79,28 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
         return undefined;
 
       if (value instanceof ArrayBuffer) {
+        if (arrayBufferIsPNG(value)) {
+          switch (options!.imageOutputType) {
+            case ImageOutputType.DataURI:
+            case ImageOutputType.GLB:
+              break; // Not applicable
+
+            default: // ImageOutputType.External
+              const filename = `img${currentImg}.png`;
+              currentImg++;
+              output[filename] = value;
+              return filename;
+          }
+        }
+
         switch (options!.bufferOutputType) {
           case BufferOutputType.DataURI:
             return encodeBase64DataUri(value);
 
           case BufferOutputType.GLB:
-            if (output[BIN_CHUNK_NAME])
+            if (binChunkBuffer)
               throw new Error("Already encountered an ArrayBuffer, there should only be one in the GLB format.");
-            output[BIN_CHUNK_NAME] = value;
+            binChunkBuffer = value;
             return undefined;
 
           default: // BufferOutputType.External
@@ -93,19 +110,18 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
             return filename;
         }
       }
-      if (value instanceof HTMLImageElement || value instanceof HTMLCanvasElement) {
-        const filename = `img${currentImg}.png`;
-        currentImg++;
-        output[filename] = imageToDataURI(value);
-        // Strip off data uri schema
-        output[filename] = output[filename].substr(output[filename].indexOf(",") + 1);
-        return filename;
-      }
 
       return value;
     }, jsonSpacing);
 
-    output[MODEL_NAME] = gltfString;
+    const doingGLB = options!.bufferOutputType === BufferOutputType.GLB
+      || options!.imageOutputType === ImageOutputType.GLB;
+    if (doingGLB) {
+      output[MODEL_NAME_GLB] = createGLBBuffer(gltfString, binChunkBuffer);
+    }
+    else {
+      output[MODEL_NAME_GLTF] = gltfString;
+    }
 
     return output;
   });
@@ -121,12 +137,7 @@ export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExport
   return exportGLTF(asset, options).then((output) => {
     const zip = new jsZip();
     for (let filename in output) {
-      if (filename !== MODEL_NAME && typeof output[filename] === "string") { // An image
-        zip.file(filename, output[filename], { base64: true });
-      }
-      else {
-        zip.file(filename, output[filename]);
-      }
+      zip.file(filename, output[filename]);
     }
     return zip.generateAsync({ type: "blob" });
   });
@@ -145,12 +156,6 @@ export function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer> {
     imageOutputType: ImageOutputType.GLB,
     jsonSpacing: 0,
   }).then(output => {
-    for (let filename in output) {
-      if (filename === MODEL_NAME || filename === BIN_CHUNK_NAME)
-        continue;
-      throw new Error("External files along with GLB are not supported");
-    }
-
-    return createGLBBuffer(output[MODEL_NAME], output[BIN_CHUNK_NAME]);
+    return output[MODEL_NAME_GLB];
   });
 }

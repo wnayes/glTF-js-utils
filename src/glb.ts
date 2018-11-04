@@ -9,7 +9,7 @@ enum GLBChunkType {
   BIN = 0x004E4942,
 }
 
-export function createGLBBuffer(json: string, bin: ArrayBuffer) {
+export function createGLBBuffer(json: string, bin?: ArrayBuffer | null) {
   if (!json)
     throw new Error("GLB requires a JSON glTF chunk");
 

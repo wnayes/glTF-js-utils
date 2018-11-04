@@ -376,7 +376,9 @@ function addImage(gltf: glTF, image: HTMLImageElement | HTMLCanvasElement): numb
       break;
 
     default: // ImageOutputType.External
-      gltfImage.uri = (image as any); // Processed later
+      gltf.extras.promises.push(imageToArrayBuffer(image).then((pngBuffer: ArrayBuffer) => {
+        gltfImage.uri = (pngBuffer as any); // Processed later
+      }));
       break;
   }
 

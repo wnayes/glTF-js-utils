@@ -59,8 +59,8 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset);
 //   "data2.bin": ArrayBuffer,
 //   "data3.bin": ArrayBuffer,
 //   ...
-//   "img1.png": /* Texture image */
-//   "img2.png": /* Texture image */
+//   "img1.png": ArrayBuffer /* Texture image */
+//   "img2.png": ArrayBuffer
 //   ...
 // }
 ```
@@ -121,8 +121,8 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset, {
 //   "model.glb": ArrayBuffer
 //   ...
 //   // Only images follow, data bins are in the GLB file
-//   "img1.png": /* Texture image */
-//   "img2.png": /* Texture image */
+//   "img1.png": ArrayBuffer /* Texture image */
+//   "img2.png": ArrayBuffer
 // }
 ```
 

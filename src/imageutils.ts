@@ -67,3 +67,20 @@ export function encodeBase64DataUri(buf: ArrayBuffer): string {
   const uri = "data:application/octet-stream;base64," + b64;
   return uri;
 }
+
+/** Determines if an ArrayBuffer holds a PNG format image. */
+export function arrayBufferIsPNG(buffer: ArrayBuffer): boolean {
+  // PNG starts with 89 50 4E 47 0D 0A 1A 0A
+  if (buffer.byteLength < 8)
+    return false;
+
+  const arr = new Uint8Array(buffer);
+  return arr[0] === 0x89
+    && arr[1] ===  0x50
+    && arr[2] === 0x4E
+    && arr[3] === 0x47
+    && arr[4] === 0x0D
+    && arr[5] === 0x0A
+    && arr[6] === 0x1A
+    && arr[7] === 0x0A;
+}
