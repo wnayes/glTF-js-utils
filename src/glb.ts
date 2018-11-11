@@ -66,7 +66,7 @@ function writeChunk(out: DataView, chunk: ArrayBuffer, offset: number, chunkType
 }
 
 function textToArrayBuffer(json: string): ArrayBuffer {
-  return (new TextEncoder()).encode(json);
+  return (new TextEncoder()).encode(json).buffer;
 }
 
 function writeArrayBuffer(target: ArrayBuffer, src: ArrayBuffer, targetOffset: number, srcOffset: number, byteLength: number) {
