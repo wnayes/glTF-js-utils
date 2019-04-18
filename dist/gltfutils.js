@@ -7,7 +7,7 @@
 		exports["GLTFUtils"] = factory();
 	else
 		root["GLTFUtils"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
