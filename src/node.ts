@@ -1,9 +1,12 @@
 import { XYZPair, Quaternion, toQuaternion, degreesToRadians } from "./math";
 import { Mesh } from "./mesh";
+import {Animation} from "./animation";
+
 
 export class Node {
   public name: string = "";
   public mesh?: Mesh;
+  public animations?: Animation[];
 
   private _nodes: Node[] = [];
   private _translation?: XYZPair;

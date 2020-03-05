@@ -5,10 +5,12 @@ export { Mesh } from "./mesh";
 export { Material } from "./material";
 export { Texture } from "./texture";
 export { Vertex } from "./vertex";
+export { Animation } from "./animation";
 export { XYZPair, Quaternion } from "./math";
 export { glTFAssetFromTHREE } from "./threejs";
 export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode } from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";
+export { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
 
 import { GLTFAsset } from "./asset";
 import { addScenes } from "./gltf";

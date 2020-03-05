@@ -1,4 +1,5 @@
-import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType } from "./types";
+import { AlphaMode, ComponentType, DataType, MeshMode,
+  WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, TRSMode } from "./types";
 import { Buffer } from "./buffer";
 
 export interface glTF {
@@ -20,7 +21,7 @@ export interface glTF {
   materials?: glTFMaterial[];
   skins?: any[];
   cameras?: any[];
-  animations?: any[];
+  animations?: glTFAnimation[];
   /** Extras used specifically by gltf-js-utils. */
   extras: {
     options: {
@@ -37,6 +38,25 @@ export interface glTFBuffer {
   byteLength: number;
   uri?: string;
   extras?: any;
+}
+
+export interface glTFAnimationSampler {
+  input: number;
+  output: number;
+  interpolation: InterpolationMode
+}
+
+export interface glTFAnimationChannel {
+  sampler: number;
+  target: {
+    node: number;
+    path: TRSMode
+  }
+}
+
+export interface glTFAnimation {
+  samplers: glTFAnimationSampler[];
+  channels: glTFAnimationChannel[];
 }
 
 export interface glTFBufferView {
