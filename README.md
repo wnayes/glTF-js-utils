@@ -47,6 +47,29 @@ mesh.addFace(v4, v5, v6, faceMaterialIndex);
 // ...
 ```
 
+###### Create Animation
+```
+const node = new GLTFUtils.Node();
+scene.addNode(node);
+let nodeAnim = new GLTFUtils.Animation(GLTFUtils.TRSMode.TRANSLATION);
+const InterpolationMode = GLTFUtils.InterpolationMode;
+nodeAnim.keyframes = [
+    {
+        time: 0,
+        value: [1,2,3],
+        interp_type: InterpolationMode.LINEAR
+    },
+    {
+        time: 0.3,
+        value: [4,5,6],
+        interp_type: InterpolationMode.LINEAR
+    }
+];
+// or add keyframes via addKeyframe function
+nodeAnim1.addKeyframe(0.8, [7,8,9], InterpolationMode.STEP);
+node.animations = [nodeAnim];
+```
+
 ##### Export to a collection of individual files/data
 
 With the default options, you'll receive an object keyed with the glTF JSON and binary buffers.
