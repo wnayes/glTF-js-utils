@@ -2,10 +2,10 @@ import {InterpolationMode, TRSMode} from "./types";
 
 export interface KeyframeExtras // for cubicspline interpolation
 {
-    outTangent: number; // default 1
-    outTangentWeight: number; // default 1
-    inTangent: number; // default 1
-    inTangentWeight: number; // default 1
+    outTangent?: number; // default 1
+    outTangentWeight?: number; // default 1
+    inTangent?: number; // default 1
+    inTangentWeight?: number; // default 1
 }
 
 export interface Keyframe
@@ -18,12 +18,6 @@ export interface Keyframe
 
 export class Animation 
 {
-    // private _channels: Channel[] = [];
-    // private _samplers: Sampler[] = [];
-    // private _name: string = "";
-    // private _extensions: object = {};
-    // private _extras: any = {};
-
     public keyframes: Keyframe[] = [];
     public path: TRSMode;
 
@@ -43,12 +37,9 @@ export class Animation
         };
         if (interp_type === InterpolationMode.CUBICSPLINE)
         {
-            let ext: KeyframeExtras = {
-                inTangent: 1,
-                inTangentWeight: 1,
-                outTangent: 1,
-                outTangentWeight: 1
-            };
+            throw "CUBICSPLINE NOT IMPLEMENTED"
+
+            let ext: KeyframeExtras = {};
             if (extras)
             {
                 if (extras.inTangent) ext.inTangent = extras.inTangent;
@@ -57,7 +48,8 @@ export class Animation
                 if (extras.outTangentWeight) ext.outTangentWeight = extras.outTangentWeight;
             }
 
-            kf.extras = ext;
+            if (Object.keys(ext).length > 0)
+                kf.extras = ext;
         }
 
         this.keyframes.push(kf);

@@ -96,7 +96,7 @@ function addNode(gltf: glTF, node: Node): number {
     const addedIndex = gltf.nodes.length;
     gltf.nodes.push(gltfNode);
 
-    if (node.animations)
+    if (node.animations && node.animations.length > 0)
     {
         addAnimations(gltf, node.animations, addedIndex);
     }
@@ -104,15 +104,14 @@ function addNode(gltf: glTF, node: Node): number {
     if (node.mesh) {
         gltfNode.mesh = addMesh(gltf, node.mesh);
     }
-    else {
-        node.forEachNode((node: Node) => {
-            if (!gltfNode.children)
-                gltfNode.children = [];
 
-            const index = addNode(gltf, node);
-            gltfNode.children.push(index);
-        });
-    }
+    node.forEachNode((node: Node) => {
+        if (!gltfNode.children)
+            gltfNode.children = [];
+
+        const index = addNode(gltf, node);
+        gltfNode.children.push(index);
+    });
 
     return addedIndex;
 }
@@ -199,6 +198,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         for (let keyframe of anim.keyframes)
         {
             let interp_type = keyframe.interp_type;
+            let isSpline = interp_type === InterpolationMode.CUBICSPLINE;
             if (interp_type != prev_interp_type)
             {
                 _completeAnimation(animBufferView, prev_interp_type, path);
@@ -208,11 +208,22 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
             let time = keyframe.time;
             let value = keyframe.value;
 
-            timeBufferView.push(time);
-            animBufferView.push(value[0]);
-            animBufferView.push(value[1]);
-            animBufferView.push(value[2]);
-            if (isVec4) animBufferView.push(value[3]);
+            if (isSpline)
+            {
+                // TODO: cubic interp stuff
+                // let outTangent = 1;
+                // let inTangent = 1;
+                let cubic_info = keyframe.extras;
+                // let outTangent = cubic_info?.outTangent
+                throw "CUBICSPLINE NOT IMPLEMENTED"
+            } else {
+                timeBufferView.push(time);
+                animBufferView.push(value[0]);
+                animBufferView.push(value[1]);
+                animBufferView.push(value[2]);
+                if (isVec4) animBufferView.push(value[3]);
+            }
+
 
             prev_interp_type = interp_type;
         }

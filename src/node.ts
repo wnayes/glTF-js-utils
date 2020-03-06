@@ -13,6 +13,11 @@ export class Node {
   private _rotation?: Quaternion;
   private _scale?: XYZPair;
 
+  constructor(name: string = "")
+  {
+    this.name = name;
+  }
+
   public addNode(node: Node): void {
     if (this._nodes.indexOf(node) >= 0)
       throw new Error("Node passed to addNode was added prior.");

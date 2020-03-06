@@ -97,7 +97,26 @@ export interface glTFAccessor {
   type: DataType;
   max?: number[];
   min?: number[];
-  sparse?: object;
+  sparse?: glTFSparseAccessor;
+}
+
+export interface glTFSparseAccessor {
+  count: number;
+  indices: {
+    bufferView: number;
+    byteOffset?: number; // default 0
+    componentType: ComponentType
+    extensions?: object;
+    extras?: any;
+  };
+  values: {
+    bufferView: number;
+    byteOffset?: number; // default 0
+    extensions?: object;
+    extras?: any;
+  };
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFMesh {

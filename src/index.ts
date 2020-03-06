@@ -8,7 +8,8 @@ export { Vertex } from "./vertex";
 export { Animation } from "./animation";
 export { XYZPair, Quaternion } from "./math";
 export { glTFAssetFromTHREE } from "./threejs";
-export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode } from "./types";
+export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
+  VertexColorMode, WrappingMode, InterpolationMode, TRSMode } from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";
 export { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
 

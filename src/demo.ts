@@ -215,10 +215,15 @@ function test2() {
         {
             time: 0.6,
             value: [1,2,3,4],
-            interp_type: InterpolationMode.CUBICSPLINE
+            interp_type: InterpolationMode.STEP,
+            extras: {
+                outTangent: 1
+            }
         }
     ];
-    nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.CUBICSPLINE);
+    nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP, {inTangent: 0.5});
+
+    console.log(nodeAnim1)
 
     let nodeAnim2 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
     nodeAnim2.keyframes = [
@@ -248,7 +253,7 @@ function test2() {
     let channel3 = gltfAnim.channels![2]; // path: TRANSLATION
 
     let sampler1 = gltfAnim.samplers![0]; // interpolation: LINEAR
-    let sampler2 = gltfAnim.samplers![1]; // interpolation: CUBICSPLINE
+    let sampler2 = gltfAnim.samplers![1]; // interpolation: STEP
     let sampler3 = gltfAnim.samplers![2]; // interpolation: LINEAR
 
     // assert channel targets
@@ -256,13 +261,13 @@ function test2() {
         channel1.sampler === 0 && channel2.sampler === 1 && channel3.sampler === 2
     );
     console.assert(
-        channel1.target.path == TRSMode.ROTATION && channel2.target.path == TRSMode.ROTATION
-        && channel3.target.path == TRSMode.TRANSLATION
+        channel1.target.path == nodeAnim1.path && channel2.target.path == nodeAnim1.path
+        && channel3.target.path == nodeAnim2.path
     );
     // assert sampler interpolation types
-    console.assert(sampler1.interpolation == InterpolationMode.LINEAR &&
-        sampler2.interpolation == InterpolationMode.CUBICSPLINE &&
-        sampler3.interpolation == InterpolationMode.LINEAR
+    console.assert(sampler1.interpolation == nodeAnim1.keyframes![0].interp_type &&
+        sampler2.interpolation == nodeAnim1.keyframes![3].interp_type &&
+        sampler3.interpolation == nodeAnim2.keyframes![0].interp_type
     );
     // assert sampler input/output indices
     console.assert(sampler1.input === 0 && sampler1.output === 1 &&
