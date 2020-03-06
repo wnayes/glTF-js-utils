@@ -47,7 +47,7 @@ const BIN_CHUNK_NAME = "BIN";
  * @returns An object, each key pointing to a file.
  */
 export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
-  options = options || {};
+  options = options || {bufferOutputType: BufferOutputType.DataURI};
 
   const gltf: glTF = {
     asset: {

@@ -124,8 +124,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
     let animBuffer: Buffer;
     if (singleGLBBuffer) {
-        // animBuffer = gltf.extras.binChunkBuffer!;
-        throw "GLB Not Supported Yet!";
+        animBuffer = gltf.extras.binChunkBuffer!;
     } else
         animBuffer = addBuffer(gltf);
 

@@ -330,6 +330,10 @@ function test2() {
         console.log(buffer.uri);
         console.log("PASSED")
     })
+
+    GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
+        console.log(value["model.gltf"]);
+    })
 }
 
 // test1();
