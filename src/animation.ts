@@ -12,7 +12,7 @@ export interface Keyframe
 {
     time: number;
     value: number[];
-    interp_type: InterpolationMode;
+    interpType: InterpolationMode;
     extras?: KeyframeExtras;
 }
 
@@ -26,16 +26,16 @@ export class Animation
         this.path = path;
     }
 
-    public addKeyframe(time: number, value: number[], interp_type: InterpolationMode, extras?:any)
+    public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?:any)
     {
         console.assert(value.length >= 3);
 
         let kf : Keyframe = {
-            interp_type: interp_type,
+            interpType: interpType,
             time: time,
             value: value
         };
-        if (interp_type === InterpolationMode.CUBICSPLINE)
+        if (interpType === InterpolationMode.CUBICSPLINE)
         {
             throw "CUBICSPLINE NOT IMPLEMENTED"
 

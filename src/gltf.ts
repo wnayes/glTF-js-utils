@@ -142,7 +142,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
 
     let gltfAnim = gltf.animations![0];
 
-    function _completeAnimation(animBufferView: BufferView, interp_type: InterpolationMode, path: TRSMode)
+    function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: TRSMode)
     {
         let timeAccessor = timeBufferView.endAccessor();
         let timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
@@ -154,7 +154,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         let sampler: glTFAnimationSampler = {
             "input": timeAccessor_idx,
             "output": animAccessor_idx,
-            "interpolation": interp_type
+            "interpolation": interpType
         };
         // then create channels (sampler: get sampler idx from above)
         let channel: glTFAnimationChannel = {
@@ -193,14 +193,14 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         timeBufferView.startAccessor();
         animBufferView.startAccessor();
 
-        let prev_interp_type = anim.keyframes![0].interp_type;
+        let prev_interpType = anim.keyframes![0].interpType;
         for (let keyframe of anim.keyframes)
         {
-            let interp_type = keyframe.interp_type;
-            let isSpline = interp_type === InterpolationMode.CUBICSPLINE;
-            if (interp_type != prev_interp_type)
+            let interpType = keyframe.interpType;
+            let isSpline = interpType === InterpolationMode.CUBICSPLINE;
+            if (interpType != prev_interpType)
             {
-                _completeAnimation(animBufferView, prev_interp_type, path);
+                _completeAnimation(animBufferView, prev_interpType, path);
                 timeBufferView.startAccessor();
                 animBufferView.startAccessor();
             }
@@ -224,9 +224,9 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
             }
 
 
-            prev_interp_type = interp_type;
+            prev_interpType = interpType;
         }
-        _completeAnimation(animBufferView, prev_interp_type, path);
+        _completeAnimation(animBufferView, prev_interpType, path);
     }
 
     timeBufferView.finalize();

@@ -111,7 +111,7 @@ function test1() {
         let values = [];
 
         let num = times.length;
-        let interp_type = InterpolationMode.LINEAR; // samplers
+        let interpType = InterpolationMode.LINEAR; // samplers
         for (let i = 0; i < num; ++i)
         {
             values.push([i*4, i*4+1, i*4+2, i*4+3]);
@@ -135,7 +135,7 @@ function test1() {
         let sampler: glTFAnimationSampler = {
             "input": accessor_idx,
             "output": accessor2_idx,
-            "interpolation": interp_type
+            "interpolation": interpType
         };
         myAnimation.samplers.push(sampler);
         let sampler_idx = myAnimation.samplers.length;
@@ -200,22 +200,22 @@ function test2() {
         {
             time: 0,
             value: [1,2,3,4],
-            interp_type: InterpolationMode.LINEAR
+            interpType: InterpolationMode.LINEAR
         },
         {
             time: 0.2,
             value: [2,3,4,5],
-            interp_type: InterpolationMode.LINEAR
+            interpType: InterpolationMode.LINEAR
         },
         {
             time: 0.4,
             value: [2,3,4,5],
-            interp_type: InterpolationMode.LINEAR
+            interpType: InterpolationMode.LINEAR
         },
         {
             time: 0.6,
             value: [1,2,3,4],
-            interp_type: InterpolationMode.STEP,
+            interpType: InterpolationMode.STEP,
             extras: {
                 outTangent: 1
             }
@@ -230,12 +230,12 @@ function test2() {
         {
             time: 0,
             value: [1,2,3],
-            interp_type: InterpolationMode.LINEAR
+            interpType: InterpolationMode.LINEAR
         },
         {
             time: 0.3,
             value: [4,5,6],
-            interp_type: InterpolationMode.LINEAR
+            interpType: InterpolationMode.LINEAR
         }
     ];
     node.animations = [nodeAnim1, nodeAnim2];
@@ -265,9 +265,9 @@ function test2() {
         && channel3.target.path == nodeAnim2.path
     );
     // assert sampler interpolation types
-    console.assert(sampler1.interpolation == nodeAnim1.keyframes![0].interp_type &&
-        sampler2.interpolation == nodeAnim1.keyframes![3].interp_type &&
-        sampler3.interpolation == nodeAnim2.keyframes![0].interp_type
+    console.assert(sampler1.interpolation == nodeAnim1.keyframes![0].interpType &&
+        sampler2.interpolation == nodeAnim1.keyframes![3].interpType &&
+        sampler3.interpolation == nodeAnim2.keyframes![0].interpType
     );
     // assert sampler input/output indices
     console.assert(sampler1.input === 0 && sampler1.output === 1 &&

@@ -57,12 +57,12 @@ nodeAnim.keyframes = [
     {
         time: 0,
         value: [1,2,3],
-        interp_type: InterpolationMode.LINEAR
+        interpType: InterpolationMode.LINEAR
     },
     {
         time: 0.3,
         value: [4,5,6],
-        interp_type: InterpolationMode.LINEAR
+        interpType: InterpolationMode.LINEAR
     }
 ];
 // or add keyframes via addKeyframe function
