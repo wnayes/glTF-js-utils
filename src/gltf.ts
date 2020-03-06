@@ -191,8 +191,8 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         }
 
         // add accessors
-        timeBufferView.startAccessor("POSITION"); // POSITION is just a placeholder
-        animBufferView.startAccessor("POSITION"); // POSITION is just a placeholder
+        timeBufferView.startAccessor();
+        animBufferView.startAccessor();
 
         let prev_interp_type = anim.keyframes![0].interp_type;
         for (let keyframe of anim.keyframes)
@@ -202,8 +202,8 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
             if (interp_type != prev_interp_type)
             {
                 _completeAnimation(animBufferView, prev_interp_type, path);
-                timeBufferView.startAccessor("POSITION"); // POSITION is just a placeholder
-                animBufferView.startAccessor("POSITION"); // POSITION is just a placeholder
+                timeBufferView.startAccessor();
+                animBufferView.startAccessor();
             }
             let time = keyframe.time;
             let value = keyframe.value;

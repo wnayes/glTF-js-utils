@@ -57,7 +57,7 @@ function test1() {
 
     function createAccessor(bufferView: GLTFUtils.BufferView, num: number = 1)
     {
-        bufferView.startAccessor("POSITION");
+        bufferView.startAccessor();
 
         num = Math.max(0, num);
         for (let i = 0; i < num; ++i)
@@ -118,14 +118,14 @@ function test1() {
         }
 
         // create times accessor and values accessor first
-        bufferView3.startAccessor("POSITION"); // POSITION is just a placeholder
+        bufferView3.startAccessor();
         for (let t of times)
             bufferView3.push(t);
         let accessor = bufferView3.endAccessor();
         let accessor_idx = addAccessor(gltf, bufferView3.getIndex(), accessor);
 
         let flat = flatten(values);
-        bufferView2.startAccessor("POSITION"); // POSITION is just a placeholder
+        bufferView2.startAccessor();
         for (let v of flat)
             bufferView2.push(v);
         let accessor2 = bufferView2.endAccessor();
