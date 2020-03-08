@@ -210,7 +210,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
 
             let isSpline = interpType === InterpolationMode.CUBICSPLINE;
             if (isSpline && isVec4)
-                throw new Error("CUBICSPLINE and Vector4 not implemented!");
+                throw new Error("CUBICSPLINE for Vector4 not implemented!");
 
             let time = keyframe.time;
             let value = keyframe.value;
@@ -218,13 +218,13 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
             timeBufferView.push(time);
             if (isSpline)
             {
-                let cubic_info = keyframe.extras;
+                let spline_info = keyframe.extras;
 
                 let outTangent = [0,0,0];
                 let inTangent = [0,0,0];
-                if (cubic_info?.inTangent && ix > 0) inTangent = cubic_info!.inTangent;
-                if (cubic_info?.outTangent && (idx < total_kf - 1) && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE)
-                    outTangent = cubic_info!.outTangent;
+                if (spline_info?.inTangent && ix > 0) inTangent = spline_info!.inTangent;
+                if (spline_info?.outTangent && (idx < total_kf - 1) && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE)
+                    outTangent = spline_info!.outTangent;
 
                 let data = [inTangent, value, outTangent];
                 for (let d of data)
