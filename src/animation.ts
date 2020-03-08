@@ -2,10 +2,10 @@ import {InterpolationMode, TRSMode} from "./types";
 
 export interface KeyframeExtras // for cubicspline interpolation
 {
-    outTangent?: number; // default 1
-    outTangentWeight?: number; // default 1
-    inTangent?: number; // default 1
-    inTangentWeight?: number; // default 1
+    outTangent?: [number, number, number]; // default 1
+    outTangentWeight?: [number, number, number]; // default 1
+    inTangent?: [number, number, number]; // default 1
+    inTangentWeight?: [number, number, number]; // default 1
 }
 
 export interface Keyframe
@@ -37,7 +37,7 @@ export class Animation
         };
         if (interpType === InterpolationMode.CUBICSPLINE)
         {
-            throw "CUBICSPLINE NOT IMPLEMENTED"
+            // throw "CUBICSPLINE NOT IMPLEMENTED"
 
             let ext: KeyframeExtras = {};
             if (extras)

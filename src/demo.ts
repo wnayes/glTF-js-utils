@@ -176,14 +176,14 @@ function test1() {
 // console.log(gltf.accessors)
 }
 
-function test2() {
+function animation_test() {
 
     const asset = new GLTFUtils.GLTFAsset();
     const scene = new GLTFUtils.Scene();
 
-    const gltf = createGLTF(asset);
-
     asset.addScene(scene);
+
+    const gltf = createGLTF(asset);
 
     let x = 1;
     let y = 2;
@@ -215,13 +215,10 @@ function test2() {
         {
             time: 0.6,
             value: [1,2,3,4],
-            interpType: InterpolationMode.STEP,
-            extras: {
-                outTangent: 1
-            }
+            interpType: InterpolationMode.STEP
         }
     ];
-    nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP, {inTangent: 0.5});
+    nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP);
 
     console.log(nodeAnim1)
 
@@ -326,15 +323,85 @@ function test2() {
         console.assert(bufferView3.byteLength === vec3_bytes);
         console.assert(bufferView2.byteOffset === time_bytes);
         console.assert(bufferView3.byteOffset === time_bytes + vec4_bytes);
-        console.log(gltf);
-        console.log(buffer.uri);
+        // console.log(gltf);
+        // console.log(buffer.uri);
         console.log("PASSED")
     })
 
-    GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
-        console.log(value["model.gltf"]);
-    })
+    // GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
+    //     console.log(value["model.gltf"]);
+    // })
 }
 
+function animation_cubicspline_test()
+{
+    const asset = new GLTFUtils.GLTFAsset();
+    const scene = new GLTFUtils.Scene();
+
+    asset.addScene(scene);
+
+    const gltf = createGLTF(asset);
+
+    let x = 1;
+    let y = 2;
+    let z = 3;
+
+    const node = new GLTFUtils.Node();
+    node.setTranslation(x, y, z);
+    node.setRotationRadians(x, y, z);
+    node.setScale(x, y, z);
+    scene.addNode(node);
+
+    let nodeAnim1 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
+    nodeAnim1.keyframes = [
+        {
+            time: 0,
+            value: [1,2,3],
+            interpType: InterpolationMode.CUBICSPLINE,
+            extras: {
+                outTangent: [0.1,0.1,0.1]
+            }
+        },
+        {
+            time: 0.2,
+            value: [4,5,6],
+            interpType: InterpolationMode.CUBICSPLINE,
+            extras: {
+                outTangent: [0.2,0.2,0.2],
+                inTangent: [0.3,0.3,0.3]
+            }
+        },
+        {
+            time: 0.4,
+            value: [7,8,9],
+            interpType: InterpolationMode.CUBICSPLINE,
+            extras: {
+                inTangent: [0.5,0.5,0.5]
+            }
+        }
+    ];
+    node.animations = [nodeAnim1];
+
+    addScenes(gltf, asset);
+
+    const accessors = gltf.accessors!;
+    const BV = gltf.bufferViews!;
+    const time_accessor = accessors[0];
+    const anim_accessor = accessors[1];
+    const time_BV = BV[0];
+    const anim_BV = BV[1];
+
+    console.assert(time_accessor.count * 3 === anim_accessor.count);
+
+    Promise.all(gltf.extras.promises).then(()=>{
+        console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
+    });
+
+    console.log(gltf)
+
+}
+
+
 // test1();
-test2();
+animation_test();
+animation_cubicspline_test();

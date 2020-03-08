@@ -194,35 +194,48 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         animBufferView.startAccessor();
 
         let prev_interpType = anim.keyframes![0].interpType;
-        for (let keyframe of anim.keyframes)
+        let ix = 0;
+        let total_kf = anim.keyframes.length;
+        for (let idx = 0; idx < total_kf; ++idx)
         {
+            let keyframe = anim.keyframes[idx];
             let interpType = keyframe.interpType;
-            let isSpline = interpType === InterpolationMode.CUBICSPLINE;
             if (interpType != prev_interpType)
             {
                 _completeAnimation(animBufferView, prev_interpType, path);
                 timeBufferView.startAccessor();
                 animBufferView.startAccessor();
+                ix = 0;
             }
+
+            let isSpline = interpType === InterpolationMode.CUBICSPLINE;
+            if (isSpline && isVec4)
+                throw new Error("CUBICSPLINE and Vector4 not implemented!");
+
             let time = keyframe.time;
             let value = keyframe.value;
 
+            timeBufferView.push(time);
             if (isSpline)
             {
-                // TODO: cubic interp stuff
-                // let outTangent = 1;
-                // let inTangent = 1;
                 let cubic_info = keyframe.extras;
-                // let outTangent = cubic_info?.outTangent
-                throw "CUBICSPLINE NOT IMPLEMENTED"
-            } else {
-                timeBufferView.push(time);
-                animBufferView.push(value[0]);
-                animBufferView.push(value[1]);
-                animBufferView.push(value[2]);
-                if (isVec4) animBufferView.push(value[3]);
-            }
 
+                let outTangent = [0,0,0];
+                let inTangent = [0,0,0];
+                if (cubic_info?.inTangent && ix > 0) inTangent = cubic_info!.inTangent;
+                if (cubic_info?.outTangent && (idx < total_kf - 1) && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE)
+                    outTangent = cubic_info!.outTangent;
+
+                let data = [inTangent, value, outTangent];
+                for (let d of data)
+                    for (let j = 0; j < 3; ++j)
+                        animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
+            } else {
+                let tj = isVec4 ? 4 : 3;
+                for (let j = 0; j < tj; ++j)
+                    animBufferView.push(value[j]);
+            }
+            ++ix;
 
             prev_interpType = interpType;
         }
