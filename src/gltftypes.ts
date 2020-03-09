@@ -19,8 +19,8 @@ export interface glTF {
   images?: glTFImage[];
   samplers?: glTFSampler[];
   materials?: glTFMaterial[];
-  skins?: any[];
-  cameras?: any[];
+  skins?: glTFSkin[];
+  cameras?: glTFCamera[];
   animations?: glTFAnimation[];
   /** Extras used specifically by gltf-js-utils. */
   extras: {
@@ -57,6 +57,42 @@ export interface glTFAnimationChannel {
 export interface glTFAnimation {
   samplers: glTFAnimationSampler[];
   channels: glTFAnimationChannel[];
+}
+
+export interface glTFCamera {
+    orthographic?: glTFCameraOrthographic;
+    perspective?: glTFCameraPerspective;
+    type: string;
+    name?: string;
+    extensions?: object;
+    extras?: any;
+}
+
+export interface glTFCameraOrthographic {
+    xmag: number;
+    ymag: number;
+    zfar: number;
+    znear: number;
+    extensions?: object;
+    extras?: any;
+}
+
+export interface glTFCameraPerspective {
+    aspectRatio?: number;
+    yfov: number;
+    zfar?: number;
+    znear: number;
+    extensions?: object;
+    extras?: any;
+}
+
+export interface glTFSkin {
+    inverseBindMatrices?: number;
+    skeleton?: number;
+    joints: number[];
+    name?: string;
+    extensions?: object;
+    extras?: any;
 }
 
 export interface glTFBufferView {
