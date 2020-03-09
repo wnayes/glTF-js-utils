@@ -220,6 +220,8 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number
     let skinAccessor = skinBufferView.endAccessor();
     let skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
 
+    gltf_skin.inverseBindMatrices = skinAccessor_idx;
+
     skinBufferView.finalize();
 
     if (!singleGLBBuffer)

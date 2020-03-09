@@ -443,7 +443,7 @@ function skin_test()
         let gltf = createGLTF(asset);
         addScenes(gltf, asset);
         let joints = gltf.skins![0].joints!;
-        console.assert(node.index === 0);
+        console.assert(node.index === 0 && gltf.skins![0].skeleton === node2.index);
         console.assert(joints.length == 4 && joints[0] === node2.index);
     }
 
@@ -470,6 +470,8 @@ function skin_test()
     node3.inverseBindMatrix.data[0][3] = x; // set x translation
     node3.inverseBindMatrix.data[1][3] = y; // set y translation
     node3.inverseBindMatrix.data[2][3] = z; // set z translation
+    // set skeleton root back to node2
+    node.skin.skeletonNode = node2;
     {
         let gltf = createGLTF(asset);
 
@@ -479,6 +481,7 @@ function skin_test()
         Promise.all(gltf.extras.promises).then(()=>{
             let buffer = gltf.buffers![0];
             let accessor = gltf.accessors![0];
+            console.assert(gltf.skins![0].inverseBindMatrices === 0);
             console.assert(buffer.byteLength === joints.length * 4 * 16);
             console.assert(accessor.count === joints.length);
             // GLTF stores as column major (index 12 = M03, 13 = M13, 14 = M23)
