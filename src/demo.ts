@@ -4,6 +4,7 @@ import {glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler} from ".
 import {InterpolationMode, TRSMode} from "../src/types";
 import {addAccessor, addBuffer, addScenes} from "../src/gltf";
 
+
 function flatten(arr: Array<any>): Array<any> {
     return arr.reduce(function (flat, toFlatten) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
@@ -340,7 +341,7 @@ function animation_cubicspline_test()
 
     asset.addScene(scene);
 
-    const gltf = createGLTF(asset);
+    let gltf = createGLTF(asset);
 
     let x = 1;
     let y = 2;
@@ -354,6 +355,11 @@ function animation_cubicspline_test()
 
     let nodeAnim1 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
     nodeAnim1.keyframes = [
+        {
+            time: -0.2,
+            value: [1,2,3],
+            interpType: InterpolationMode.STEP,
+        },
         {
             time: 0,
             value: [1,2,3],
@@ -378,7 +384,12 @@ function animation_cubicspline_test()
             extras: {
                 inTangent: [0.5,0.5,0.5]
             }
-        }
+        },
+        {
+            time: 0.6,
+            value: [1,2,3],
+            interpType: InterpolationMode.LINEAR,
+        },
     ];
     node.animations = [nodeAnim1];
 
@@ -386,22 +397,118 @@ function animation_cubicspline_test()
 
     const accessors = gltf.accessors!;
     const BV = gltf.bufferViews!;
-    const time_accessor = accessors[0];
-    const anim_accessor = accessors[1];
+    const time_accessor = accessors[2];
+    const anim_accessor = accessors[3];
     const time_BV = BV[0];
     const anim_BV = BV[1];
 
     console.assert(time_accessor.count * 3 === anim_accessor.count);
 
     Promise.all(gltf.extras.promises).then(()=>{
-        console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
+        // console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
     });
 
     console.log(gltf)
 
 }
 
+function skin_test()
+{
+    let M = new GLTFUtils.Matrix(4);
 
+    const asset = new GLTFUtils.GLTFAsset();
+    const scene = new GLTFUtils.Scene();
+
+    asset.addScene(scene);
+
+    const node = new GLTFUtils.Node("Root");
+    const node2 = new GLTFUtils.Node("Skeleton");
+    const node3 = new GLTFUtils.Node("Pelvis");
+    const node4 = new GLTFUtils.Node("LeftLeg");
+    const node5 = new GLTFUtils.Node("RightLeg");
+
+    const xnode = new GLTFUtils.Node("Light");
+    scene.addNode(node);
+    scene.addNode(xnode);
+
+    node.addNode(node2);
+    node2.addNode(node3);
+    node3.addNode(node4);
+    node3.addNode(node5);
+
+    let skin_name = "Skin0";
+    node.skin = new GLTFUtils.Skin(node2, skin_name);
+
+    {
+        let gltf = createGLTF(asset);
+        addScenes(gltf, asset);
+        let joints = gltf.skins![0].joints!;
+        console.assert(node.index === 0);
+        console.assert(joints.length == 4 && joints[0] === node2.index);
+    }
+
+    const parentNode = new GLTFUtils.Node("Parent");
+    parentNode.addNode(node);
+    scene.removeNode(node); // remove node from scene children, since no longer root
+    scene.addNode(parentNode);
+
+    node.skin.skeletonNode = null; // set skeleton root to 'node'
+
+    {
+        let gltf = createGLTF(asset);
+        addScenes(gltf, asset);
+        let joints = gltf.skins![0].joints!;
+        console.assert(node.index === 2);
+        console.assert(joints.length == 5 && joints[0] === node.index);
+    }
+
+    let x = 10;
+    let y = 20;
+    let z = -30;
+    // use row major to store
+    node3.inverseBindMatrix = new GLTFUtils.Matrix4x4(); // add some inverse bind matrices
+    node3.inverseBindMatrix.data[0][3] = x; // set x translation
+    node3.inverseBindMatrix.data[1][3] = y; // set y translation
+    node3.inverseBindMatrix.data[2][3] = z; // set z translation
+    {
+        let gltf = createGLTF(asset);
+
+        addScenes(gltf, asset);
+
+        let joints = gltf.skins![0].joints!;
+        Promise.all(gltf.extras.promises).then(()=>{
+            let buffer = gltf.buffers![0];
+            let accessor = gltf.accessors![0];
+            console.assert(buffer.byteLength === joints.length * 4 * 16);
+            console.assert(accessor.count === joints.length);
+            // GLTF stores as column major (index 12 = M03, 13 = M13, 14 = M23)
+            console.assert(accessor.max![12] == x && accessor.max![13] == y && accessor.min![14] == z);
+            console.log(gltf)
+        })
+    }
+
+    // Promise.all(gltf.extras.promises).then(()=>{
+    //     console.log(gltf)
+    //     // console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
+    // });
+}
+
+function matrix_test()
+{
+    const Matrix = GLTFUtils.Matrix;
+    let rows = 4;
+    let M = new Matrix(rows);
+    M.data[0][0] = 1;
+    console.assert(Matrix.IsIdentity(M));
+    M.data[0][0] = 2;
+    console.assert(!Matrix.IsIdentity(M));
+    M.data[0][0] = 1;
+    M.data[0][1] = 0.0001;
+    console.assert(!Matrix.IsIdentity(M));
+}
+
+matrix_test();
 // test1();
 animation_test();
 animation_cubicspline_test();
+skin_test();

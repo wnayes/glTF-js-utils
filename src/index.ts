@@ -5,8 +5,9 @@ export { Mesh } from "./mesh";
 export { Material } from "./material";
 export { Texture } from "./texture";
 export { Vertex } from "./vertex";
+export { Skin } from "./skin";
 export { Animation } from "./animation";
-export { Vector3, Quaternion } from "./math";
+export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "./math";
 export { glTFAssetFromTHREE } from "./threejs";
 export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
   VertexColorMode, WrappingMode, InterpolationMode, TRSMode } from "./types";

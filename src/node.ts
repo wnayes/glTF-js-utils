@@ -1,14 +1,16 @@
-import { Vector3, Quaternion, toQuaternion, degreesToRadians } from "./math";
+import {Vector3, Quaternion, toQuaternion, degreesToRadians, Matrix4x4} from "./math";
 import { Mesh } from "./mesh";
 import {Animation} from "./animation";
-// import {Skin} from "./skin";
+import {Skin} from "./skin";
 
 
 export class Node {
   public name: string = "";
   public mesh?: Mesh;
   public animations: Animation[] = [];
-  // public skin?: Skin;
+  public skin?: Skin;
+  public inverseBindMatrix?: Matrix4x4;
+  public index: number = -1; // don't modify. used for converting to gltf
 
   private _nodes: Node[] = [];
   private _translation?: Vector3;

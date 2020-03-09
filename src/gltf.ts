@@ -9,7 +9,7 @@ import {
     glTFMesh,
     glTFMeshPrimitives,
     glTFNode,
-    glTFScene
+    glTFScene, glTFSkin
 } from "./gltftypes";
 import {GLTFAsset} from "./asset";
 import {Node} from "./node";
@@ -34,6 +34,8 @@ import {Material} from "./material";
 import {Texture} from "./texture";
 import {imageToArrayBuffer, imageToDataURI} from "./imageutils";
 import {Animation} from "./animation";
+import {Skin} from "./skin";
+import {Matrix4x4} from "./math";
 
 export function addScenes(gltf: glTF, asset: GLTFAsset): void {
     gltf.scene = asset.defaultScene;
@@ -45,6 +47,11 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
         gltf.extras.binChunkBuffer = addBuffer(gltf);
     }
 
+    // reset all nodes first
+    asset.forEachScene((scene: Scene) => {
+       resetNode(scene);
+    });
+
     asset.forEachScene((scene: Scene) => {
         addScene(gltf, scene);
     });
@@ -52,6 +59,14 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
     if (doingGLB) {
         gltf.extras.binChunkBuffer!.finalize();
     }
+}
+
+function resetNode(node : Node | Scene) {
+    if (node instanceof Node)
+        node.index = -1;
+    node.forEachNode((node: Node) => {
+        resetNode(node);
+    });
 }
 
 function addScene(gltf: glTF, scene: Scene): void {
@@ -74,6 +89,9 @@ function addScene(gltf: glTF, scene: Scene): void {
 }
 
 function addNode(gltf: glTF, node: Node): number {
+    if (node.index >= 0)
+        return node.index;
+
     if (!gltf.nodes)
         gltf.nodes = [];
 
@@ -94,6 +112,7 @@ function addNode(gltf: glTF, node: Node): number {
         gltfNode.scale = scale.toArray();
 
     const addedIndex = gltf.nodes.length;
+    node.index = addedIndex;
     gltf.nodes.push(gltfNode);
 
     if (node.animations && node.animations.length > 0)
@@ -112,6 +131,99 @@ function addNode(gltf: glTF, node: Node): number {
         const index = addNode(gltf, node);
         gltfNode.children.push(index);
     });
+
+    if (node.skin) {
+        gltfNode.skin = addSkin(gltf, node.skin, node);
+    }
+
+    return addedIndex;
+}
+
+function getJointIndexAndInverseBindMatrices(node: Node): [number[], any[]] {
+    if (node.index < 0)
+        throw new Error("Node should be added to gltf before running this function");
+    let joints: number[] = [node.index];
+    let ibms: any[] = [node.inverseBindMatrix];
+    node.forEachNode((node: Node) => {
+        let data = getJointIndexAndInverseBindMatrices(node);
+        joints = joints.concat(data[0]);
+        ibms = ibms.concat(data[1]);
+    });
+    return [joints, ibms];
+}
+
+export function addSkin(gltf: glTF, skin: Skin, node: Node): number
+{
+    if (!gltf.skins)
+        gltf.skins = [];
+    const addedIndex = gltf.skins!.length;
+    const gltf_skin: glTFSkin = {
+        joints: []
+    };
+    gltf.skins.push(gltf_skin);
+
+    // add name (if exists)
+    if (skin.name.length > 0)
+        gltf_skin.name = skin.name;
+
+    // add skeleton (if exists)
+    let skeletonNode = node.skin!.skeletonNode;
+    if (skeletonNode)
+    {
+        if (skeletonNode.index < 0)
+            addNode(gltf, skeletonNode);
+        gltf_skin.skeleton = skeletonNode.index;
+    }
+
+    // add joints (required) and inversebindmatrices [IBM], if necessary
+    let rootNode = skeletonNode ? skeletonNode : node;
+    let data = getJointIndexAndInverseBindMatrices(rootNode);
+    gltf_skin.joints = data[0];
+    let ibms = data[1];
+
+    // check if there are any non default IBMs, and if so, create a new accessor
+    let hasIBM = false;
+    for(let m of ibms) {
+        if (m && m.rows === 4 && m.cols === 4 && !Matrix4x4.IsIdentity(m)) {
+            hasIBM = true;
+            break;
+        }
+    }
+
+    if (!hasIBM) {
+        return addedIndex;
+    }
+
+    // init skin buffer
+    const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+    let skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
+
+    // init skin bufferView
+    let skinBufferView = skinBuffer.addBufferView(ComponentType.FLOAT, DataType.MAT4);
+
+    // init skin accessor
+    skinBufferView.startAccessor();
+    for (let ibm of ibms)
+    {
+        let m = ibm instanceof Matrix4x4 ? ibm : new Matrix4x4();
+        // GLTF2.0 uses column major matrix
+        for (let c = 0; c < 4; ++c)
+        {
+            for (let r = 0; r < 4; ++r)
+            {
+                skinBufferView.push(m.data[r][c]);
+            }
+        }
+    }
+
+    // complete and clean up
+    let skinAccessor = skinBufferView.endAccessor();
+    let skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
+
+    skinBufferView.finalize();
+
+    if (!singleGLBBuffer)
+        skinBuffer.finalize();
 
     return addedIndex;
 }
