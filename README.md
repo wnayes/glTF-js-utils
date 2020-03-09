@@ -151,8 +151,7 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset, {
 ```
 
 ## Limitations
-
-* Overall glTF support is limited (no cameras, skins, animations)
+* No support for camera yet (will add soon). Works with skins and animations in latest update.
 * Three.js export is limited to basic functionality (`MeshBasicMaterial`)
 
 ## Development
