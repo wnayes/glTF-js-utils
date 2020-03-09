@@ -1,4 +1,4 @@
-export class XYZPair {
+export class Vector3 {
   public constructor(x: number, y: number, z: number) {
     this.x = x;
     this.y = y;
@@ -50,4 +50,38 @@ export function toQuaternion(x: number, y: number, z: number): Quaternion {
 
 export function degreesToRadians(degrees: number) {
   return degrees * Math.PI / 180;
+}
+
+// NxN Square Matrix
+export class Matrix {
+
+    public data: number[][];
+
+    public constructor(rows: number = 4) {
+        this.data = Matrix.Identity(rows);
+    }
+
+    /**
+     * Return the matrix values
+     */
+    public get m(): number[][] {
+        return this.data;
+    }
+
+    /**
+     * Initialize an identity square matrix
+     */
+    public static Identity(rows: number): number[][] {
+        let M = [];
+        for (let r = 0; r < rows; ++r)
+        {
+            let Mrow = [];
+            for (let c = 0; c < rows; ++c)
+            {
+                Mrow.push(r===c?1:0);
+            }
+            M.push(Mrow);
+        }
+        return M;
+    }
 }
