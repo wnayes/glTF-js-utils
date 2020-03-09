@@ -53,9 +53,10 @@ export function degreesToRadians(degrees: number) {
 }
 
 // NxN Square Matrix
+// Make sure to store as row-major
 export class Matrix {
 
-    public data: number[][];
+    public data: number[][]; // try to use row-major
 
     public constructor(rows: number = 4) {
         this.data = Matrix.Identity(rows);
@@ -66,6 +67,18 @@ export class Matrix {
      */
     public get m(): number[][] {
         return this.data;
+    }
+
+    public get rows(): number
+    {
+        return this.data.length;
+    }
+
+    public get cols(): number
+    {
+        if (this.rows === 0)
+            return 0;
+        return this.data[0].length;
     }
 
     /**
@@ -83,5 +96,53 @@ export class Matrix {
             M.push(Mrow);
         }
         return M;
+    }
+
+    public static IsIdentity(matrix: Matrix): boolean {
+        const rows = matrix.rows;
+        const cols = matrix.cols;
+        if (rows !== cols)
+            return false;
+        for (let r = 0; r < rows; ++r)
+        {
+            for (let c = 0; c < cols; ++c)
+            {
+                if (matrix.data[r][c] != (r === c ? 1 : 0))
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+
+export class Matrix3x3 extends Matrix {
+    public constructor() {
+        super(3);
+    }
+
+    public static Identity(): number[][] {
+        return Matrix.Identity(3);
+    }
+
+    public static IsIdentity(matrix: Matrix): boolean {
+        if (matrix.rows !== 3 || matrix.cols !== 3)
+            return false;
+        return Matrix.IsIdentity(matrix);
+    }
+}
+
+export class Matrix4x4 extends Matrix {
+    public constructor() {
+        super(4);
+    }
+
+    public static Identity(): number[][] {
+        return Matrix.Identity(4);
+    }
+
+    public static IsIdentity(matrix: Matrix): boolean {
+        if (matrix.rows !== 4 || matrix.cols !== 4)
+            return false;
+        return Matrix.IsIdentity(matrix);
     }
 }
