@@ -24,8 +24,8 @@ export class Node {
 
   public addNode(node: Node): void {
     if (this._nodes.indexOf(node) >= 0)
-        return;
-      // throw new Error("Node passed to addNode was added prior.");
+      return;
+    // throw new Error("Node passed to addNode was added prior.");
 
     this._nodes.push(node);
   }

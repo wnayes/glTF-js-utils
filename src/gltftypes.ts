@@ -55,44 +55,45 @@ export interface glTFAnimationChannel {
 }
 
 export interface glTFAnimation {
+  name?: string;
   samplers: glTFAnimationSampler[];
   channels: glTFAnimationChannel[];
 }
 
 export interface glTFCamera {
-    orthographic?: glTFCameraOrthographic;
-    perspective?: glTFCameraPerspective;
-    type: string;
-    name?: string;
-    extensions?: object;
-    extras?: any;
+  orthographic?: glTFCameraOrthographic;
+  perspective?: glTFCameraPerspective;
+  type: string;
+  name?: string;
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFCameraOrthographic {
-    xmag: number;
-    ymag: number;
-    zfar: number;
-    znear: number;
-    extensions?: object;
-    extras?: any;
+  xmag: number;
+  ymag: number;
+  zfar: number;
+  znear: number;
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFCameraPerspective {
-    aspectRatio?: number;
-    yfov: number;
-    zfar?: number;
-    znear: number;
-    extensions?: object;
-    extras?: any;
+  aspectRatio?: number;
+  yfov: number;
+  zfar?: number;
+  znear: number;
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFSkin {
-    inverseBindMatrices?: number;
-    skeleton?: number;
-    joints: number[];
-    name?: string;
-    extensions?: object;
-    extras?: any;
+  inverseBindMatrices?: number;
+  skeleton?: number;
+  joints: number[];
+  name?: string;
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFBufferView {

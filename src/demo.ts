@@ -5,6 +5,15 @@ import {InterpolationMode, TRSMode} from "../src/types";
 import {addAccessor, addBuffer, addScenes} from "../src/gltf";
 
 
+function download(content: string, fileName: string, contentType: string = "text/plain") {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+
 function flatten(arr: Array<any>): Array<any> {
     return arr.reduce(function (flat, toFlatten) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
@@ -428,6 +437,12 @@ function skin_test()
     const node5 = new GLTFUtils.Node("RightLeg");
 
     const xnode = new GLTFUtils.Node("Light");
+    xnode.setTranslation(1,2,3);
+
+    node.setTranslation(0.1,0.2,-3);
+    node.setRotationDegrees(20,30,-40);
+    node3.setScale(0.8,0.8,0.8)
+
     scene.addNode(node);
     scene.addNode(xnode);
 
@@ -490,11 +505,67 @@ function skin_test()
         })
     }
 
-    // Promise.all(gltf.extras.promises).then(()=>{
-    //     console.log(gltf)
-    //     // console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
-    // });
+    let nodeAnim1 = new GLTFUtils.Animation(TRSMode.ROTATION);
+    nodeAnim1.keyframes = [
+        {
+            time: 0,
+            value: [1,2,3,4],
+            interpType: InterpolationMode.LINEAR
+        },
+        {
+            time: 0.2,
+            value: [2,3,4,5],
+            interpType: InterpolationMode.LINEAR
+        },
+        {
+            time: 0.4,
+            value: [2,3,4,5],
+            interpType: InterpolationMode.LINEAR
+        },
+        {
+            time: 0.6,
+            value: [1,2,3,4],
+            interpType: InterpolationMode.STEP
+        }
+    ];
+    nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP);
+
+    let nodeAnim2 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
+    nodeAnim2.keyframes = [
+        {
+            time: 0,
+            value: [1,2,3],
+            interpType: InterpolationMode.LINEAR
+        },
+        {
+            time: 0.3,
+            value: [4,5,6],
+            interpType: InterpolationMode.LINEAR
+        }
+    ];
+
+    let nodeAnim3 = new GLTFUtils.Animation(TRSMode.SCALE);
+    nodeAnim3.keyframes = [
+        {
+            time: 0,
+            value: [10,20,30], // degrees
+            interpType: InterpolationMode.CUBICSPLINE
+        },
+        {
+            time: 0.3,
+            value: [40,50,60], // degrees
+            interpType: InterpolationMode.CUBICSPLINE
+        }
+    ]
+    node.animations = [nodeAnim1, nodeAnim2];
+    node2.animations = [nodeAnim3];
+
+    GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
+        console.log(value["model.gltf"]);
+        download(value["model.gltf"], "yolo.gltf");
+    })
 }
+
 
 function matrix_test()
 {
