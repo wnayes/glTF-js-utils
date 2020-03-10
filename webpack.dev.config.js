@@ -2,9 +2,7 @@ const path = require("path");
 
 module.exports = {
   mode: "development",
-  entry: {
-    demo: "./src/demo.ts"
-  },
+  entry: "./src/index.ts",
   module: {
     rules: [
       {
@@ -17,23 +15,11 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"]
   },
-  // output: {
-  //   libraryTarget: "umd",
-  //   library: "GLTFUtils",
-  //   filename: "gltfutils.js",
-  //   path: path.resolve(__dirname, "dist"),
-  //   globalObject: "typeof self !== 'undefined' ? self : this"
-  // },
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    // historyApiFallback: true,
-    compress: true,
-    port: 8081
+    libraryTarget: "umd",
+    library: "GLTFUtils",
+    filename: "gltfutils.js",
+    path: path.resolve(__dirname, "dist"),
+    globalObject: "typeof self !== 'undefined' ? self : this"
   }
 };
-
