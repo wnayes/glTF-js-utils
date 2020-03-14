@@ -7,6 +7,7 @@
   "scripts": {
     "start": "npx webpack-dev-server",
     "build": "webpack --config webpack.dev.config.js & webpack --config webpack.prod.config.js",
+    "build-demo": "webpack --config public/webpack.config.js",
     "test": "mocha"
   },
   "keywords": [],

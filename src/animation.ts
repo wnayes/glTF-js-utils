@@ -28,11 +28,12 @@ export class Animation {
   public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?: KeyframeExtras) {
     console.assert(value.length >= 3);
 
-    let kf : Keyframe = {
-      interpType: interpType,
-      time: time,
-      value: value
+    const kf: Keyframe = {
+      interpType,
+      time,
+      value,
     };
+
     if (interpType === InterpolationMode.CUBICSPLINE) {
       let ext: KeyframeExtras = {};
       if (extras) {
@@ -42,8 +43,9 @@ export class Animation {
         if (extras.outTangentWeight) ext.outTangentWeight = extras.outTangentWeight;
       }
 
-      if (Object.keys(ext).length > 0)
+      if (Object.keys(ext).length > 0) {
         kf.extras = ext;
+      }
     }
 
     this.keyframes.push(kf);
