@@ -6,6 +6,7 @@ Helper library for creating glTF 2.0 models with JavaScript.
 Includes a basic Three.js to glTF converter.
 
 ## Usage
+See `src/demo.ts` for usage and test cases
 
 #### Creating glTF from scratch
 
@@ -45,6 +46,29 @@ const v2 = new GLTFUtils.Vertex();
 mesh.addFace(v1, v2, v3, faceMaterialIndex /* 0 */);
 mesh.addFace(v4, v5, v6, faceMaterialIndex);
 // ...
+```
+
+###### Create Animation
+```
+const node = new GLTFUtils.Node();
+scene.addNode(node);
+let nodeAnim = new GLTFUtils.Animation(GLTFUtils.TRSMode.TRANSLATION);
+const InterpolationMode = GLTFUtils.InterpolationMode;
+nodeAnim.keyframes = [
+    {
+        time: 0,
+        value: [1,2,3],
+        interpType: InterpolationMode.LINEAR
+    },
+    {
+        time: 0.3,
+        value: [4,5,6],
+        interpType: InterpolationMode.LINEAR
+    }
+];
+// or add keyframes via addKeyframe function
+nodeAnim1.addKeyframe(0.8, [7,8,9], InterpolationMode.STEP);
+node.animations = [nodeAnim];
 ```
 
 ##### Export to a collection of individual files/data
@@ -127,8 +151,7 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset, {
 ```
 
 ## Limitations
-
-* Overall glTF support is limited (no cameras, skins, animations)
+* No support for camera yet (will add soon). Works with skins and animations in latest update.
 * Three.js export is limited to basic functionality (`MeshBasicMaterial`)
 
 ## Development

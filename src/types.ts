@@ -87,3 +87,15 @@ export enum VertexColorMode {
   FaceColors = 1,
   VertexColors = 2,
 }
+
+export enum InterpolationMode {
+  LINEAR = "LINEAR",
+  STEP = "STEP",
+  CUBICSPLINE = "CUBICSPLINE"
+}
+
+export enum TRSMode {
+  TRANSLATION = "translation",
+  ROTATION = "rotation",
+  SCALE = "scale"
+}

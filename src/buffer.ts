@@ -142,6 +142,11 @@ export class BufferView {
     gltf.bufferViews.push(this._gltfBufferView);
   }
 
+  public getBuffer(): Buffer
+  {
+    return this._buffer;
+  }
+
   public getIndex(): number {
     return this._index;
   }
@@ -208,7 +213,7 @@ export class BufferView {
     return this._asyncWritePromise;
   }
 
-  public startAccessor(attr: glTFAttribute): void {
+  public startAccessor(attr: glTFAttribute | null = null): void {
     if (this._accessorIndex >= 0)
       throw "Accessor was started without ending the previous one";
 

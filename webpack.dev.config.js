@@ -23,4 +23,3 @@ module.exports = {
     globalObject: "typeof self !== 'undefined' ? self : this"
   }
 };
-

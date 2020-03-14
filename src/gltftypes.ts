@@ -1,4 +1,5 @@
-import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType } from "./types";
+import { AlphaMode, ComponentType, DataType, MeshMode,
+  WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, TRSMode } from "./types";
 import { Buffer } from "./buffer";
 
 export interface glTF {
@@ -18,9 +19,9 @@ export interface glTF {
   images?: glTFImage[];
   samplers?: glTFSampler[];
   materials?: glTFMaterial[];
-  skins?: any[];
-  cameras?: any[];
-  animations?: any[];
+  skins?: glTFSkin[];
+  cameras?: glTFCamera[];
+  animations?: glTFAnimation[];
   /** Extras used specifically by gltf-js-utils. */
   extras: {
     options: {
@@ -36,6 +37,62 @@ export interface glTFBuffer {
   name?: string;
   byteLength: number;
   uri?: string;
+  extras?: any;
+}
+
+export interface glTFAnimationSampler {
+  input: number;
+  output: number;
+  interpolation: InterpolationMode
+}
+
+export interface glTFAnimationChannel {
+  sampler: number;
+  target: {
+    node: number;
+    path: TRSMode
+  }
+}
+
+export interface glTFAnimation {
+  name?: string;
+  samplers: glTFAnimationSampler[];
+  channels: glTFAnimationChannel[];
+}
+
+export interface glTFCamera {
+  orthographic?: glTFCameraOrthographic;
+  perspective?: glTFCameraPerspective;
+  type: string;
+  name?: string;
+  extensions?: object;
+  extras?: any;
+}
+
+export interface glTFCameraOrthographic {
+  xmag: number;
+  ymag: number;
+  zfar: number;
+  znear: number;
+  extensions?: object;
+  extras?: any;
+}
+
+export interface glTFCameraPerspective {
+  aspectRatio?: number;
+  yfov: number;
+  zfar?: number;
+  znear: number;
+  extensions?: object;
+  extras?: any;
+}
+
+export interface glTFSkin {
+  inverseBindMatrices?: number;
+  skeleton?: number;
+  joints: number[];
+  name?: string;
+  extensions?: object;
   extras?: any;
 }
 
@@ -77,7 +134,26 @@ export interface glTFAccessor {
   type: DataType;
   max?: number[];
   min?: number[];
-  sparse?: object;
+  sparse?: glTFSparseAccessor;
+}
+
+export interface glTFSparseAccessor {
+  count: number;
+  indices: {
+    bufferView: number;
+    byteOffset?: number; // default 0
+    componentType: ComponentType
+    extensions?: object;
+    extras?: any;
+  };
+  values: {
+    bufferView: number;
+    byteOffset?: number; // default 0
+    extensions?: object;
+    extras?: any;
+  };
+  extensions?: object;
+  extras?: any;
 }
 
 export interface glTFMesh {

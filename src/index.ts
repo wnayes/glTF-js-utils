@@ -5,10 +5,14 @@ export { Mesh } from "./mesh";
 export { Material } from "./material";
 export { Texture } from "./texture";
 export { Vertex } from "./vertex";
-export { XYZPair, Quaternion } from "./math";
+export { Skin } from "./skin";
+export { Animation } from "./animation";
+export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "./math";
 export { glTFAssetFromTHREE } from "./threejs";
-export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode } from "./types";
+export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
+  VertexColorMode, WrappingMode, InterpolationMode, TRSMode } from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";
+export { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
 
 import { GLTFAsset } from "./asset";
 import { addScenes } from "./gltf";
@@ -44,7 +48,7 @@ const BIN_CHUNK_NAME = "BIN";
  * @returns An object, each key pointing to a file.
  */
 export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
-  options = options || {};
+  options = options || {bufferOutputType: BufferOutputType.DataURI};
 
   const gltf: glTF = {
     asset: {

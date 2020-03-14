@@ -1,14 +1,41 @@
-import { glTF, glTFScene, glTFNode, glTFMesh, glTFMeshPrimitives, glTFMaterial, glTFImage, glTFAttribute, glTFAccessor } from "./gltftypes";
-import { GLTFAsset } from "./asset";
-import { Node } from "./node";
-import { Scene } from "./scene";
-import { MeshMode, ComponentType, DataType, VertexColorMode, RGBColor, RGBAColor, AlphaMode, ImageOutputType, BufferOutputType } from "./types";
-import { Mesh } from "./mesh";
-import { Buffer, BufferView, BufferAccessorInfo } from "./buffer";
-import { Vertex } from "./vertex";
-import { Material } from "./material";
-import { Texture } from "./texture";
-import { imageToArrayBuffer, imageToDataURI } from "./imageutils";
+import {
+  glTF,
+  glTFAccessor,
+  glTFAnimation,
+  glTFAnimationChannel,
+  glTFAnimationSampler,
+  glTFImage,
+  glTFMaterial,
+  glTFMesh,
+  glTFMeshPrimitives,
+  glTFNode,
+  glTFScene, glTFSkin
+} from "./gltftypes";
+import {GLTFAsset} from "./asset";
+import {Node} from "./node";
+import {Scene} from "./scene";
+import {
+  AlphaMode,
+  BufferOutputType,
+  ComponentType,
+  DataType,
+  ImageOutputType,
+  InterpolationMode,
+  MeshMode,
+  RGBAColor,
+  RGBColor,
+  TRSMode,
+  VertexColorMode
+} from "./types";
+import {Mesh} from "./mesh";
+import {Buffer, BufferAccessorInfo, BufferView} from "./buffer";
+import {Vertex} from "./vertex";
+import {Material} from "./material";
+import {Texture} from "./texture";
+import {imageToArrayBuffer, imageToDataURI} from "./imageutils";
+import {Animation} from "./animation";
+import {Skin} from "./skin";
+import {Matrix4x4} from "./math";
 
 export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   gltf.scene = asset.defaultScene;
@@ -20,6 +47,11 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
     gltf.extras.binChunkBuffer = addBuffer(gltf);
   }
 
+  // reset all nodes first
+  asset.forEachScene((scene: Scene) => {
+    resetNode(scene);
+  });
+
   asset.forEachScene((scene: Scene) => {
     addScene(gltf, scene);
   });
@@ -27,6 +59,14 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   if (doingGLB) {
     gltf.extras.binChunkBuffer!.finalize();
   }
+}
+
+function resetNode(node : Node | Scene) {
+  if (node instanceof Node)
+    node.index = -1;
+  node.forEachNode((node: Node) => {
+    resetNode(node);
+  });
 }
 
 function addScene(gltf: glTF, scene: Scene): void {
@@ -49,6 +89,9 @@ function addScene(gltf: glTF, scene: Scene): void {
 }
 
 function addNode(gltf: glTF, node: Node): number {
+  if (node.index >= 0)
+    return node.index;
+
   if (!gltf.nodes)
     gltf.nodes = [];
 
@@ -69,22 +112,259 @@ function addNode(gltf: glTF, node: Node): number {
     gltfNode.scale = scale.toArray();
 
   const addedIndex = gltf.nodes.length;
+  node.index = addedIndex;
   gltf.nodes.push(gltfNode);
+
+  if (node.animations && node.animations.length > 0)
+  {
+    addAnimations(gltf, node.animations, addedIndex);
+  }
 
   if (node.mesh) {
     gltfNode.mesh = addMesh(gltf, node.mesh);
   }
-  else {
-    node.forEachNode((node: Node) => {
-      if (!gltfNode.children)
-        gltfNode.children = [];
 
-      const index = addNode(gltf, node);
-      gltfNode.children.push(index);
-    });
+  node.forEachNode((node: Node) => {
+    if (!gltfNode.children)
+      gltfNode.children = [];
+
+    const index = addNode(gltf, node);
+    gltfNode.children.push(index);
+  });
+
+  if (node.skin) {
+    gltfNode.skin = addSkin(gltf, node.skin, node);
   }
 
   return addedIndex;
+}
+
+function getJointIndexAndInverseBindMatrices(node: Node): [number[], any[]] {
+  if (node.index < 0)
+    throw new Error("Node should be added to gltf before running this function");
+  let joints: number[] = [node.index];
+  let ibms: any[] = [node.inverseBindMatrix];
+  node.forEachNode((node: Node) => {
+    let data = getJointIndexAndInverseBindMatrices(node);
+    joints = joints.concat(data[0]);
+    ibms = ibms.concat(data[1]);
+  });
+  return [joints, ibms];
+}
+
+export function addSkin(gltf: glTF, skin: Skin, node: Node): number
+{
+  if (!gltf.skins)
+    gltf.skins = [];
+  const addedIndex = gltf.skins!.length;
+  const gltf_skin: glTFSkin = {
+    joints: []
+  };
+  gltf.skins.push(gltf_skin);
+
+  // add name (if exists)
+  if (skin.name.length > 0)
+    gltf_skin.name = skin.name;
+
+  // add skeleton (if exists)
+  let skeletonNode = node.skin!.skeletonNode;
+  if (skeletonNode)
+  {
+    if (skeletonNode.index < 0)
+      addNode(gltf, skeletonNode);
+    gltf_skin.skeleton = skeletonNode.index;
+  }
+
+  // add joints (required) and inversebindmatrices [IBM], if necessary
+  let rootNode = skeletonNode ? skeletonNode : node;
+  let data = getJointIndexAndInverseBindMatrices(rootNode);
+  gltf_skin.joints = data[0];
+  let ibms = data[1];
+
+  // check if there are any non default IBMs, and if so, create a new accessor
+  let hasIBM = false;
+  for(let m of ibms) {
+    if (m && m.rows === 4 && m.cols === 4 && !Matrix4x4.IsIdentity(m)) {
+      hasIBM = true;
+      break;
+    }
+  }
+
+  if (!hasIBM) {
+    return addedIndex;
+  }
+
+  // init skin buffer
+  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  let skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
+
+  // init skin bufferView
+  let skinBufferView = skinBuffer.addBufferView(ComponentType.FLOAT, DataType.MAT4);
+
+  // init skin accessor
+  skinBufferView.startAccessor();
+  for (let ibm of ibms)
+  {
+    let m = ibm instanceof Matrix4x4 ? ibm : new Matrix4x4();
+    // GLTF2.0 uses column major matrix
+    for (let c = 0; c < 4; ++c)
+    {
+      for (let r = 0; r < 4; ++r)
+      {
+        skinBufferView.push(m.data[r][c]);
+      }
+    }
+  }
+
+  // complete and clean up
+  let skinAccessor = skinBufferView.endAccessor();
+  let skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
+
+  gltf_skin.inverseBindMatrices = skinAccessor_idx;
+
+  skinBufferView.finalize();
+
+  if (!singleGLBBuffer)
+    skinBuffer.finalize();
+
+  return addedIndex;
+}
+
+export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: number) {
+
+  if (animations.length == 0)
+    return;
+
+  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  let animBuffer: Buffer;
+  if (singleGLBBuffer) {
+    animBuffer = gltf.extras.binChunkBuffer!;
+  } else
+    animBuffer = addBuffer(gltf);
+
+  let timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
+  let vec4BufferView: BufferView | undefined;// = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
+  let vec3BufferView: BufferView | undefined;// = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
+
+  if (!gltf.animations || gltf.animations.length == 0) {
+    const gltfAnim: glTFAnimation = {
+      channels: [],
+      samplers: []
+    };
+    gltf.animations = [gltfAnim];
+  }
+
+  let gltfAnim = gltf.animations![0];
+  if (animations[0].name && !gltfAnim.name) // TODO: Animation names
+    gltfAnim.name = animations[0].name;
+
+  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: TRSMode)
+  {
+    let timeAccessor = timeBufferView.endAccessor();
+    let timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
+
+    let animAccessor = animBufferView.endAccessor();
+    let animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
+
+    // then create samplers (input: times accessor idx, output: values accessor idx)
+    let sampler: glTFAnimationSampler = {
+      "input": timeAccessor_idx,
+      "output": animAccessor_idx,
+      "interpolation": interpType
+    };
+    // then create channels (sampler: get sampler idx from above)
+    let channel: glTFAnimationChannel = {
+      "sampler": gltfAnim.samplers.length,
+      "target": {
+        "node": nodeIndex,
+        "path": path
+      }
+    };
+
+    gltfAnim.samplers.push(sampler);
+    gltfAnim.channels.push(channel);
+  }
+
+  for (let anim of animations) {
+
+    if (!anim.keyframes || anim.keyframes.length == 0) {
+      continue;
+    }
+
+    // push to channels and samplers
+    let path = anim.path;
+    let isVec4 = anim.keyframes![0].value!.length == 4;
+    let animBufferView: BufferView;
+    if (isVec4) {
+      if (!vec4BufferView)
+        vec4BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
+      animBufferView = vec4BufferView;
+    } else {
+      if (!vec3BufferView)
+        vec3BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
+      animBufferView = vec3BufferView;
+    }
+
+    // add accessors
+    timeBufferView.startAccessor();
+    animBufferView.startAccessor();
+
+    let prev_interpType = anim.keyframes![0].interpType;
+    let ix = 0;
+    let total_kf = anim.keyframes.length;
+    for (let idx = 0; idx < total_kf; ++idx)
+    {
+      let keyframe = anim.keyframes[idx];
+      let interpType = keyframe.interpType;
+      if (interpType != prev_interpType)
+      {
+        _completeAnimation(animBufferView, prev_interpType, path);
+        timeBufferView.startAccessor();
+        animBufferView.startAccessor();
+        ix = 0;
+      }
+
+      let isSpline = interpType === InterpolationMode.CUBICSPLINE;
+      if (isSpline && isVec4)
+        throw new Error("CUBICSPLINE for Vector4 not implemented!");
+
+      let time = keyframe.time;
+      let value = keyframe.value;
+
+      timeBufferView.push(time);
+      if (isSpline)
+      {
+        let spline_info = keyframe.extras;
+
+        let outTangent = [0,0,0];
+        let inTangent = [0,0,0];
+        if (spline_info?.inTangent && ix > 0) inTangent = spline_info!.inTangent;
+        if (spline_info?.outTangent && (idx < total_kf - 1) && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE)
+          outTangent = spline_info!.outTangent;
+
+        let data = [inTangent, value, outTangent];
+        for (let d of data)
+          for (let j = 0; j < 3; ++j)
+            animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
+      } else {
+        let tj = isVec4 ? 4 : 3;
+        for (let j = 0; j < tj; ++j)
+          animBufferView.push(value[j]);
+      }
+      ++ix;
+
+      prev_interpType = interpType;
+    }
+    _completeAnimation(animBufferView, prev_interpType, path);
+  }
+
+  timeBufferView.finalize();
+  if (vec4BufferView)
+    vec4BufferView.finalize();
+  if (vec3BufferView)
+    vec3BufferView.finalize();
+  if (!singleGLBBuffer)
+    animBuffer.finalize();
 }
 
 function addMesh(gltf: glTF, mesh: Mesh): number {
@@ -263,11 +543,11 @@ function addColorToBufferView(bufferView: BufferView, color: RGBColor | RGBAColo
   }
 }
 
-function addBuffer(gltf: glTF): Buffer {
+export function addBuffer(gltf: glTF): Buffer {
   return new Buffer(gltf);
 }
 
-function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAccessorInfo): number {
+export function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAccessorInfo): number {
   if (!gltf.accessors)
     gltf.accessors = [];
 
