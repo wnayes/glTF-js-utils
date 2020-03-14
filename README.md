@@ -13,34 +13,36 @@ See `src/demo.ts` for usage and test cases
 Create a `GLTFAsset` structure using the provided types.
 
 ```javascript
-import * as GLTFUtils from "gltf-js-utils";
+import {
+  GLTFAsset, Scene, Node, Material, Texture, Mesh, Vertex
+} from "gltf-js-utils";
 
-const asset = new GLTFUtils.GLTFAsset();
-const scene = new GLTFUtils.Scene();
+const asset = new GLTFAsset();
+const scene = new Scene();
 asset.addScene(scene);
 
-const node = new GLTFUtils.Node();
+const node = new Node();
 node.setTranslation(x, y, z);
 node.setRotationRadians(x, y, z);
 node.setScale(x, y, z);
 scene.addNode(node);
 
-const material = new GLTFUtils.Material();
-const texture = new GLTFUtils.Texture(image); // HTMLImageElement
+const material = new Material();
+const texture = new Texture(image); // HTMLImageElement
 texture.wrapS = GLTFUtils.WrappingMode.CLAMP_TO_EDGE;
 texture.wrapT = GLTFUtils.WrappingMode.REPEAT;
 material.pbrMetallicRoughness.baseColorTexture = texture;
 
-const mesh = new GLTFUtils.Mesh();
+const mesh = new Mesh();
 mesh.material = [material];
 
-const v1 = new GLTFUtils.Vertex();
+const v1 = new Vertex();
 v1.x = 1;
 v1.y = 1;
 v1.z = 1;
 v1.u = 0;
 v1.v = 0;
-const v2 = new GLTFUtils.Vertex();
+const v2 = new Vertex();
 // ...
 
 mesh.addFace(v1, v2, v3, faceMaterialIndex /* 0 */);
@@ -49,25 +51,27 @@ mesh.addFace(v4, v5, v6, faceMaterialIndex);
 ```
 
 ###### Create Animation
-```
-const node = new GLTFUtils.Node();
+
+```javascript
+import { Node, Animation, InterpolationMode, TRSMode } from "gltf-js-utils";
+
+const node = new Node();
 scene.addNode(node);
-let nodeAnim = new GLTFUtils.Animation(GLTFUtils.TRSMode.TRANSLATION);
-const InterpolationMode = GLTFUtils.InterpolationMode;
+let nodeAnim = new Animation(GLTFUtils.TRSMode.TRANSLATION);
 nodeAnim.keyframes = [
     {
         time: 0,
-        value: [1,2,3],
+        value: [1, 2, 3],
         interpType: InterpolationMode.LINEAR
     },
     {
         time: 0.3,
-        value: [4,5,6],
+        value: [4, 5, 6],
         interpType: InterpolationMode.LINEAR
     }
 ];
 // or add keyframes via addKeyframe function
-nodeAnim1.addKeyframe(0.8, [7,8,9], InterpolationMode.STEP);
+nodeAnim1.addKeyframe(0.8, [7, 8, 9], InterpolationMode.STEP);
 node.animations = [nodeAnim];
 ```
 
@@ -76,7 +80,9 @@ node.animations = [nodeAnim];
 With the default options, you'll receive an object keyed with the glTF JSON and binary buffers.
 
 ```javascript
-const gltfFiles = await GLTFUtils.exportGLTF(asset);
+import { exportGLTF } from "gltf-js-utils";
+
+const gltfFiles = await exportGLTF(asset);
 // {
 //   "model.gltf": string /* JSON glTF string */
 //   "data1.bin": ArrayBuffer /* ArrayBuffer of buffer data */
@@ -94,9 +100,11 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset);
 Buffers and/or images can be embedded within the JSON as data URIs.
 
 ```javascript
-const gltfFiles = await GLTFUtils.exportGLTF(asset, {
-  bufferOutputType: GLTFUtils.BufferOutputType.DataURI,
-  imageOutputType: GLTFUtils.BufferOutputType.DataURI,
+import { exportGLTF, BufferOutputType } from "gltf-js-utils";
+
+const gltfFiles = await exportGLTF(asset, {
+  bufferOutputType: BufferOutputType.DataURI,
+  imageOutputType: BufferOutputType.DataURI,
 });
 // {
 //   "model.gltf": string /* JSON glTF string, all data embedded */
@@ -108,7 +116,10 @@ const gltfFiles = await GLTFUtils.exportGLTF(asset, {
 Requires a `JSZip` reference. The result will be a ZIP blob.
 
 ```javascript
-GLTFUtils.exportGLTFZip(asset, JSZip).then(blob => {
+import * as JSZip from "jszip";
+import { exportGLTFZip } from "gltf-js-utils";
+
+exportGLTFZip(asset, JSZip).then(blob => {
   // Use FileSaver as an example.
   saveAs(blob, "model.zip");
 });
@@ -117,7 +128,7 @@ GLTFUtils.exportGLTFZip(asset, JSZip).then(blob => {
 #### Create glTF from Three.js object
 
 ```javascript
-import { glTFAssetFromTHREE, exportGLTF } from "gltf-js-utils";
+import { exportGLTF, glTFAssetFromTHREE } from "gltf-js-utils";
 
 // Create a Three.js Scene or Object3D structure...
 const scene = new THREE.Scene();
@@ -131,15 +142,19 @@ const gltfFiles = await exportGLTF(glTFAssetFromTHREE(scene));
 Calling `exportGLB` will produce a single GLB model in an ArrayBuffer.
 
 ```javascript
-const glbArrayBuffer = await GLTFUtils.exportGLB(asset);
+import { exportGLB } from "gltf-js-utils";
+
+const glbArrayBuffer = await exportGLB(asset);
 ```
 
 You can also use `exportGLTF` with the GLB output type to selectively keep some assets external.
 
 ```javascript
-const gltfFiles = await GLTFUtils.exportGLTF(asset, {
-  bufferOutputType: GLTFUtils.BufferOutputType.GLB,
-  imageOutputType: GLTFUtils.BufferOutputType.External,
+import { exportGLTF, BufferOutputType } from "gltf-js-utils";
+
+const gltfFiles = await exportGLTF(asset, {
+  bufferOutputType: BufferOutputType.GLB,
+  imageOutputType: BufferOutputType.External,
 });
 // {
 //   "model.glb": ArrayBuffer
