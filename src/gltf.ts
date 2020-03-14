@@ -115,7 +115,7 @@ function addNode(gltf: glTF, node: Node): number {
   node.index = addedIndex;
   gltf.nodes.push(gltfNode);
 
-  if (node.animations && node.animations.length > 0) {
+  if (node.animations.length > 0) {
     addAnimations(gltf, node.animations, addedIndex);
   }
 
@@ -152,31 +152,33 @@ function getJointIndexAndInverseBindMatrices(node: Node): [number[], any[]] {
 }
 
 export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
-  if (!gltf.skins)
+  if (!gltf.skins) {
     gltf.skins = [];
-  const addedIndex = gltf.skins!.length;
-  const gltf_skin: glTFSkin = {
+  }
+
+  const addedIndex = gltf.skins.length;
+  const gltfSkin: glTFSkin = {
     joints: []
   };
-  gltf.skins.push(gltf_skin);
+  gltf.skins.push(gltfSkin);
 
   // add name (if exists)
   if (skin.name.length > 0)
-    gltf_skin.name = skin.name;
+    gltfSkin.name = skin.name;
 
   // add skeleton (if exists)
-  let skeletonNode = node.skin!.skeletonNode;
+  const skeletonNode = skin.skeletonNode;
   if (skeletonNode) {
     if (skeletonNode.index < 0) {
       addNode(gltf, skeletonNode);
     }
-    gltf_skin.skeleton = skeletonNode.index;
+    gltfSkin.skeleton = skeletonNode.index;
   }
 
   // add joints (required) and inversebindmatrices [IBM], if necessary
   let rootNode = skeletonNode ? skeletonNode : node;
   let data = getJointIndexAndInverseBindMatrices(rootNode);
-  gltf_skin.joints = data[0];
+  gltfSkin.joints = data[0];
   let ibms = data[1];
 
   // check if there are any non default IBMs, and if so, create a new accessor
@@ -194,10 +196,10 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
 
   // init skin buffer
   const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
-  let skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
+  const skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
 
   // init skin bufferView
-  let skinBufferView = skinBuffer.addBufferView(ComponentType.FLOAT, DataType.MAT4);
+  const skinBufferView = skinBuffer.addBufferView(ComponentType.FLOAT, DataType.MAT4);
 
   // init skin accessor
   skinBufferView.startAccessor();
@@ -212,10 +214,10 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   }
 
   // complete and clean up
-  let skinAccessor = skinBufferView.endAccessor();
-  let skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
+  const skinAccessor = skinBufferView.endAccessor();
+  const skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
 
-  gltf_skin.inverseBindMatrices = skinAccessor_idx;
+  gltfSkin.inverseBindMatrices = skinAccessor_idx;
 
   skinBufferView.finalize();
 
@@ -230,13 +232,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     return;
 
   const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
-  let animBuffer: Buffer;
-  if (singleGLBBuffer) {
-    animBuffer = gltf.extras.binChunkBuffer!;
-  }
-  else {
-    animBuffer = addBuffer(gltf);
-  }
+  const animBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
 
   const timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
   let vec4BufferView: BufferView | undefined; // ComponentType.FLOAT, DataType.VEC4
@@ -262,7 +258,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     let animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
 
     // then create samplers (input: times accessor idx, output: values accessor idx)
-    let sampler: glTFAnimationSampler = {
+    const sampler: glTFAnimationSampler = {
       "input": timeAccessor_idx,
       "output": animAccessor_idx,
       "interpolation": interpType
@@ -287,7 +283,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
 
     // push to channels and samplers
     let path = anim.path;
-    let isVec4 = anim.keyframes![0].value!.length == 4;
+    const isVec4 = anim.keyframes[0].value.length === 4;
     let animBufferView: BufferView;
     if (isVec4) {
       if (!vec4BufferView) {
