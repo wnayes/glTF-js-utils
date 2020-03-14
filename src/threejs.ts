@@ -98,7 +98,7 @@ function MaterialFromTHREE(threeMaterial: THREE.Material): Material {
       material.alphaCutoff = threeMaterial.alphaTest;
     }
 
-    material.vertexColorMode = (threeMaterial.vertexColors as any) as VertexColorMode;
+    material.vertexColorMode = (threeMaterial.vertexColors as any) ? VertexColorMode.VertexColors : VertexColorMode.NoColors;
 
     if (threeMaterial.color && !threeMaterial.vertexColors) {
       material.pbrMetallicRoughness.baseColorFactor = [
