@@ -5,8 +5,7 @@ export class Scene {
 
   private _nodes: Node[] = [];
 
-  public constructor(name: string = "")
-  {
+  public constructor(name: string = "") {
     this.name = name;
   }
 
@@ -18,8 +17,7 @@ export class Scene {
     this._nodes.push(node);
   }
 
-  public removeNode(node: Node | number): number
-  {
+  public removeNode(node: Node | number): number {
     let idx = node instanceof Node ? this._nodes.indexOf(node) : node;
     if (idx >= 0 && idx < this._nodes.length)
       this._nodes.splice(idx, 1);

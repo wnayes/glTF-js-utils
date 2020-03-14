@@ -115,8 +115,7 @@ function addNode(gltf: glTF, node: Node): number {
   node.index = addedIndex;
   gltf.nodes.push(gltfNode);
 
-  if (node.animations && node.animations.length > 0)
-  {
+  if (node.animations && node.animations.length > 0) {
     addAnimations(gltf, node.animations, addedIndex);
   }
 
@@ -152,8 +151,7 @@ function getJointIndexAndInverseBindMatrices(node: Node): [number[], any[]] {
   return [joints, ibms];
 }
 
-export function addSkin(gltf: glTF, skin: Skin, node: Node): number
-{
+export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   if (!gltf.skins)
     gltf.skins = [];
   const addedIndex = gltf.skins!.length;
@@ -168,10 +166,10 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number
 
   // add skeleton (if exists)
   let skeletonNode = node.skin!.skeletonNode;
-  if (skeletonNode)
-  {
-    if (skeletonNode.index < 0)
+  if (skeletonNode) {
+    if (skeletonNode.index < 0) {
       addNode(gltf, skeletonNode);
+    }
     gltf_skin.skeleton = skeletonNode.index;
   }
 
@@ -183,7 +181,7 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number
 
   // check if there are any non default IBMs, and if so, create a new accessor
   let hasIBM = false;
-  for(let m of ibms) {
+  for (let m of ibms) {
     if (m && m.rows === 4 && m.cols === 4 && !Matrix4x4.IsIdentity(m)) {
       hasIBM = true;
       break;
@@ -203,14 +201,11 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number
 
   // init skin accessor
   skinBufferView.startAccessor();
-  for (let ibm of ibms)
-  {
+  for (let ibm of ibms) {
     let m = ibm instanceof Matrix4x4 ? ibm : new Matrix4x4();
     // GLTF2.0 uses column major matrix
-    for (let c = 0; c < 4; ++c)
-    {
-      for (let r = 0; r < 4; ++r)
-      {
+    for (let c = 0; c < 4; c++) {
+      for (let r = 0; r < 4; r++) {
         skinBufferView.push(m.data[r][c]);
       }
     }
@@ -231,16 +226,17 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number
 }
 
 export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: number) {
-
-  if (animations.length == 0)
+  if (animations.length === 0)
     return;
 
   const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
   let animBuffer: Buffer;
   if (singleGLBBuffer) {
     animBuffer = gltf.extras.binChunkBuffer!;
-  } else
+  }
+  else {
     animBuffer = addBuffer(gltf);
+  }
 
   let timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
   let vec4BufferView: BufferView | undefined;// = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
@@ -258,8 +254,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
   if (animations[0].name && !gltfAnim.name) // TODO: Animation names
     gltfAnim.name = animations[0].name;
 
-  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: TRSMode)
-  {
+  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: TRSMode) {
     let timeAccessor = timeBufferView.endAccessor();
     let timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
 
@@ -286,7 +281,6 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
   }
 
   for (let anim of animations) {
-
     if (!anim.keyframes || anim.keyframes.length == 0) {
       continue;
     }
@@ -296,12 +290,15 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     let isVec4 = anim.keyframes![0].value!.length == 4;
     let animBufferView: BufferView;
     if (isVec4) {
-      if (!vec4BufferView)
+      if (!vec4BufferView) {
         vec4BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
+      }
       animBufferView = vec4BufferView;
-    } else {
-      if (!vec3BufferView)
+    }
+    else {
+      if (!vec3BufferView) {
         vec3BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
+      }
       animBufferView = vec3BufferView;
     }
 
@@ -312,12 +309,10 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     let prev_interpType = anim.keyframes![0].interpType;
     let ix = 0;
     let total_kf = anim.keyframes.length;
-    for (let idx = 0; idx < total_kf; ++idx)
-    {
+    for (let idx = 0; idx < total_kf; ++idx) {
       let keyframe = anim.keyframes[idx];
       let interpType = keyframe.interpType;
-      if (interpType != prev_interpType)
-      {
+      if (interpType != prev_interpType) {
         _completeAnimation(animBufferView, prev_interpType, path);
         timeBufferView.startAccessor();
         animBufferView.startAccessor();
@@ -332,8 +327,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
       let value = keyframe.value;
 
       timeBufferView.push(time);
-      if (isSpline)
-      {
+      if (isSpline) {
         let spline_info = keyframe.extras;
 
         let outTangent = [0,0,0];
@@ -343,13 +337,17 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
           outTangent = spline_info!.outTangent;
 
         let data = [inTangent, value, outTangent];
-        for (let d of data)
-          for (let j = 0; j < 3; ++j)
+        for (let d of data) {
+          for (let j = 0; j < 3; ++j) {
             animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
-      } else {
+          }
+        }
+      }
+      else {
         let tj = isVec4 ? 4 : 3;
-        for (let j = 0; j < tj; ++j)
+        for (let j = 0; j < tj; ++j) {
           animBufferView.push(value[j]);
+        }
       }
       ++ix;
 

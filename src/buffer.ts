@@ -142,8 +142,7 @@ export class BufferView {
     gltf.bufferViews.push(this._gltfBufferView);
   }
 
-  public getBuffer(): Buffer
-  {
+  public getBuffer(): Buffer {
     return this._buffer;
   }
 

@@ -6,6 +6,7 @@ import { Material } from "./material";
 import { Texture } from "./texture";
 import { Vertex } from "./vertex";
 import { AlphaMode, RGBColor, VertexColorMode, WrappingMode } from "./types";
+import * as THREE from "three";
 
 export function glTFAssetFromTHREE(obj: THREE.Object3D): GLTFAsset {
   const asset = new GLTFAsset();
@@ -99,7 +100,7 @@ function MaterialFromTHREE(threeMaterial: THREE.Material): Material {
 
     material.vertexColorMode = (threeMaterial.vertexColors as any) as VertexColorMode;
 
-    if (threeMaterial.color && threeMaterial.vertexColors === 0 /* THREE.NoColors */) {
+    if (threeMaterial.color && threeMaterial.vertexColors === false /* THREE.NoColors */) {
       material.pbrMetallicRoughness.baseColorFactor = [
         threeMaterial.color.r,
         threeMaterial.color.g,

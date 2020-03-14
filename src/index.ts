@@ -39,7 +39,6 @@ export type GLTFExportType = { [filename: string]: any };
 
 const MODEL_NAME_GLTF = "model.gltf";
 const MODEL_NAME_GLB = "model.glb";
-const BIN_CHUNK_NAME = "BIN";
 
 /**
  * Creates a glTF model from a GLTFAsset structure.
@@ -48,7 +47,7 @@ const BIN_CHUNK_NAME = "BIN";
  * @returns An object, each key pointing to a file.
  */
 export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
-  options = options || {bufferOutputType: BufferOutputType.DataURI};
+  options = options || {};
 
   const gltf: glTF = {
     asset: {

@@ -1,13 +1,10 @@
-import {Matrix} from "./math";
-import {Node} from "./node";
+import { Node } from "./node";
 
-export class Skin
-{
+export class Skin {
   public name: string = "";
   public skeletonNode: Node | null;
 
-  constructor(skeletonNode: Node | null = null, name: string = "")
-  {
+  constructor(skeletonNode: Node | null = null, name: string = "") {
     this.skeletonNode = skeletonNode;
     this.name = name;
   }

@@ -1,8 +1,7 @@
-import {Vector3, Quaternion, toQuaternion, degreesToRadians, Matrix4x4} from "./math";
+import { Vector3, Quaternion, toQuaternion, degreesToRadians, Matrix4x4 } from "./math";
 import { Mesh } from "./mesh";
-import {Animation} from "./animation";
-import {Skin} from "./skin";
-
+import { Animation } from "./animation";
+import { Skin } from "./skin";
 
 export class Node {
   public name: string = "";
@@ -17,8 +16,7 @@ export class Node {
   private _rotation?: Quaternion;
   private _scale?: Vector3;
 
-  constructor(name: string = "")
-  {
+  constructor(name: string = "") {
     this.name = name;
   }
 
@@ -30,8 +28,7 @@ export class Node {
     this._nodes.push(node);
   }
 
-  public removeNode(node: Node | number): number
-  {
+  public removeNode(node: Node | number): number {
     let idx = node instanceof Node ? this._nodes.indexOf(node) : node;
     if (idx >= 0 && idx < this._nodes.length)
       this._nodes.splice(idx, 1);
@@ -42,13 +39,11 @@ export class Node {
     this._nodes.forEach(fn);
   }
 
-  public addAnimation(animation: Animation)
-  {
+  public addAnimation(animation: Animation) {
     this.animations.push(animation);
   }
 
-  public removeAnimation(animation: Animation | number): number
-  {
+  public removeAnimation(animation: Animation | number): number {
     let idx = animation instanceof Animation ? this.animations.indexOf(animation) : animation;
     if (idx >= 0 && idx < this.animations.length)
       this.animations.splice(idx, 1);

@@ -12,6 +12,10 @@ module.exports = {
       }
     ]
   },
+  externals: {
+    three: "three",
+    jszip: "jszip"
+  },
   resolve: {
     extensions: [".ts", ".js"]
   },
@@ -23,4 +27,3 @@ module.exports = {
     globalObject: "typeof self !== 'undefined' ? self : this"
   }
 };
-

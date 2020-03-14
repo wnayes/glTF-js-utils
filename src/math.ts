@@ -69,13 +69,11 @@ export class Matrix {
     return this.data;
   }
 
-  public get rows(): number
-  {
+  public get rows(): number {
     return this.data.length;
   }
 
-  public get cols(): number
-  {
+  public get cols(): number {
     if (this.rows === 0)
       return 0;
     return this.data[0].length;

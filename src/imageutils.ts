@@ -1,5 +1,3 @@
-import { rejects } from "assert";
-
 type ImageType = HTMLImageElement | HTMLCanvasElement;
 
 /**

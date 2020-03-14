@@ -1,20 +1,20 @@
 import * as GLTFUtils from "../src/index";
-import {ComponentType, DataType} from "../src/index";
-import {glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler} from "../src/gltftypes";
-import {InterpolationMode, TRSMode} from "../src/types";
-import {addAccessor, addBuffer, addScenes} from "../src/gltf";
+import { ComponentType, DataType } from "../src/index";
+import { glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler } from "../src/gltftypes";
+import { InterpolationMode, TRSMode } from "../src/types";
+import { addAccessor, addBuffer, addScenes } from "../src/gltf";
 
 
 function download(content: string, fileName: string, contentType: string = "text/plain") {
-    var a = document.createElement("a");
-    var file = new Blob([content], {type: contentType});
+    const a = document.createElement("a");
+    const file = new Blob([content], {type: contentType});
     a.href = URL.createObjectURL(file);
     a.download = fileName;
     a.click();
 }
 
 
-function flatten(arr: Array<any>): Array<any> {
+function flatten(arr: any[]): any[] {
     return arr.reduce(function (flat, toFlatten) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
@@ -65,13 +65,11 @@ function test1() {
     let bufferView3 = buffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
     console.assert(bufferView.getIndex() === 0 && bufferView2.getIndex() === 1);
 
-    function createAccessor(bufferView: GLTFUtils.BufferView, num: number = 1)
-    {
+    function createAccessor(bufferView: GLTFUtils.BufferView, num: number = 1) {
         bufferView.startAccessor();
 
         num = Math.max(0, num);
-        for (let i = 0; i < num; ++i)
-        {
+        for (let i = 0; i < num; ++i) {
             bufferView.push(i*3);
             bufferView.push(i*3+1);
             bufferView.push(i*3+2);
@@ -89,8 +87,7 @@ function test1() {
     acc1 = gltf.accessors![1];
     console.assert(acc1.count === 2 && acc1.byteOffset === 3 * 4 && acc1.max![0] === 3 && acc1.min![0] === 0);
 
-    function createAnimation()
-    {
+    function createAnimation() {
         let animation_sample = [
             {
                 "samplers" : [
@@ -182,12 +179,11 @@ function test1() {
         console.log(gltf.animations)
         console.log(buf1.uri)
     });
-// console.log(gltf.scenes);
-// console.log(gltf.accessors)
+    // console.log(gltf.scenes);
+    // console.log(gltf.accessors);
 }
 
 function animation_test() {
-
     const asset = new GLTFUtils.GLTFAsset();
     const scene = new GLTFUtils.Scene();
 
@@ -343,8 +339,7 @@ function animation_test() {
     // })
 }
 
-function animation_cubicspline_test()
-{
+function animation_cubicspline_test() {
     const asset = new GLTFUtils.GLTFAsset();
     const scene = new GLTFUtils.Scene();
 
@@ -418,11 +413,9 @@ function animation_cubicspline_test()
     });
 
     console.log(gltf)
-
 }
 
-function skin_test()
-{
+function skin_test() {
     let M = new GLTFUtils.Matrix(4);
 
     const asset = new GLTFUtils.GLTFAsset();
@@ -567,8 +560,7 @@ function skin_test()
 }
 
 
-function matrix_test()
-{
+function matrix_test() {
     const Matrix = GLTFUtils.Matrix;
     let rows = 4;
     let M = new Matrix(rows);
