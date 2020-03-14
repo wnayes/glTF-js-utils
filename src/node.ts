@@ -9,7 +9,6 @@ export class Node {
   public animations: Animation[] = [];
   public skin?: Skin;
   public inverseBindMatrix?: Matrix4x4;
-  public index: number = -1; // don't modify. used for converting to gltf
 
   private _nodes: Node[] = [];
   private _translation?: Vector3;

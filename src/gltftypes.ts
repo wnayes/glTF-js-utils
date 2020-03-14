@@ -1,12 +1,13 @@
 import { AlphaMode, ComponentType, DataType, MeshMode,
   WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation } from "./types";
 import { Buffer } from "./buffer";
+import { Node } from "./node";
 
 export interface glTF {
   asset: {
-    version: string;
-    copyright?: string;
-    generator?: string;
+    version: string,
+    copyright?: string,
+    generator?: string,
   };
   scene?: number;
   buffers?: glTFBuffer[];
@@ -25,11 +26,12 @@ export interface glTF {
   /** Extras used specifically by gltf-js-utils. */
   extras: {
     options: {
-       bufferOutputType?: BufferOutputType;
-       imageOutputType?: ImageOutputType;
+       bufferOutputType?: BufferOutputType,
+       imageOutputType?: ImageOutputType,
     },
-    binChunkBuffer: Buffer | null;
-    promises: Promise<any>[];
+    binChunkBuffer: Buffer | null,
+    promises: Promise<any>[],
+    nodeIndices: Map<Node, number>,
   };
 }
 

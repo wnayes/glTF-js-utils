@@ -2,7 +2,7 @@ import * as GLTFUtils from "../src/index";
 import { ComponentType, DataType } from "../src/index";
 import { glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler } from "../src/gltftypes";
 import { InterpolationMode, Transformation } from "../src/types";
-import { addAccessor, addBuffer, addScenes } from "../src/gltf";
+import { addAccessor, addBuffer, addScenes, createEmptyGLTF } from "../src/gltf";
 
 
 function download(content: string, fileName: string, contentType: string = "text/plain") {
@@ -21,19 +21,7 @@ function flatten(arr: any[]): any[] {
 }
 
 function createGLTF(asset: GLTFUtils.GLTFAsset): glTF {
-    const gltf: glTF = {
-        asset: {
-            version: "2.0",
-            copyright: asset.copyright,
-            generator: asset.generator,
-        },
-        extras: {
-            options: {},
-            binChunkBuffer: null,
-            promises: [],
-        }
-    };
-    return gltf;
+    return createEmptyGLTF();
 }
 
 
@@ -451,8 +439,10 @@ function skin_test() {
         let gltf = createGLTF(asset);
         addScenes(gltf, asset);
         let joints = gltf.skins![0].joints!;
-        console.assert(node.index === 0 && gltf.skins![0].skeleton === node2.index);
-        console.assert(joints.length == 4 && joints[0] === node2.index);
+        const nodeIndex = gltf.extras.nodeIndices.get(node);
+        const node2Index = gltf.extras.nodeIndices.get(node2);
+        console.assert(nodeIndex === 0 && gltf.skins![0].skeleton === node2Index);
+        console.assert(joints.length == 4 && joints[0] === node2Index);
     }
 
     const parentNode = new GLTFUtils.Node("Parent");
@@ -466,8 +456,9 @@ function skin_test() {
         let gltf = createGLTF(asset);
         addScenes(gltf, asset);
         let joints = gltf.skins![0].joints!;
-        console.assert(node.index === 2);
-        console.assert(joints.length == 5 && joints[0] === node.index);
+        const nodeIndex = gltf.extras.nodeIndices.get(node);
+        console.assert(nodeIndex === 2);
+        console.assert(joints.length == 5 && joints[0] === nodeIndex);
     }
 
     let x = 10;

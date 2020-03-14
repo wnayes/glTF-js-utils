@@ -15,7 +15,7 @@ export { ImageOutputType, BufferOutputType } from "./types";
 export { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
 
 import { GLTFAsset } from "./asset";
-import { addScenes } from "./gltf";
+import { addScenes, createEmptyGLTF } from "./gltf";
 import { glTF } from "./gltftypes";
 import { encodeBase64DataUri, arrayBufferIsPNG } from "./imageutils";
 import { ImageOutputType, BufferOutputType } from "./types";
@@ -49,18 +49,10 @@ const MODEL_NAME_GLB = "model.glb";
 export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
   options = options || {};
 
-  const gltf: glTF = {
-    asset: {
-      version: "2.0",
-      copyright: asset.copyright,
-      generator: asset.generator,
-    },
-    extras: {
-      options,
-      binChunkBuffer: null,
-      promises: [],
-    }
-  };
+  const gltf = createEmptyGLTF();
+  gltf.asset.copyright = asset.copyright;
+  gltf.asset.generator = asset.generator;
+  gltf.extras.options = options;
 
   addScenes(gltf, asset);
 

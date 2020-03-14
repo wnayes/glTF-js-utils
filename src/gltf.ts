@@ -37,6 +37,20 @@ import { Animation } from "./animation";
 import { Skin } from "./skin";
 import { Matrix4x4 } from "./math";
 
+export function createEmptyGLTF(): glTF {
+  return {
+    asset: {
+      version: "2.0",
+    },
+    extras: {
+      options: {},
+      binChunkBuffer: null,
+      promises: [],
+      nodeIndices: new Map(),
+    }
+  };
+}
+
 export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   gltf.scene = asset.defaultScene;
 
@@ -47,11 +61,6 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
     gltf.extras.binChunkBuffer = addBuffer(gltf);
   }
 
-  // reset all nodes first
-  asset.forEachScene((scene: Scene) => {
-    resetNode(scene);
-  });
-
   asset.forEachScene((scene: Scene) => {
     addScene(gltf, scene);
   });
@@ -59,14 +68,6 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   if (doingGLB) {
     gltf.extras.binChunkBuffer!.finalize();
   }
-}
-
-function resetNode(node : Node | Scene) {
-  if (node instanceof Node)
-    node.index = -1;
-  node.forEachNode((node: Node) => {
-    resetNode(node);
-  });
 }
 
 function addScene(gltf: glTF, scene: Scene): void {
@@ -89,8 +90,10 @@ function addScene(gltf: glTF, scene: Scene): void {
 }
 
 function addNode(gltf: glTF, node: Node): number {
-  if (node.index >= 0)
-    return node.index;
+  const existingIndex = getNodeIndex(gltf, node);
+  if (existingIndex >= 0) {
+    return existingIndex;
+  }
 
   if (!gltf.nodes)
     gltf.nodes = [];
@@ -112,7 +115,7 @@ function addNode(gltf: glTF, node: Node): number {
     gltfNode.scale = scale.toArray();
 
   const addedIndex = gltf.nodes.length;
-  node.index = addedIndex;
+  setNodeIndex(gltf, node, addedIndex);
   gltf.nodes.push(gltfNode);
 
   if (node.animations.length > 0) {
@@ -138,13 +141,16 @@ function addNode(gltf: glTF, node: Node): number {
   return addedIndex;
 }
 
-function getJointIndexAndInverseBindMatrices(node: Node): [number[], any[]] {
-  if (node.index < 0)
-    throw new Error("Node should be added to gltf before running this function");
-  let joints: number[] = [node.index];
+function getJointIndexAndInverseBindMatrices(gltf: glTF, node: Node): [number[], any[]] {
+  const nodeIndex = getNodeIndex(gltf, node);
+  if (nodeIndex === -1) {
+    throw new Error("Node should be added to gltf before calling getJointIndexAndInverseBindMatrices");
+  }
+
+  let joints: number[] = [nodeIndex];
   let ibms: any[] = [node.inverseBindMatrix];
   node.forEachNode((node: Node) => {
-    let data = getJointIndexAndInverseBindMatrices(node);
+    const data = getJointIndexAndInverseBindMatrices(gltf, node);
     joints = joints.concat(data[0]);
     ibms = ibms.concat(data[1]);
   });
@@ -169,15 +175,18 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   // add skeleton (if exists)
   const skeletonNode = skin.skeletonNode;
   if (skeletonNode) {
-    if (skeletonNode.index < 0) {
-      addNode(gltf, skeletonNode);
+    const existingIndex = getNodeIndex(gltf, skeletonNode);
+    if (existingIndex === -1) {
+      gltfSkin.skeleton = addNode(gltf, skeletonNode);
     }
-    gltfSkin.skeleton = skeletonNode.index;
+    else {
+      gltfSkin.skeleton = existingIndex;
+    }
   }
 
   // add joints (required) and inversebindmatrices [IBM], if necessary
   let rootNode = skeletonNode ? skeletonNode : node;
-  let data = getJointIndexAndInverseBindMatrices(rootNode);
+  let data = getJointIndexAndInverseBindMatrices(gltf, rootNode);
   gltfSkin.joints = data[0];
   let ibms = data[1];
 
@@ -685,6 +694,17 @@ function addSampler(gltf: glTF, texture: Texture): number {
   gltf.samplers.push(gltfSampler);
 
   return addedIndex;
+}
+
+function getNodeIndex(gltf: glTF, node: Node): number {
+  if (gltf.extras.nodeIndices.has(node)) {
+    return gltf.extras.nodeIndices.get(node)!;
+  }
+  return -1;
+}
+
+function setNodeIndex(gltf: glTF, node: Node, index: number): void {
+  gltf.extras.nodeIndices.set(node, index);
 }
 
 function objectsEqual(obj1: any, obj2: any): boolean {
