@@ -14,7 +14,7 @@ Create a `GLTFAsset` structure using the provided types.
 
 ```javascript
 import {
-  GLTFAsset, Scene, Node, Material, Texture, Mesh, Vertex
+  GLTFAsset, Scene, Node, Material, Texture, Mesh, Vertex, WrappingMode
 } from "gltf-js-utils";
 
 const asset = new GLTFAsset();
@@ -29,8 +29,8 @@ scene.addNode(node);
 
 const material = new Material();
 const texture = new Texture(image); // HTMLImageElement
-texture.wrapS = GLTFUtils.WrappingMode.CLAMP_TO_EDGE;
-texture.wrapT = GLTFUtils.WrappingMode.REPEAT;
+texture.wrapS = WrappingMode.CLAMP_TO_EDGE;
+texture.wrapT = WrappingMode.REPEAT;
 material.pbrMetallicRoughness.baseColorTexture = texture;
 
 const mesh = new Mesh();
@@ -53,11 +53,11 @@ mesh.addFace(v4, v5, v6, faceMaterialIndex);
 ###### Create Animation
 
 ```javascript
-import { Node, Animation, InterpolationMode, TRSMode } from "gltf-js-utils";
+import { Node, Animation, InterpolationMode, Transformation } from "gltf-js-utils";
 
 const node = new Node();
 scene.addNode(node);
-let nodeAnim = new Animation(GLTFUtils.TRSMode.TRANSLATION);
+const nodeAnim = new Animation(Transformation.TRANSLATION);
 nodeAnim.keyframes = [
     {
         time: 0,

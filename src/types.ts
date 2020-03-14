@@ -94,7 +94,7 @@ export enum InterpolationMode {
   CUBICSPLINE = "CUBICSPLINE"
 }
 
-export enum TRSMode {
+export enum Transformation {
   TRANSLATION = "translation",
   ROTATION = "rotation",
   SCALE = "scale"

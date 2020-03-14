@@ -1,4 +1,4 @@
-import {InterpolationMode, TRSMode} from "./types";
+import { InterpolationMode, Transformation } from "./types";
 
 // for cubicspline interpolation
 export interface KeyframeExtras {
@@ -17,15 +17,15 @@ export interface Keyframe {
 
 export class Animation {
   public keyframes: Keyframe[] = [];
-  public path: TRSMode;
+  public path: Transformation;
   public name: string = "";
 
-  public constructor(path: TRSMode, name: string = "") {
+  public constructor(path: Transformation, name: string = "") {
     this.path = path;
     this.name = name;
   }
 
-  public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?:any) {
+  public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?: KeyframeExtras) {
     console.assert(value.length >= 3);
 
     let kf : Keyframe = {
@@ -34,8 +34,6 @@ export class Animation {
       value: value
     };
     if (interpType === InterpolationMode.CUBICSPLINE) {
-      // throw "CUBICSPLINE NOT IMPLEMENTED"
-
       let ext: KeyframeExtras = {};
       if (extras) {
         if (extras.inTangent) ext.inTangent = extras.inTangent;

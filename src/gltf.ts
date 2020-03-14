@@ -11,9 +11,9 @@ import {
   glTFNode,
   glTFScene, glTFSkin
 } from "./gltftypes";
-import {GLTFAsset} from "./asset";
-import {Node} from "./node";
-import {Scene} from "./scene";
+import { GLTFAsset } from "./asset";
+import { Node } from "./node";
+import { Scene } from "./scene";
 import {
   AlphaMode,
   BufferOutputType,
@@ -24,18 +24,18 @@ import {
   MeshMode,
   RGBAColor,
   RGBColor,
-  TRSMode,
+  Transformation,
   VertexColorMode
 } from "./types";
-import {Mesh} from "./mesh";
-import {Buffer, BufferAccessorInfo, BufferView} from "./buffer";
-import {Vertex} from "./vertex";
-import {Material} from "./material";
-import {Texture} from "./texture";
-import {imageToArrayBuffer, imageToDataURI} from "./imageutils";
-import {Animation} from "./animation";
-import {Skin} from "./skin";
-import {Matrix4x4} from "./math";
+import { Mesh } from "./mesh";
+import { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
+import { Vertex } from "./vertex";
+import { Material } from "./material";
+import { Texture } from "./texture";
+import { imageToArrayBuffer, imageToDataURI } from "./imageutils";
+import { Animation } from "./animation";
+import { Skin } from "./skin";
+import { Matrix4x4 } from "./math";
 
 export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   gltf.scene = asset.defaultScene;
@@ -238,11 +238,11 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     animBuffer = addBuffer(gltf);
   }
 
-  let timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
-  let vec4BufferView: BufferView | undefined;// = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
-  let vec3BufferView: BufferView | undefined;// = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
+  const timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
+  let vec4BufferView: BufferView | undefined; // ComponentType.FLOAT, DataType.VEC4
+  let vec3BufferView: BufferView | undefined; // ComponentType.FLOAT, DataType.VEC3
 
-  if (!gltf.animations || gltf.animations.length == 0) {
+  if (!gltf.animations || gltf.animations.length === 0) {
     const gltfAnim: glTFAnimation = {
       channels: [],
       samplers: []
@@ -254,7 +254,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
   if (animations[0].name && !gltfAnim.name) // TODO: Animation names
     gltfAnim.name = animations[0].name;
 
-  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: TRSMode) {
+  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: Transformation) {
     let timeAccessor = timeBufferView.endAccessor();
     let timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
 
@@ -268,7 +268,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
       "interpolation": interpType
     };
     // then create channels (sampler: get sampler idx from above)
-    let channel: glTFAnimationChannel = {
+    const channel: glTFAnimationChannel = {
       "sampler": gltfAnim.samplers.length,
       "target": {
         "node": nodeIndex,
@@ -319,24 +319,28 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         ix = 0;
       }
 
-      let isSpline = interpType === InterpolationMode.CUBICSPLINE;
+      const isSpline = interpType === InterpolationMode.CUBICSPLINE;
       if (isSpline && isVec4)
         throw new Error("CUBICSPLINE for Vector4 not implemented!");
 
-      let time = keyframe.time;
-      let value = keyframe.value;
+      const { time, value } = keyframe;
 
       timeBufferView.push(time);
       if (isSpline) {
         let spline_info = keyframe.extras;
 
-        let outTangent = [0,0,0];
-        let inTangent = [0,0,0];
-        if (spline_info?.inTangent && ix > 0) inTangent = spline_info!.inTangent;
-        if (spline_info?.outTangent && (idx < total_kf - 1) && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE)
+        let outTangent = [0, 0, 0];
+        let inTangent = [0, 0, 0];
+        if (spline_info?.inTangent && ix > 0) {
+          inTangent = spline_info!.inTangent;
+        }
+        if (spline_info?.outTangent
+          && (idx < total_kf - 1)
+          && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE) {
           outTangent = spline_info!.outTangent;
+        }
 
-        let data = [inTangent, value, outTangent];
+        const data = [inTangent, value, outTangent];
         for (let d of data) {
           for (let j = 0; j < 3; ++j) {
             animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
@@ -344,12 +348,12 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         }
       }
       else {
-        let tj = isVec4 ? 4 : 3;
+        const tj = isVec4 ? 4 : 3;
         for (let j = 0; j < tj; ++j) {
           animBufferView.push(value[j]);
         }
       }
-      ++ix;
+      ix++;
 
       prev_interpType = interpType;
     }

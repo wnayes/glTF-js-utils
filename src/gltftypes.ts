@@ -1,5 +1,5 @@
 import { AlphaMode, ComponentType, DataType, MeshMode,
-  WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, TRSMode } from "./types";
+  WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation } from "./types";
 import { Buffer } from "./buffer";
 
 export interface glTF {
@@ -50,7 +50,7 @@ export interface glTFAnimationChannel {
   sampler: number;
   target: {
     node: number;
-    path: TRSMode
+    path: Transformation
   }
 }
 

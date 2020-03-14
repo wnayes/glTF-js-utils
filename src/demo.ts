@@ -1,7 +1,7 @@
 import * as GLTFUtils from "../src/index";
 import { ComponentType, DataType } from "../src/index";
 import { glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler } from "../src/gltftypes";
-import { InterpolationMode, TRSMode } from "../src/types";
+import { InterpolationMode, Transformation } from "../src/types";
 import { addAccessor, addBuffer, addScenes } from "../src/gltf";
 
 
@@ -151,7 +151,7 @@ function test1() {
             "sampler": sampler_idx,
             "target": {
                 "node": node_idx,
-                "path": TRSMode.ROTATION
+                "path": Transformation.ROTATION
             }
         };
         myAnimation.channels.push(channel);
@@ -201,7 +201,7 @@ function animation_test() {
     node.setScale(x, y, z);
     scene.addNode(node);
 
-    let nodeAnim1 = new GLTFUtils.Animation(TRSMode.ROTATION);
+    let nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
     nodeAnim1.keyframes = [
         {
             time: 0,
@@ -228,7 +228,7 @@ function animation_test() {
 
     console.log(nodeAnim1)
 
-    let nodeAnim2 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
+    let nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim2.keyframes = [
         {
             time: 0,
@@ -357,7 +357,7 @@ function animation_cubicspline_test() {
     node.setScale(x, y, z);
     scene.addNode(node);
 
-    let nodeAnim1 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
+    let nodeAnim1 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim1.keyframes = [
         {
             time: -0.2,
@@ -498,7 +498,7 @@ function skin_test() {
         })
     }
 
-    let nodeAnim1 = new GLTFUtils.Animation(TRSMode.ROTATION);
+    let nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
     nodeAnim1.keyframes = [
         {
             time: 0,
@@ -523,7 +523,7 @@ function skin_test() {
     ];
     nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP);
 
-    let nodeAnim2 = new GLTFUtils.Animation(TRSMode.TRANSLATION);
+    let nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim2.keyframes = [
         {
             time: 0,
@@ -537,7 +537,7 @@ function skin_test() {
         }
     ];
 
-    let nodeAnim3 = new GLTFUtils.Animation(TRSMode.SCALE);
+    let nodeAnim3 = new GLTFUtils.Animation(Transformation.SCALE);
     nodeAnim3.keyframes = [
         {
             time: 0,
