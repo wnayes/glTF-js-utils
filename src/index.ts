@@ -12,7 +12,8 @@ export { glTFAssetFromTHREE } from "./threejs";
 export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
   VertexColorMode, WrappingMode, InterpolationMode, Transformation } from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";
-export { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
+export { Buffer, BufferView } from "./buffer";
+export type { BufferAccessorInfo } from "./buffer";
 
 import { GLTFAsset } from "./asset";
 import { addScenes, createEmptyGLTF } from "./gltf";
