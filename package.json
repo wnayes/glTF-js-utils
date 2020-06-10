@@ -18,13 +18,13 @@
     "url": "https://github.com/wnayes/gltf-js-utils.git"
   },
   "devDependencies": {
-    "@types/jszip": "^3.1.7",
-    "three": "^0.114.0",
-    "ts-loader": "^6.2.1",
-    "tslint": "^5.11.0",
-    "typescript": "^3.8.3",
-    "webpack": "^4.41.6",
+    "@types/jszip": "^3.4.1",
+    "three": "^0.117.0",
+    "ts-loader": "^7.0.5",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   }
 }
