@@ -101,6 +101,7 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
         return undefined;
 
       if (value instanceof ArrayBuffer) {
+        let filename: string;
         if (arrayBufferIsPNG(value)) {
           switch (options!.imageOutputType) {
             case ImageOutputType.DataURI:
@@ -108,7 +109,7 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
               break; // Not applicable
 
             default: // ImageOutputType.External
-              const filename = `img${currentImg}.png`;
+              filename = `img${currentImg}.png`;
               currentImg++;
               output[filename] = value;
               return filename;
@@ -126,7 +127,7 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
             return undefined;
 
           default: // BufferOutputType.External
-            const filename = `data${currentData}.bin`;
+            filename = `data${currentData}.bin`;
             currentData++;
             output[filename] = value;
             return filename;
@@ -159,7 +160,7 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
 export async function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExportOptions): Promise<Blob> {
   return exportGLTF(asset, options).then((output) => {
     const zip = new jsZip();
-    for (let filename in output) {
+    for (const filename in output) {
       zip.file(filename, output[filename]);
     }
     return zip.generateAsync({ type: "blob" });

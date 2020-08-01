@@ -7,7 +7,7 @@ import { addAccessor, addBuffer, addScenes, createEmptyGLTF } from "../src/gltf"
 // There is usage of internal types/APIs here. Until this file operates only
 // with the public API, I don't think we can refer to it as an ideal example.
 
-function download(content: string, fileName: string, contentType: string = "text/plain") {
+function download(content: string, fileName: string, contentType = "text/plain") {
     const a = document.createElement("a");
     const file = new Blob([content], {type: contentType});
     a.href = URL.createObjectURL(file);
@@ -15,7 +15,7 @@ function download(content: string, fileName: string, contentType: string = "text
     a.click();
 }
 
-function createGLTF(asset: GLTFUtils.GLTFAsset): glTF {
+function createGLTF(): glTF {
     return createEmptyGLTF();
 }
 
@@ -23,13 +23,13 @@ function test1() {
     const asset = new GLTFUtils.GLTFAsset();
     const scene = new GLTFUtils.Scene();
 
-    const gltf = createGLTF(asset);
+    const gltf = createGLTF();
 
     asset.addScene(scene);
 
-    let x = 1;
-    let y = 2;
-    let z = 3;
+    const x = 1;
+    const y = 2;
+    const z = 3;
 
     const node = new GLTFUtils.Node();
     node.setTranslation(x, y, z);
@@ -41,13 +41,13 @@ function test1() {
 
     console.assert(gltf.scenes!.length === 1 && gltf.nodes!.length === 1 && gltf.scenes![0].nodes![0] === 0)
 
-    let buffer = addBuffer(gltf); // for translation
-    let bufferView = buffer.addBufferView(ComponentType.FLOAT, DataType.VEC3); // add translation
-    let bufferView2 = buffer.addBufferView(ComponentType.FLOAT, DataType.VEC4); // add quat
-    let bufferView3 = buffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
+    const buffer = addBuffer(gltf); // for translation
+    const bufferView = buffer.addBufferView(ComponentType.FLOAT, DataType.VEC3); // add translation
+    const bufferView2 = buffer.addBufferView(ComponentType.FLOAT, DataType.VEC4); // add quat
+    const bufferView3 = buffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
     console.assert(bufferView.getIndex() === 0 && bufferView2.getIndex() === 1);
 
-    function createAccessor(bufferView: GLTFUtils.BufferView, num: number = 1) {
+    function createAccessor(bufferView: GLTFUtils.BufferView, num = 1) {
         bufferView.startAccessor();
 
         num = Math.max(0, num);
@@ -57,7 +57,7 @@ function test1() {
             bufferView.push(i*3+2);
         }
 
-        let accessor = bufferView.endAccessor();
+        const accessor = bufferView.endAccessor();
         addAccessor(gltf, bufferView.getIndex(), accessor);
     }
 
@@ -70,37 +70,37 @@ function test1() {
     console.assert(acc1.count === 2 && acc1.byteOffset === 3 * 4 && acc1.max![0] === 3 && acc1.min![0] === 0);
 
     function createAnimation() {
-        let animation_sample = [
-            {
-                "samplers" : [
-                    {
-                        "input" : 2,
-                        "interpolation" : "LINEAR",
-                        "output" : 3
-                    }
-                ],
-                "channels" : [ {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 0,
-                        "path" : "rotation"
-                    }
-                } ]
-            }
-        ]
+        // const animation_sample = [
+        //     {
+        //         "samplers" : [
+        //             {
+        //                 "input" : 2,
+        //                 "interpolation" : "LINEAR",
+        //                 "output" : 3
+        //             }
+        //         ],
+        //         "channels" : [ {
+        //             "sampler" : 0,
+        //             "target" : {
+        //                 "node" : 0,
+        //                 "path" : "rotation"
+        //             }
+        //         } ]
+        //     }
+        // ]
 
-        let node_idx = 0;
+        const node_idx = 0;
 
-        let myAnimation: glTFAnimation = {
+        const myAnimation: glTFAnimation = {
             channels: [],
             samplers: []
         }
 
-        let times = [0, 0.2, 0.4, 0.6, 0.8];
-        let values: number[] = [];
+        const times = [0, 0.2, 0.4, 0.6, 0.8];
+        const values: number[] = [];
 
-        let num = times.length;
-        let interpType = InterpolationMode.LINEAR; // samplers
+        const num = times.length;
+        const interpType = InterpolationMode.LINEAR; // samplers
         for (let i = 0; i < num; ++i)
         {
             values.push(i*4, i*4+1, i*4+2, i*4+3);
@@ -110,14 +110,16 @@ function test1() {
         bufferView3.startAccessor();
         for (const t of times)
             bufferView3.push(t);
-        let accessor = bufferView3.endAccessor();
-        let accessor_idx = addAccessor(gltf, bufferView3.getIndex(), accessor);
+
+        const accessor = bufferView3.endAccessor();
+        const accessor_idx = addAccessor(gltf, bufferView3.getIndex(), accessor);
 
         bufferView2.startAccessor();
         for (const v of values)
             bufferView2.push(v);
-        let accessor2 = bufferView2.endAccessor();
-        let accessor2_idx = addAccessor(gltf, bufferView2.getIndex(), accessor2);
+
+        const accessor2 = bufferView2.endAccessor();
+        const accessor2_idx = addAccessor(gltf, bufferView2.getIndex(), accessor2);
 
         // then create samplers (input: times accessor idx, output: values accessor idx)
         const sampler: glTFAnimationSampler = {
@@ -144,14 +146,14 @@ function test1() {
 
     createAnimation();
 
-    let promises = [];
+    const promises = [];
     bufferView.finalize();
     bufferView2.finalize();
     bufferView3.finalize();
     promises.push(buffer.finalize());
 
-    let bufv1 = gltf.bufferViews![0];
-    let buf1 = gltf.buffers![0];
+    const bufv1 = gltf.bufferViews![0];
+    const buf1 = gltf.buffers![0];
 
     Promise.all(promises).then(() => {
         console.assert(bufv1.byteLength === 3 * 3 * 4)
@@ -170,11 +172,11 @@ function animation_test() {
 
     asset.addScene(scene);
 
-    const gltf = createGLTF(asset);
+    const gltf = createGLTF();
 
-    let x = 1;
-    let y = 2;
-    let z = 3;
+    const x = 1;
+    const y = 2;
+    const z = 3;
 
     const node = new GLTFUtils.Node();
     node.setTranslation(x, y, z);
@@ -182,7 +184,7 @@ function animation_test() {
     node.setScale(x, y, z);
     scene.addNode(node);
 
-    let nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
+    const nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
     nodeAnim1.keyframes = [
         {
             time: 0,
@@ -209,7 +211,7 @@ function animation_test() {
 
     console.log(nodeAnim1)
 
-    let nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
+    const nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim2.keyframes = [
         {
             time: 0,
@@ -232,13 +234,13 @@ function animation_test() {
     const gltfAnim = gltf.animations![0];
     console.assert(gltfAnim.samplers!.length === 3);
     console.assert(gltfAnim.channels!.length === 3);
-    let channel1 = gltfAnim.channels![0]; // path: ROTATION
-    let channel2 = gltfAnim.channels![1]; // path: ROTATION
-    let channel3 = gltfAnim.channels![2]; // path: TRANSLATION
+    const channel1 = gltfAnim.channels![0]; // path: ROTATION
+    const channel2 = gltfAnim.channels![1]; // path: ROTATION
+    const channel3 = gltfAnim.channels![2]; // path: TRANSLATION
 
-    let sampler1 = gltfAnim.samplers![0]; // interpolation: LINEAR
-    let sampler2 = gltfAnim.samplers![1]; // interpolation: STEP
-    let sampler3 = gltfAnim.samplers![2]; // interpolation: LINEAR
+    const sampler1 = gltfAnim.samplers![0]; // interpolation: LINEAR
+    const sampler2 = gltfAnim.samplers![1]; // interpolation: STEP
+    const sampler3 = gltfAnim.samplers![2]; // interpolation: LINEAR
 
     // assert channel targets
     console.assert(
@@ -287,13 +289,13 @@ function animation_test() {
         console.assert(count === accessors[5].count && count === 2);
     }
 
-    let num_time = 7;
-    let num_vec4 = 5;
-    let num_vec3 = 2;
-    let time_bytes = num_time * 4;
-    let vec3_bytes = num_vec3 * 3 * 4;
-    let vec4_bytes = num_vec4 * 4 * 4;
-    let total_bytes = time_bytes + vec3_bytes + vec4_bytes;
+    const num_time = 7;
+    const num_vec4 = 5;
+    const num_vec3 = 2;
+    const time_bytes = num_time * 4;
+    const vec3_bytes = num_vec3 * 3 * 4;
+    const vec4_bytes = num_vec4 * 4 * 4;
+    const total_bytes = time_bytes + vec3_bytes + vec4_bytes;
     // assert accessors
 
     Promise.all(gltf.extras.promises).then(()=>{
@@ -326,11 +328,11 @@ function animation_cubicspline_test() {
 
     asset.addScene(scene);
 
-    let gltf = createGLTF(asset);
+    const gltf = createGLTF();
 
-    let x = 1;
-    let y = 2;
-    let z = 3;
+    const x = 1;
+    const y = 2;
+    const z = 3;
 
     const node = new GLTFUtils.Node();
     node.setTranslation(x, y, z);
@@ -338,7 +340,7 @@ function animation_cubicspline_test() {
     node.setScale(x, y, z);
     scene.addNode(node);
 
-    let nodeAnim1 = new GLTFUtils.Animation(Transformation.TRANSLATION);
+    const nodeAnim1 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim1.keyframes = [
         {
             time: -0.2,
@@ -381,11 +383,11 @@ function animation_cubicspline_test() {
     addScenes(gltf, asset);
 
     const accessors = gltf.accessors!;
-    const BV = gltf.bufferViews!;
     const time_accessor = accessors[2];
     const anim_accessor = accessors[3];
-    const time_BV = BV[0];
-    const anim_BV = BV[1];
+    //const BV = gltf.bufferViews!;
+    //const time_BV = BV[0];
+    //const anim_BV = BV[1];
 
     console.assert(time_accessor.count * 3 === anim_accessor.count);
 
@@ -397,7 +399,7 @@ function animation_cubicspline_test() {
 }
 
 function skin_test() {
-    let M = new GLTFUtils.Matrix(4);
+    //const M = new GLTFUtils.Matrix(4);
 
     const asset = new GLTFUtils.GLTFAsset();
     const scene = new GLTFUtils.Scene();
@@ -425,13 +427,13 @@ function skin_test() {
     node3.addNode(node4);
     node3.addNode(node5);
 
-    let skin_name = "Skin0";
+    const skin_name = "Skin0";
     node.skin = new GLTFUtils.Skin(node2, skin_name);
 
     {
-        let gltf = createGLTF(asset);
+        const gltf = createGLTF();
         addScenes(gltf, asset);
-        let joints = gltf.skins![0].joints!;
+        const joints = gltf.skins![0].joints!;
         const nodeIndex = gltf.extras.nodeIndices.get(node);
         const node2Index = gltf.extras.nodeIndices.get(node2);
         console.assert(nodeIndex === 0 && gltf.skins![0].skeleton === node2Index);
@@ -446,17 +448,17 @@ function skin_test() {
     node.skin.skeletonNode = null; // set skeleton root to 'node'
 
     {
-        let gltf = createGLTF(asset);
+        const gltf = createGLTF();
         addScenes(gltf, asset);
-        let joints = gltf.skins![0].joints!;
+        const joints = gltf.skins![0].joints!;
         const nodeIndex = gltf.extras.nodeIndices.get(node);
         console.assert(nodeIndex === 2);
         console.assert(joints.length == 5 && joints[0] === nodeIndex);
     }
 
-    let x = 10;
-    let y = 20;
-    let z = -30;
+    const x = 10;
+    const y = 20;
+    const z = -30;
     // use row major to store
     node3.inverseBindMatrix = new GLTFUtils.Matrix4x4(); // add some inverse bind matrices
     node3.inverseBindMatrix.data[0][3] = x; // set x translation
@@ -465,14 +467,14 @@ function skin_test() {
     // set skeleton root back to node2
     node.skin.skeletonNode = node2;
     {
-        let gltf = createGLTF(asset);
+        const gltf = createGLTF();
 
         addScenes(gltf, asset);
 
-        let joints = gltf.skins![0].joints!;
-        Promise.all(gltf.extras.promises).then(()=>{
-            let buffer = gltf.buffers![0];
-            let accessor = gltf.accessors![0];
+        const joints = gltf.skins![0].joints!;
+        Promise.all(gltf.extras.promises).then(() => {
+            const buffer = gltf.buffers![0];
+            const accessor = gltf.accessors![0];
             console.assert(gltf.skins![0].inverseBindMatrices === 0);
             console.assert(buffer.byteLength === joints.length * 4 * 16);
             console.assert(accessor.count === joints.length);
@@ -482,7 +484,7 @@ function skin_test() {
         })
     }
 
-    let nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
+    const nodeAnim1 = new GLTFUtils.Animation(Transformation.ROTATION);
     nodeAnim1.keyframes = [
         {
             time: 0,
@@ -507,7 +509,7 @@ function skin_test() {
     ];
     nodeAnim1.addKeyframe(0.8, [1,2,3,4], InterpolationMode.STEP);
 
-    let nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
+    const nodeAnim2 = new GLTFUtils.Animation(Transformation.TRANSLATION);
     nodeAnim2.keyframes = [
         {
             time: 0,
@@ -521,7 +523,7 @@ function skin_test() {
         }
     ];
 
-    let nodeAnim3 = new GLTFUtils.Animation(Transformation.SCALE);
+    const nodeAnim3 = new GLTFUtils.Animation(Transformation.SCALE);
     nodeAnim3.keyframes = [
         {
             time: 0,
@@ -547,8 +549,8 @@ function skin_test() {
 
 function matrix_test() {
     const Matrix = GLTFUtils.Matrix;
-    let rows = 4;
-    let M = new Matrix(rows);
+    const rows = 4;
+    const M = new Matrix(rows);
     M.data[0][0] = 1;
     console.assert(Matrix.IsIdentity(M));
     M.data[0][0] = 2;
@@ -565,12 +567,12 @@ animation_cubicspline_test();
 skin_test();
 
 // Not executed, ensures API typings work.
-function __typingTests(): void
+function __typingTests(): void // eslint-disable-line
 {
     const asset = new GLTFUtils.GLTFAsset();
-    const isString = (x: string) => {};
-    const isBuffer = (x: ArrayBuffer) => {};
-    const isEither = (x: ArrayBuffer | string) => {};
+    const isString = (x: string) => x;
+    const isBuffer = (x: ArrayBuffer) => x;
+    const isEither = (x: ArrayBuffer | string) => x;
 
     GLTFUtils.exportGLTF(asset).then(value => {
         isString(value["model.gltf"]);
@@ -608,4 +610,4 @@ function __typingTests(): void
         isBuffer(value["model.glb"]);
         isEither(value["something"]);
     });
-};
+}
