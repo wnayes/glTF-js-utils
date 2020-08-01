@@ -6,7 +6,7 @@ import { Material } from "./material";
 import { Texture } from "./texture";
 import { Vertex } from "./vertex";
 import { AlphaMode, RGBColor, VertexColorMode, WrappingMode } from "./types";
-import * as THREE from "three";
+import type * as THREE from "three";
 
 export function glTFAssetFromTHREE(obj: THREE.Object3D): GLTFAsset {
   const asset = new GLTFAsset();

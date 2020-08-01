@@ -4,6 +4,8 @@ import { glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler } from 
 import { InterpolationMode, Transformation } from "../src/types";
 import { addAccessor, addBuffer, addScenes, createEmptyGLTF } from "../src/gltf";
 
+// There is usage of internal types/APIs above. Until this file operates only
+// with the public API, I don't think we can refer to it as an ideal example.
 
 function download(content: string, fileName: string, contentType: string = "text/plain") {
     const a = document.createElement("a");

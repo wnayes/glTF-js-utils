@@ -6,7 +6,6 @@ Helper library for creating glTF 2.0 models with JavaScript.
 Includes a basic Three.js to glTF converter.
 
 ## Usage
-See `src/demo.ts` for usage and test cases
 
 #### Creating glTF from scratch
 
