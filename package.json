@@ -8,7 +8,7 @@
     "start": "npx webpack-dev-server",
     "build": "webpack --config webpack.dev.config.js & webpack --config webpack.prod.config.js",
     "build-demo": "webpack --config public/webpack.config.js",
-    "test": "mocha"
+    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register test/*.spec.ts"
   },
   "keywords": [],
   "author": "Will Nayes",
@@ -18,12 +18,18 @@
     "url": "https://github.com/wnayes/gltf-js-utils.git"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.12",
     "@types/jszip": "^3.4.1",
+    "@types/mocha": "^8.0.1",
     "@typescript-eslint/eslint-plugin": "^3.7.1",
     "@typescript-eslint/parser": "^3.7.1",
+    "chai": "^4.2.0",
+    "cross-env": "^7.0.2",
     "eslint": "^7.6.0",
+    "mocha": "^8.1.0",
     "three": "^0.119.1",
     "ts-loader": "^8.0.2",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.7",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
