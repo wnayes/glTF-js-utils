@@ -1,16 +1,16 @@
 import { RGBColor, RGBAColor } from "./types";
 
 export class Vertex {
-  public x: number = 0;
-  public y: number = 0;
-  public z: number = 0;
+  public x = 0;
+  public y = 0;
+  public z = 0;
 
-  public u: number = 0;
-  public v: number = 0;
+  public u = 0;
+  public v = 0;
 
-  public normalX: number = 0;
-  public normalY: number = 0;
-  public normalZ: number = 0;
+  public normalX = 0;
+  public normalY = 0;
+  public normalZ = 0;
 
   public color?: RGBColor | RGBAColor;
 }

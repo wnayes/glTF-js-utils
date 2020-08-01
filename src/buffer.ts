@@ -7,7 +7,7 @@ export class Buffer {
   private _index: number;
   private _bufferViews: BufferView[] = [];
   private _finalizePromise?: Promise<void>;
-  private _finalized: boolean = false;
+  private _finalized = false;
 
   public constructor(gltf: glTF) {
     this._gltf = gltf;
@@ -62,7 +62,7 @@ export class Buffer {
     if (!this._finalized)
       throw new Error("Cannot get ArrayBuffer from Buffer before it is finalized");
 
-    let byteLength = this._getTotalSize();
+    const byteLength = this._getTotalSize();
     const buffer = new ArrayBuffer(byteLength);
 
     let currentIndex = 0;
@@ -111,11 +111,11 @@ export class BufferView {
 
   private _asyncWritePromise?: Promise<void>;
 
-  private _finalized: boolean = false;
+  private _finalized = false;
   private _finalizedPromise?: Promise<void>;
-  private _finalizedPromiseResolve?: any;
+  private _finalizedPromiseResolve?: VoidFunction;
 
-  private _accessorIndex: number = -1;
+  private _accessorIndex = -1;
   private _accessorAttr: glTFAttribute | null = null;
   private _accessorMin: number[] | null = null;
   private _accessorMax: number[] | null = null;
@@ -158,17 +158,21 @@ export class BufferView {
     if (this._accessorIndex >= 0) {
       const minmaxIndex = writeIndex % this._numComponentsForDataType();
 
-      const currentMin = this._accessorMin![minmaxIndex];
-      if (typeof currentMin !== "number")
-        this._accessorMin![minmaxIndex] = item;
-      else
-        this._accessorMin![minmaxIndex] = Math.min(currentMin, item);
+      if (!this._accessorMin || !this._accessorMax) {
+        throw new Error("Unexpected accessor state");
+      }
 
-      const currentMax = this._accessorMax![minmaxIndex];
-      if (typeof currentMax !== "number")
-        this._accessorMax![minmaxIndex] = item;
+      const currentMin = this._accessorMin[minmaxIndex];
+      if (typeof currentMin !== "number")
+        this._accessorMin[minmaxIndex] = item;
       else
-        this._accessorMax![minmaxIndex] = Math.max(currentMax, item);
+        this._accessorMin[minmaxIndex] = Math.min(currentMin, item);
+
+      const currentMax = this._accessorMax[minmaxIndex];
+      if (typeof currentMax !== "number")
+        this._accessorMax[minmaxIndex] = item;
+      else
+        this._accessorMax[minmaxIndex] = Math.max(currentMax, item);
     }
   }
 
@@ -199,7 +203,7 @@ export class BufferView {
     }
   }
 
-  public writeAsync(buffer: Promise<ArrayBuffer>, startIndex: number = this.getSize()): Promise<void> {
+  public writeAsync(buffer: Promise<ArrayBuffer>): Promise<void> {
     if (this._asyncWritePromise)
       throw new Error("Can't write multiple buffer view values asynchronously");
     this._asyncWritePromise = buffer.then((arrayBuffer: ArrayBuffer) => {
@@ -224,19 +228,23 @@ export class BufferView {
 
   public endAccessor(): BufferAccessorInfo {
     if (this._accessorIndex < 0)
-      throw "An accessor was not started, but was attempted to be ended";
+      throw new Error("An accessor was not started, but was attempted to be ended");
 
     const elementSize = this._getElementSize();
     const numComponentsForDataType = this._numComponentsForDataType()
     const numElements = (this._data.length - this._accessorIndex) / numComponentsForDataType;
     if (numElements % 1)
-      throw "An accessor was ended with missing component values";
+      throw new Error("An accessor was ended with missing component values");
 
-    for (let i = 0; i < this._accessorMin!.length; i++) {
-      if (typeof this._accessorMin![i] !== "number")
-        this._accessorMin![i] = 0;
-      if (typeof this._accessorMax![i] !== "number")
-        this._accessorMax![i] = 0;
+    if (!this._accessorMin || !this._accessorMax) {
+      throw new Error("Unexpected accessor state");
+    }
+
+    for (let i = 0; i < this._accessorMin.length; i++) {
+      if (typeof this._accessorMin[i] !== "number")
+        this._accessorMin[i] = 0;
+      if (typeof this._accessorMax[i] !== "number")
+        this._accessorMax[i] = 0;
     }
 
     const info: BufferAccessorInfo = {
@@ -244,8 +252,8 @@ export class BufferView {
       componentType: this._componentType,
       count: numElements,
       type: this._dataType,
-      min: this._accessorMin!,
-      max: this._accessorMax!,
+      min: this._accessorMin,
+      max: this._accessorMax,
     };
 
     switch (this._accessorAttr) {

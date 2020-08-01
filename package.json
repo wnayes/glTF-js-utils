@@ -19,6 +19,9 @@
   },
   "devDependencies": {
     "@types/jszip": "^3.4.1",
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
+    "eslint": "^7.6.0",
     "three": "^0.119.1",
     "ts-loader": "^8.0.2",
     "tslint": "^6.1.3",

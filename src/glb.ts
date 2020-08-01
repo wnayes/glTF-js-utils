@@ -9,7 +9,7 @@ enum GLBChunkType {
   BIN = 0x004E4942,
 }
 
-export function createGLBBuffer(json: string, bin?: ArrayBuffer | null) {
+export function createGLBBuffer(json: string, bin?: ArrayBuffer | null): ArrayBuffer {
   if (!json)
     throw new Error("GLB requires a JSON glTF chunk");
 
@@ -32,7 +32,7 @@ export function createGLBBuffer(json: string, bin?: ArrayBuffer | null) {
   writeHeader(glbDataView, glbLength);
 
   // Chunk 0 (JSON)
-  let offset = writeChunk(glbDataView, encodedJSON, 12, GLBChunkType.JSON, 0x20);
+  const offset = writeChunk(glbDataView, encodedJSON, 12, GLBChunkType.JSON, 0x20);
 
   // Chunk 1 (Binary Buffer)
   if (bin) {
@@ -48,7 +48,7 @@ function writeHeader(out: DataView, glbLength: number): void {
   out.setUint32(8, glbLength, true);
 }
 
-function writeChunk(out: DataView, chunk: ArrayBuffer, offset: number, chunkType: GLBChunkType, pad: number = 0): number {
+function writeChunk(out: DataView, chunk: ArrayBuffer, offset: number, chunkType: GLBChunkType, pad = 0): number {
   const chunkLength = makeDivisibleBy(chunk.byteLength, 4);
   out.setUint32(offset, chunkLength, true);
   out.setUint32(offset += 4, chunkType, true);

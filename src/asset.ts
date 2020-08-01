@@ -1,9 +1,9 @@
 import { Scene } from "./scene";
 
 export class GLTFAsset {
-  public copyright: string = "";
-  public defaultScene: number = 0;
-  public generator: string = "glTF-js-utils";
+  public copyright = "";
+  public defaultScene = 0;
+  public generator = "glTF-js-utils";
 
   private _scenes: Scene[] = [];
 

@@ -4,7 +4,7 @@ import { glTF, glTFAnimation, glTFAnimationChannel, glTFAnimationSampler } from 
 import { InterpolationMode, Transformation } from "../src/types";
 import { addAccessor, addBuffer, addScenes, createEmptyGLTF } from "../src/gltf";
 
-// There is usage of internal types/APIs above. Until this file operates only
+// There is usage of internal types/APIs here. Until this file operates only
 // with the public API, I don't think we can refer to it as an ideal example.
 
 function download(content: string, fileName: string, contentType: string = "text/plain") {
@@ -15,17 +15,9 @@ function download(content: string, fileName: string, contentType: string = "text
     a.click();
 }
 
-
-function flatten(arr: any[]): any[] {
-    return arr.reduce(function (flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-    }, []);
-}
-
 function createGLTF(asset: GLTFUtils.GLTFAsset): glTF {
     return createEmptyGLTF();
 }
-
 
 function test1() {
     const asset = new GLTFUtils.GLTFAsset();
@@ -105,39 +97,38 @@ function test1() {
         }
 
         let times = [0, 0.2, 0.4, 0.6, 0.8];
-        let values = [];
+        let values: number[] = [];
 
         let num = times.length;
         let interpType = InterpolationMode.LINEAR; // samplers
         for (let i = 0; i < num; ++i)
         {
-            values.push([i*4, i*4+1, i*4+2, i*4+3]);
+            values.push(i*4, i*4+1, i*4+2, i*4+3);
         }
 
         // create times accessor and values accessor first
         bufferView3.startAccessor();
-        for (let t of times)
+        for (const t of times)
             bufferView3.push(t);
         let accessor = bufferView3.endAccessor();
         let accessor_idx = addAccessor(gltf, bufferView3.getIndex(), accessor);
 
-        let flat = flatten(values);
         bufferView2.startAccessor();
-        for (let v of flat)
+        for (const v of values)
             bufferView2.push(v);
         let accessor2 = bufferView2.endAccessor();
         let accessor2_idx = addAccessor(gltf, bufferView2.getIndex(), accessor2);
 
         // then create samplers (input: times accessor idx, output: values accessor idx)
-        let sampler: glTFAnimationSampler = {
+        const sampler: glTFAnimationSampler = {
             "input": accessor_idx,
             "output": accessor2_idx,
             "interpolation": interpType
         };
         myAnimation.samplers.push(sampler);
-        let sampler_idx = myAnimation.samplers.length;
+        const sampler_idx = myAnimation.samplers.length;
         // then create channels (sampler: get sampler idx from above)
-        let channel: glTFAnimationChannel = {
+        const channel: glTFAnimationChannel = {
             "sampler": sampler_idx,
             "target": {
                 "node": node_idx,
@@ -546,10 +537,11 @@ function skin_test() {
     node.animations = [nodeAnim1, nodeAnim2];
     node2.animations = [nodeAnim3];
 
-    GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
-        console.log(value["model.gltf"]);
-        download(value["model.gltf"], "yolo.gltf");
-    })
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.DataURI }).then(value => {
+        const result = value["model.gltf"];
+        console.log(result);
+        download(result, "yolo.gltf");
+    });
 }
 
 
@@ -571,3 +563,49 @@ matrix_test();
 animation_test();
 animation_cubicspline_test();
 skin_test();
+
+// Not executed, ensures API typings work.
+function __typingTests(): void
+{
+    const asset = new GLTFUtils.GLTFAsset();
+    const isString = (x: string) => {};
+    const isBuffer = (x: ArrayBuffer) => {};
+    const isEither = (x: ArrayBuffer | string) => {};
+
+    GLTFUtils.exportGLTF(asset).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, {}).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { jsonSpacing: 2 }).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.DataURI, imageOutputType: GLTFUtils.ImageOutputType.DataURI }).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.DataURI, imageOutputType: GLTFUtils.ImageOutputType.DataURI, jsonSpacing: 2 }).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.External, imageOutputType: GLTFUtils.ImageOutputType.External, jsonSpacing: 2 }).then(value => {
+        isString(value["model.gltf"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.GLB }).then(value => {
+        isBuffer(value["model.glb"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { imageOutputType: GLTFUtils.ImageOutputType.GLB }).then(value => {
+        isBuffer(value["model.glb"]);
+        isEither(value["something"]);
+    });
+    GLTFUtils.exportGLTF(asset, { bufferOutputType: GLTFUtils.BufferOutputType.GLB, imageOutputType: GLTFUtils.ImageOutputType.GLB }).then(value => {
+        isBuffer(value["model.glb"]);
+        isEither(value["something"]);
+    });
+};

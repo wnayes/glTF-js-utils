@@ -1,11 +1,11 @@
 import { Node } from "./node";
 
 export class Scene {
-  public name: string = "";
+  public name = "";
 
   private _nodes: Node[] = [];
 
-  public constructor(name: string = "") {
+  public constructor(name = "") {
     this.name = name;
   }
 
@@ -18,7 +18,7 @@ export class Scene {
   }
 
   public removeNode(node: Node | number): number {
-    let idx = node instanceof Node ? this._nodes.indexOf(node) : node;
+    const idx = node instanceof Node ? this._nodes.indexOf(node) : node;
     if (idx >= 0 && idx < this._nodes.length)
       this._nodes.splice(idx, 1);
     return idx;

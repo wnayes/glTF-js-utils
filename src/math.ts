@@ -5,9 +5,9 @@ export class Vector3 {
     this.z = z;
   }
 
-  public x: number = 0;
-  public y: number = 0;
-  public z: number = 0;
+  public x = 0;
+  public y = 0;
+  public z = 0;
 
   public toArray(): [number, number, number] {
     return [this.x, this.y, this.z];
@@ -48,7 +48,7 @@ export function toQuaternion(x: number, y: number, z: number): Quaternion {
   );
 }
 
-export function degreesToRadians(degrees: number) {
+export function degreesToRadians(degrees: number): number {
   return degrees * Math.PI / 180;
 }
 
@@ -58,7 +58,7 @@ export class Matrix {
 
   public data: number[][]; // try to use row-major
 
-  public constructor(rows: number = 4) {
+  public constructor(rows = 4) {
     this.data = Matrix.Identity(rows);
   }
 
@@ -83,12 +83,10 @@ export class Matrix {
    * Initialize an identity square matrix
    */
   public static Identity(rows: number): number[][] {
-    let M = [];
-    for (let r = 0; r < rows; ++r)
-    {
-      let Mrow = [];
-      for (let c = 0; c < rows; ++c)
-      {
+    const M = [];
+    for (let r = 0; r < rows; ++r) {
+      const Mrow = [];
+      for (let c = 0; c < rows; ++c) {
         Mrow.push(r===c?1:0);
       }
       M.push(Mrow);
@@ -101,10 +99,8 @@ export class Matrix {
     const cols = matrix.cols;
     if (rows !== cols)
       return false;
-    for (let r = 0; r < rows; ++r)
-    {
-      for (let c = 0; c < cols; ++c)
-      {
+    for (let r = 0; r < rows; ++r) {
+      for (let c = 0; c < cols; ++c) {
         if (matrix.data[r][c] != (r === c ? 1 : 0))
           return false;
       }

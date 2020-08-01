@@ -67,7 +67,7 @@ export interface glTFCamera {
   perspective?: glTFCameraPerspective;
   type: string;
   name?: string;
-  extensions?: object;
+  extensions?: Record<string, unknown>;
   extras?: any;
 }
 
@@ -76,7 +76,7 @@ export interface glTFCameraOrthographic {
   ymag: number;
   zfar: number;
   znear: number;
-  extensions?: object;
+  extensions?: Record<string, unknown>;
   extras?: any;
 }
 
@@ -85,7 +85,7 @@ export interface glTFCameraPerspective {
   yfov: number;
   zfar?: number;
   znear: number;
-  extensions?: object;
+  extensions?: Record<string, unknown>;
   extras?: any;
 }
 
@@ -94,7 +94,7 @@ export interface glTFSkin {
   skeleton?: number;
   joints: number[];
   name?: string;
-  extensions?: object;
+  extensions?: Record<string, unknown>;
   extras?: any;
 }
 
@@ -145,16 +145,16 @@ export interface glTFSparseAccessor {
     bufferView: number;
     byteOffset?: number; // default 0
     componentType: ComponentType
-    extensions?: object;
+    extensions?: Record<string, unknown>;
     extras?: any;
   };
   values: {
     bufferView: number;
     byteOffset?: number; // default 0
-    extensions?: object;
+    extensions?: Record<string, unknown>;
     extras?: any;
   };
-  extensions?: object;
+  extensions?: Record<string, unknown>;
   extras?: any;
 }
 

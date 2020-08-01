@@ -4,7 +4,7 @@ import { Animation } from "./animation";
 import { Skin } from "./skin";
 
 export class Node {
-  public name: string = "";
+  public name = "";
   public mesh?: Mesh;
   public animations: Animation[] = [];
   public skin?: Skin;
@@ -15,7 +15,7 @@ export class Node {
   private _rotation?: Quaternion;
   private _scale?: Vector3;
 
-  constructor(name: string = "") {
+  constructor(name = "") {
     this.name = name;
   }
 
@@ -28,7 +28,7 @@ export class Node {
   }
 
   public removeNode(node: Node | number): number {
-    let idx = node instanceof Node ? this._nodes.indexOf(node) : node;
+    const idx = node instanceof Node ? this._nodes.indexOf(node) : node;
     if (idx >= 0 && idx < this._nodes.length)
       this._nodes.splice(idx, 1);
     return idx;
@@ -38,12 +38,12 @@ export class Node {
     this._nodes.forEach(fn);
   }
 
-  public addAnimation(animation: Animation) {
+  public addAnimation(animation: Animation): void {
     this.animations.push(animation);
   }
 
   public removeAnimation(animation: Animation | number): number {
-    let idx = animation instanceof Animation ? this.animations.indexOf(animation) : animation;
+    const idx = animation instanceof Animation ? this.animations.indexOf(animation) : animation;
     if (idx >= 0 && idx < this.animations.length)
       this.animations.splice(idx, 1);
     return idx;

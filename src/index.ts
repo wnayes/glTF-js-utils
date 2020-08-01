@@ -17,14 +17,13 @@ export type { BufferAccessorInfo } from "./buffer";
 
 import { GLTFAsset } from "./asset";
 import { addScenes, createEmptyGLTF } from "./gltf";
-import { glTF } from "./gltftypes";
 import { encodeBase64DataUri, arrayBufferIsPNG } from "./imageutils";
 import { ImageOutputType, BufferOutputType } from "./types";
 
 import * as jsz from "jszip";
 import { createGLBBuffer } from "./glb";
 
-
+/** Options for glTF export APIs. */
 export interface GLTFExportOptions {
   /** Controls how buffers are outputted. */
   bufferOutputType?: BufferOutputType;
@@ -36,18 +35,45 @@ export interface GLTFExportOptions {
   jsonSpacing?: number;
 }
 
-export type GLTFExportType = { [filename: string]: any };
-
 const MODEL_NAME_GLTF = "model.gltf";
 const MODEL_NAME_GLB = "model.glb";
+
+/** Return type of a glTF export function. */
+export type GLTFExportType = {
+  [filename: string]: ArrayBuffer | string;
+};
+
+export type GLTFExportTypeWithGLTF = {
+  [filename: string]: ArrayBuffer | string;
+  [MODEL_NAME_GLTF]: string;
+};
+export type GLTFExportTypeWithGLB = {
+  [filename: string]: ArrayBuffer | string;
+  [MODEL_NAME_GLB]: ArrayBuffer;
+};
+
+/**
+ * Creates a GLB glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @param options Export options
+ * @returns Promise for an object, each key pointing to a file.
+ */
+export async function exportGLTF(asset: GLTFAsset, options: { imageOutputType: ImageOutputType.GLB } | { bufferOutputType: BufferOutputType.GLB }): Promise<GLTFExportTypeWithGLB>;
+/**
+ * Creates a glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @param options Export options
+ * @returns Promise for an object, each key pointing to a file.
+ */
+export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportTypeWithGLTF>;
 
 /**
  * Creates a glTF model from a GLTFAsset structure.
  * @param asset GLTFAsset model structure
- * @param options
- * @returns An object, each key pointing to a file.
+ * @param options Export options
+ * @returns Promise for an object, each key pointing to a file.
  */
-export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
+export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
   options = options || {};
 
   const gltf = createEmptyGLTF();
@@ -65,7 +91,7 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
   let binChunkBuffer: ArrayBuffer | null = null;
 
   return Promise.all(promises).then(() => {
-    const output: { [filename: string]: any } = {};
+    const output: GLTFExportType = {};
 
     delete gltf.extras;
 
@@ -126,10 +152,11 @@ export function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promi
 /**
  * Creates a ZIP file of a glTF model from a GLTFAsset structure.
  * @param asset GLTFAsset model structure
- * @param options
+ * @param jsZip JSZip instance
+ * @param options Export options
  * @returns A Promise to receive a ZIP blob is returned instead.
  */
-export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExportOptions): Promise<Blob> {
+export async function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExportOptions): Promise<Blob> {
   return exportGLTF(asset, options).then((output) => {
     const zip = new jsZip();
     for (let filename in output) {
@@ -143,15 +170,14 @@ export function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExport
 /**
  * Creates a GLB binary format glTF model from a GLTFAsset structure.
  * @param asset GLTFAsset model structure
- * @param options
  * @returns An ArrayBuffer containing the GLB file.
  */
-export function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer> {
+export async function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer> {
   return exportGLTF(asset, {
     bufferOutputType: BufferOutputType.GLB,
     imageOutputType: ImageOutputType.GLB,
     jsonSpacing: 0,
   }).then(output => {
-    return output[MODEL_NAME_GLB];
+    return output[MODEL_NAME_GLB] as ArrayBuffer;
   });
 }

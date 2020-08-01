@@ -18,14 +18,14 @@ export interface Keyframe {
 export class Animation {
   public keyframes: Keyframe[] = [];
   public path: Transformation;
-  public name: string = "";
+  public name = "";
 
-  public constructor(path: Transformation, name: string = "") {
+  public constructor(path: Transformation, name = "") {
     this.path = path;
     this.name = name;
   }
 
-  public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?: KeyframeExtras) {
+  public addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?: KeyframeExtras): void {
     console.assert(value.length >= 3);
 
     const kf: Keyframe = {
@@ -35,7 +35,7 @@ export class Animation {
     };
 
     if (interpType === InterpolationMode.CUBICSPLINE) {
-      let ext: KeyframeExtras = {};
+      const ext: KeyframeExtras = {};
       if (extras) {
         if (extras.inTangent) ext.inTangent = extras.inTangent;
         if (extras.inTangentWeight) ext.inTangentWeight = extras.inTangentWeight;

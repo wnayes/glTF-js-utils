@@ -141,14 +141,14 @@ function addNode(gltf: glTF, node: Node): number {
   return addedIndex;
 }
 
-function getJointIndexAndInverseBindMatrices(gltf: glTF, node: Node): [number[], any[]] {
+function getJointIndexAndInverseBindMatrices(gltf: glTF, node: Node): [number[], (Matrix4x4 | undefined)[]] {
   const nodeIndex = getNodeIndex(gltf, node);
   if (nodeIndex === -1) {
     throw new Error("Node should be added to gltf before calling getJointIndexAndInverseBindMatrices");
   }
 
   let joints: number[] = [nodeIndex];
-  let ibms: any[] = [node.inverseBindMatrix];
+  let ibms: (Matrix4x4 | undefined)[] = [node.inverseBindMatrix];
   node.forEachNode((node: Node) => {
     const data = getJointIndexAndInverseBindMatrices(gltf, node);
     joints = joints.concat(data[0]);
@@ -185,14 +185,14 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   }
 
   // add joints (required) and inversebindmatrices [IBM], if necessary
-  let rootNode = skeletonNode ? skeletonNode : node;
-  let data = getJointIndexAndInverseBindMatrices(gltf, rootNode);
+  const rootNode = skeletonNode ? skeletonNode : node;
+  const data = getJointIndexAndInverseBindMatrices(gltf, rootNode);
   gltfSkin.joints = data[0];
-  let ibms = data[1];
+  const ibms = data[1];
 
   // check if there are any non default IBMs, and if so, create a new accessor
   let hasIBM = false;
-  for (let m of ibms) {
+  for (const m of ibms) {
     if (m && m.rows === 4 && m.cols === 4 && !Matrix4x4.IsIdentity(m)) {
       hasIBM = true;
       break;
@@ -212,8 +212,8 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
 
   // init skin accessor
   skinBufferView.startAccessor();
-  for (let ibm of ibms) {
-    let m = ibm instanceof Matrix4x4 ? ibm : new Matrix4x4();
+  for (const ibm of ibms) {
+    const m = ibm instanceof Matrix4x4 ? ibm : new Matrix4x4();
     // GLTF2.0 uses column major matrix
     for (let c = 0; c < 4; c++) {
       for (let r = 0; r < 4; r++) {
@@ -236,7 +236,7 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   return addedIndex;
 }
 
-export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: number) {
+export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: number): void {
   if (animations.length === 0)
     return;
 
@@ -255,16 +255,16 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     gltf.animations = [gltfAnim];
   }
 
-  let gltfAnim = gltf.animations![0];
+  const gltfAnim = gltf.animations[0];
   if (animations[0].name && !gltfAnim.name) // TODO: Animation names
     gltfAnim.name = animations[0].name;
 
   function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: Transformation) {
-    let timeAccessor = timeBufferView.endAccessor();
-    let timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
+    const timeAccessor = timeBufferView.endAccessor();
+    const timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
 
-    let animAccessor = animBufferView.endAccessor();
-    let animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
+    const animAccessor = animBufferView.endAccessor();
+    const animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
 
     // then create samplers (input: times accessor idx, output: values accessor idx)
     const sampler: glTFAnimationSampler = {
@@ -285,13 +285,13 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     gltfAnim.channels.push(channel);
   }
 
-  for (let anim of animations) {
+  for (const anim of animations) {
     if (!anim.keyframes || anim.keyframes.length == 0) {
       continue;
     }
 
     // push to channels and samplers
-    let path = anim.path;
+    const path = anim.path;
     const isVec4 = anim.keyframes[0].value.length === 4;
     let animBufferView: BufferView;
     if (isVec4) {
@@ -311,12 +311,12 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     timeBufferView.startAccessor();
     animBufferView.startAccessor();
 
-    let prev_interpType = anim.keyframes![0].interpType;
+    let prev_interpType = anim.keyframes[0].interpType;
     let ix = 0;
-    let total_kf = anim.keyframes.length;
+    const total_kf = anim.keyframes.length;
     for (let idx = 0; idx < total_kf; ++idx) {
-      let keyframe = anim.keyframes[idx];
-      let interpType = keyframe.interpType;
+      const keyframe = anim.keyframes[idx];
+      const interpType = keyframe.interpType;
       if (interpType != prev_interpType) {
         _completeAnimation(animBufferView, prev_interpType, path);
         timeBufferView.startAccessor();
@@ -332,21 +332,21 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
 
       timeBufferView.push(time);
       if (isSpline) {
-        let spline_info = keyframe.extras;
+        const spline_info = keyframe.extras;
 
         let outTangent = [0, 0, 0];
         let inTangent = [0, 0, 0];
         if (spline_info?.inTangent && ix > 0) {
-          inTangent = spline_info!.inTangent;
+          inTangent = spline_info.inTangent;
         }
         if (spline_info?.outTangent
           && (idx < total_kf - 1)
           && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE) {
-          outTangent = spline_info!.outTangent;
+          outTangent = spline_info.outTangent;
         }
 
         const data = [inTangent, value, outTangent];
-        for (let d of data) {
+        for (const d of data) {
           for (let j = 0; j < 3; ++j) {
             animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
           }
@@ -648,9 +648,11 @@ function addImage(gltf: glTF, image: HTMLImageElement | HTMLCanvasElement): numb
   const gltfImage: glTFImage = {
     extras: image as any, // For duplicate detection
   };
+
+  let bufferView: BufferView;
   switch (gltf.extras.options.imageOutputType) {
     case ImageOutputType.GLB:
-      const bufferView = gltf.extras.binChunkBuffer!.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.SCALAR);
+      bufferView = gltf.extras.binChunkBuffer!.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.SCALAR);
       bufferView.writeAsync(imageToArrayBuffer(image)).then(() => {
         bufferView.finalize();
       });

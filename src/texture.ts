@@ -12,7 +12,7 @@ export class Texture {
     }
     this.__image = val;
   }
-  public get image() {
+  public get image(): TextureImageType {
     return this.__image;
   }
 
