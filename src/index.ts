@@ -93,7 +93,7 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
   return Promise.all(promises).then(() => {
     const output: GLTFExportType = {};
 
-    delete gltf.extras;
+    delete (gltf as any).extras;
 
     const jsonSpacing = typeof options!.jsonSpacing === "number" ? options!.jsonSpacing : 4;
     const gltfString = JSON.stringify(gltf, (key: string, value: any) => {
