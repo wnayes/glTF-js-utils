@@ -18,21 +18,21 @@
     "url": "https://github.com/wnayes/gltf-js-utils.git"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.12",
+    "@types/chai": "^4.2.14",
     "@types/jszip": "^3.4.1",
     "@types/mocha": "^8.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "chai": "^4.2.0",
     "cross-env": "^7.0.2",
-    "eslint": "^7.8.1",
-    "mocha": "^8.1.3",
-    "three": "^0.120.1",
-    "ts-loader": "^8.0.3",
+    "eslint": "^7.12.0",
+    "mocha": "^8.2.0",
+    "three": "^0.121.1",
+    "ts-loader": "^8.0.7",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
+    "typescript": "^4.0.3",
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.1.0",
     "webpack-dev-server": "^3.11.0"
   }
 }
