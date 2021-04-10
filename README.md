@@ -34,6 +34,7 @@ material.pbrMetallicRoughness.baseColorTexture = texture;
 
 const mesh = new Mesh();
 mesh.material = [material];
+node.mesh = mesh;
 
 const v1 = new Vertex();
 v1.x = 1;
@@ -44,8 +45,10 @@ v1.v = 0;
 const v2 = new Vertex();
 // ...
 
-mesh.addFace(v1, v2, v3, faceMaterialIndex /* 0 */);
-mesh.addFace(v4, v5, v6, faceMaterialIndex);
+const faceColor = undefined;
+const faceMaterialIndex = 0;
+mesh.addFace(v1, v2, v3, faceColor, faceMaterialIndex);
+mesh.addFace(v4, v5, v6, faceColor, faceMaterialIndex);
 // ...
 ```
 
