@@ -1,8 +1,11 @@
 src
 test
 examples
+.vscode
 public/node_modules
+public/yarn.lock
 
+.eslintrc.js
 tsconfig.json
 *.config.js
 *.config.json
