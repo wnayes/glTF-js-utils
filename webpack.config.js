@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  mode: "production",
+  mode: "none",
   entry: "./src/index.ts",
   module: {
     rules: [
@@ -13,7 +13,6 @@ module.exports = {
     ]
   },
   externals: {
-    three: "three",
     jszip: "jszip"
   },
   resolve: {
@@ -22,7 +21,7 @@ module.exports = {
   output: {
     libraryTarget: "umd",
     library: "GLTFUtils",
-    filename: "gltfutils.min.js",
+    filename: "gltfjsutils.js",
     path: path.resolve(__dirname, "dist"),
     globalObject: "typeof self !== 'undefined' ? self : this"
   }

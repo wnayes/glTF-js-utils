@@ -3,8 +3,6 @@ gltf-js-utils
 
 Helper library for creating glTF 2.0 models with JavaScript.
 
-Includes a basic Three.js to glTF converter.
-
 ## Usage
 
 #### Creating glTF from scratch
@@ -129,8 +127,12 @@ exportGLTFZip(asset, JSZip).then(blob => {
 
 #### Create glTF from Three.js object
 
+Use the separate `gtlf-js-utils-three` package to create glTF models from Three.js models.
+See the `gtlf-js-utils-three` documentation for more details.
+
 ```javascript
-import { exportGLTF, glTFAssetFromTHREE } from "gltf-js-utils";
+import { exportGLTF } from "gltf-js-utils";
+import { glTFAssetFromTHREE } from "gltf-js-utils-three";
 
 // Create a Three.js Scene or Object3D structure...
 const scene = new THREE.Scene();
@@ -168,8 +170,7 @@ const gltfFiles = await exportGLTF(asset, {
 ```
 
 ## Limitations
-* No support for camera yet. Works with skins and animations in latest update.
-* Three.js export is limited to basic functionality (`MeshBasicMaterial`).
+* No support for camera yet.
 
 ## Development
 

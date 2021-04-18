@@ -2,7 +2,7 @@ const path = require("path");
 const currentDirectory = path.resolve(__dirname);
 
 module.exports = {
-  mode: "development",
+  mode: "none",
   entry: "./demo.ts",
   context: currentDirectory,
   module: {

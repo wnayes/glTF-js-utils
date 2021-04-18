@@ -1,227 +1,18 @@
-/******/ (() => { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["GLTFUtils"] = factory();
+	else
+		root["GLTFUtils"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GLTFAsset": () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
-/* harmony export */   "Scene": () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
-/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
-/* harmony export */   "Mesh": () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
-/* harmony export */   "Material": () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
-/* harmony export */   "Texture": () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
-/* harmony export */   "Vertex": () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
-/* harmony export */   "Skin": () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
-/* harmony export */   "Animation": () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
-/* harmony export */   "Vector3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
-/* harmony export */   "Quaternion": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
-/* harmony export */   "Matrix": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
-/* harmony export */   "Matrix3x3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
-/* harmony export */   "Matrix4x4": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
-/* harmony export */   "AlphaMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
-/* harmony export */   "ComponentType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
-/* harmony export */   "DataType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
-/* harmony export */   "MeshMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
-/* harmony export */   "RGBColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
-/* harmony export */   "RGBAColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
-/* harmony export */   "VertexColorMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
-/* harmony export */   "WrappingMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
-/* harmony export */   "InterpolationMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
-/* harmony export */   "Transformation": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
-/* harmony export */   "ImageOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
-/* harmony export */   "BufferOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
-/* harmony export */   "Buffer": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
-/* harmony export */   "BufferView": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
-/* harmony export */   "exportGLTF": () => (/* binding */ exportGLTF),
-/* harmony export */   "exportGLTFZip": () => (/* binding */ exportGLTFZip),
-/* harmony export */   "exportGLB": () => (/* binding */ exportGLB)
-/* harmony export */ });
-/* harmony import */ var _asset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _scene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _mesh__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
-/* harmony import */ var _material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
-/* harmony import */ var _texture__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(10);
-/* harmony import */ var _vertex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var _skin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
-/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(7);
-/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(13);
-/* harmony import */ var _gltf__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(14);
-/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(15);
-/* harmony import */ var _glb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(16);
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var MODEL_NAME_GLTF = "model.gltf";
-var MODEL_NAME_GLB = "model.glb";
-/**
- * Creates a glTF model from a GLTFAsset structure.
- * @param asset GLTFAsset model structure
- * @param options Export options
- * @returns Promise for an object, each key pointing to a file.
- */
-function exportGLTF(asset, options) {
-    return __awaiter(this, void 0, void 0, function () {
-        var gltf, promises, currentData, currentImg, binChunkBuffer;
-        return __generator(this, function (_a) {
-            options = options || {};
-            gltf = (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.createEmptyGLTF)();
-            gltf.asset.copyright = asset.copyright;
-            gltf.asset.generator = asset.generator;
-            gltf.extras.options = options;
-            (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.addScenes)(gltf, asset);
-            promises = gltf.extras.promises;
-            currentData = 1;
-            currentImg = 1;
-            binChunkBuffer = null;
-            return [2 /*return*/, Promise.all(promises).then(function () {
-                    var output = {};
-                    delete gltf.extras;
-                    var jsonSpacing = typeof options.jsonSpacing === "number" ? options.jsonSpacing : 4;
-                    var gltfString = JSON.stringify(gltf, function (key, value) {
-                        if (key === "extras")
-                            return undefined;
-                        if (value instanceof ArrayBuffer) {
-                            var filename = void 0;
-                            if ((0,_imageutils__WEBPACK_IMPORTED_MODULE_13__.arrayBufferIsPNG)(value)) {
-                                switch (options.imageOutputType) {
-                                    case _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.DataURI:
-                                    case _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB:
-                                        break; // Not applicable
-                                    default: // ImageOutputType.External
-                                        filename = "img" + currentImg + ".png";
-                                        currentImg++;
-                                        output[filename] = value;
-                                        return filename;
-                                }
-                            }
-                            switch (options.bufferOutputType) {
-                                case _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.DataURI:
-                                    return (0,_imageutils__WEBPACK_IMPORTED_MODULE_13__.encodeBase64DataUri)(value);
-                                case _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB:
-                                    if (binChunkBuffer)
-                                        throw new Error("Already encountered an ArrayBuffer, there should only be one in the GLB format.");
-                                    binChunkBuffer = value;
-                                    return undefined;
-                                default: // BufferOutputType.External
-                                    filename = "data" + currentData + ".bin";
-                                    currentData++;
-                                    output[filename] = value;
-                                    return filename;
-                            }
-                        }
-                        return value;
-                    }, jsonSpacing);
-                    var doingGLB = options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB
-                        || options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB;
-                    if (doingGLB) {
-                        output[MODEL_NAME_GLB] = (0,_glb__WEBPACK_IMPORTED_MODULE_14__.createGLBBuffer)(gltfString, binChunkBuffer);
-                    }
-                    else {
-                        output[MODEL_NAME_GLTF] = gltfString;
-                    }
-                    return output;
-                })];
-        });
-    });
-}
-/**
- * Creates a ZIP file of a glTF model from a GLTFAsset structure.
- * @param asset GLTFAsset model structure
- * @param jsZip JSZip instance
- * @param options Export options
- * @returns A Promise to receive a ZIP blob is returned instead.
- */
-function exportGLTFZip(asset, jsZip, options) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, exportGLTF(asset, options).then(function (output) {
-                    var zip = new jsZip();
-                    for (var filename in output) {
-                        zip.file(filename, output[filename]);
-                    }
-                    return zip.generateAsync({ type: "blob" });
-                })];
-        });
-    });
-}
-/**
- * Creates a GLB binary format glTF model from a GLTFAsset structure.
- * @param asset GLTFAsset model structure
- * @returns An ArrayBuffer containing the GLB file.
- */
-function exportGLB(asset) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, exportGLTF(asset, {
-                    bufferOutputType: _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB,
-                    imageOutputType: _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB,
-                    jsonSpacing: 0,
-                }).then(function (output) {
-                    return output[MODEL_NAME_GLB];
-                })];
-        });
-    });
-}
-
-
-/***/ }),
-/* 2 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -264,14 +55,14 @@ var GLTFAsset = /** @class */ (function () {
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Scene": () => (/* binding */ Scene)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
 var Scene = /** @class */ (function () {
     function Scene(name) {
@@ -301,15 +92,15 @@ var Scene = /** @class */ (function () {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 
 var Node = /** @class */ (function () {
@@ -374,7 +165,7 @@ var Node = /** @class */ (function () {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -540,14 +331,14 @@ var Matrix4x4 = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Animation": () => (/* binding */ Animation)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 var Animation = /** @class */ (function () {
     function Animation(path, name) {
@@ -588,7 +379,7 @@ var Animation = /** @class */ (function () {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -729,14 +520,14 @@ var Transformation;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Mesh": () => (/* binding */ Mesh)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 var Mesh = /** @class */ (function () {
     function Mesh() {
@@ -766,14 +557,14 @@ var Mesh = /** @class */ (function () {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Material": () => (/* binding */ Material)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 var Material = /** @class */ (function () {
     function Material() {
@@ -793,14 +584,14 @@ var Material = /** @class */ (function () {
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Texture": () => (/* binding */ Texture)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 var Texture = /** @class */ (function () {
     function Texture(image) {
@@ -827,7 +618,7 @@ var Texture = /** @class */ (function () {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -851,7 +642,7 @@ var Vertex = /** @class */ (function () {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -872,7 +663,7 @@ var Skin = /** @class */ (function () {
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -880,7 +671,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Buffer": () => (/* binding */ Buffer),
 /* harmony export */   "BufferView": () => (/* binding */ BufferView)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 var Buffer = /** @class */ (function () {
     function Buffer(gltf) {
@@ -1206,7 +997,7 @@ function makeDivisibleBy(num, by) {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1218,10 +1009,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addBuffer": () => (/* binding */ addBuffer),
 /* harmony export */   "addAccessor": () => (/* binding */ addAccessor)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
-/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 
 
 
@@ -1783,7 +1574,7 @@ function objectsEqual(obj1, obj2) {
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1871,7 +1662,7 @@ function arrayBufferIsPNG(buffer) {
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -2004,533 +1795,222 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _src_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _src_gltf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-
-
-
-
-// There is usage of internal types/APIs here. Until this file operates only
-// with the public API, I don't think we can refer to it as an ideal example.
-function download(content, fileName, contentType) {
-    if (contentType === void 0) { contentType = "text/plain"; }
-    var a = document.createElement("a");
-    var file = new Blob([content], { type: contentType });
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
-}
-function createGLTF() {
-    return (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.createEmptyGLTF)();
-}
-function test1() {
-    var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
-    var scene = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Scene();
-    var gltf = createGLTF();
-    asset.addScene(scene);
-    var x = 1;
-    var y = 2;
-    var z = 3;
-    var node = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node();
-    node.setTranslation(x, y, z);
-    node.setRotationRadians(x, y, z);
-    node.setScale(x, y, z);
-    scene.addNode(node);
-    (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-    console.assert(gltf.scenes.length === 1 && gltf.nodes.length === 1 && gltf.scenes[0].nodes[0] === 0);
-    var buffer = (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addBuffer)(gltf); // for translation
-    var bufferView = buffer.addBufferView(_src_index__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3); // add translation
-    var bufferView2 = buffer.addBufferView(_src_index__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4); // add quat
-    var bufferView3 = buffer.addBufferView(_src_index__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR);
-    console.assert(bufferView.getIndex() === 0 && bufferView2.getIndex() === 1);
-    function createAccessor(bufferView, num) {
-        if (num === void 0) { num = 1; }
-        bufferView.startAccessor();
-        num = Math.max(0, num);
-        for (var i = 0; i < num; ++i) {
-            bufferView.push(i * 3);
-            bufferView.push(i * 3 + 1);
-            bufferView.push(i * 3 + 2);
-        }
-        var accessor = bufferView.endAccessor();
-        (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addAccessor)(gltf, bufferView.getIndex(), accessor);
-    }
-    createAccessor(bufferView, 1);
-    var acc1 = gltf.accessors[0];
-    console.assert(acc1.count === 1 && acc1.max[0] === 0 && acc1.min[0] === 0 && acc1.min[1] === 1);
-    createAccessor(bufferView, 2);
-    acc1 = gltf.accessors[1];
-    console.assert(acc1.count === 2 && acc1.byteOffset === 3 * 4 && acc1.max[0] === 3 && acc1.min[0] === 0);
-    function createAnimation() {
-        // const animation_sample = [
-        //     {
-        //         "samplers" : [
-        //             {
-        //                 "input" : 2,
-        //                 "interpolation" : "LINEAR",
-        //                 "output" : 3
-        //             }
-        //         ],
-        //         "channels" : [ {
-        //             "sampler" : 0,
-        //             "target" : {
-        //                 "node" : 0,
-        //                 "path" : "rotation"
-        //             }
-        //         } ]
-        //     }
-        // ]
-        var node_idx = 0;
-        var myAnimation = {
-            channels: [],
-            samplers: []
-        };
-        var times = [0, 0.2, 0.4, 0.6, 0.8];
-        var values = [];
-        var num = times.length;
-        var interpType = _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR; // samplers
-        for (var i = 0; i < num; ++i) {
-            values.push(i * 4, i * 4 + 1, i * 4 + 2, i * 4 + 3);
-        }
-        // create times accessor and values accessor first
-        bufferView3.startAccessor();
-        for (var _i = 0, times_1 = times; _i < times_1.length; _i++) {
-            var t = times_1[_i];
-            bufferView3.push(t);
-        }
-        var accessor = bufferView3.endAccessor();
-        var accessor_idx = (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addAccessor)(gltf, bufferView3.getIndex(), accessor);
-        bufferView2.startAccessor();
-        for (var _a = 0, values_1 = values; _a < values_1.length; _a++) {
-            var v = values_1[_a];
-            bufferView2.push(v);
-        }
-        var accessor2 = bufferView2.endAccessor();
-        var accessor2_idx = (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addAccessor)(gltf, bufferView2.getIndex(), accessor2);
-        // then create samplers (input: times accessor idx, output: values accessor idx)
-        var sampler = {
-            "input": accessor_idx,
-            "output": accessor2_idx,
-            "interpolation": interpType
-        };
-        myAnimation.samplers.push(sampler);
-        var sampler_idx = myAnimation.samplers.length;
-        // then create channels (sampler: get sampler idx from above)
-        var channel = {
-            "sampler": sampler_idx,
-            "target": {
-                "node": node_idx,
-                "path": _src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.ROTATION
-            }
-        };
-        myAnimation.channels.push(channel);
-        if (!gltf.animations)
-            gltf.animations = [];
-        gltf.animations.push(myAnimation);
-    }
-    createAnimation();
-    var promises = [];
-    bufferView.finalize();
-    bufferView2.finalize();
-    bufferView3.finalize();
-    promises.push(buffer.finalize());
-    var bufv1 = gltf.bufferViews[0];
-    var buf1 = gltf.buffers[0];
-    Promise.all(promises).then(function () {
-        console.assert(bufv1.byteLength === 3 * 3 * 4);
-        // console.assert(buf1.byteLength === 3 * 3 * 4);
-        console.log(gltf);
-        console.log(gltf.animations);
-        console.log(buf1.uri);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GLTFAsset": () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
+/* harmony export */   "Scene": () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
+/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
+/* harmony export */   "Mesh": () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
+/* harmony export */   "Material": () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
+/* harmony export */   "Texture": () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
+/* harmony export */   "Vertex": () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
+/* harmony export */   "Skin": () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
+/* harmony export */   "Animation": () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
+/* harmony export */   "Vector3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
+/* harmony export */   "Quaternion": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
+/* harmony export */   "Matrix": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
+/* harmony export */   "Matrix3x3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
+/* harmony export */   "Matrix4x4": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
+/* harmony export */   "AlphaMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
+/* harmony export */   "ComponentType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
+/* harmony export */   "DataType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
+/* harmony export */   "MeshMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
+/* harmony export */   "RGBColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
+/* harmony export */   "RGBAColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
+/* harmony export */   "VertexColorMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
+/* harmony export */   "WrappingMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
+/* harmony export */   "InterpolationMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
+/* harmony export */   "Transformation": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
+/* harmony export */   "ImageOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
+/* harmony export */   "BufferOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
+/* harmony export */   "Buffer": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
+/* harmony export */   "BufferView": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
+/* harmony export */   "exportGLTF": () => (/* binding */ exportGLTF),
+/* harmony export */   "exportGLTFZip": () => (/* binding */ exportGLTFZip),
+/* harmony export */   "exportGLB": () => (/* binding */ exportGLB)
+/* harmony export */ });
+/* harmony import */ var _asset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _scene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _mesh__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
+/* harmony import */ var _material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
+/* harmony import */ var _texture__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
+/* harmony import */ var _vertex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _skin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(11);
+/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
+/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(12);
+/* harmony import */ var _gltf__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(13);
+/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(14);
+/* harmony import */ var _glb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(15);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-    // console.log(gltf.scenes);
-    // console.log(gltf.accessors);
-}
-function animation_test() {
-    var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
-    var scene = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Scene();
-    asset.addScene(scene);
-    var gltf = createGLTF();
-    var x = 1;
-    var y = 2;
-    var z = 3;
-    var node = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node();
-    node.setTranslation(x, y, z);
-    node.setRotationRadians(x, y, z);
-    node.setScale(x, y, z);
-    scene.addNode(node);
-    var nodeAnim1 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.ROTATION);
-    nodeAnim1.keyframes = [
-        {
-            time: 0,
-            value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.2,
-            value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.4,
-            value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.6,
-            value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP
-        }
-    ];
-    nodeAnim1.addKeyframe(0.8, [1, 2, 3, 4], _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP);
-    console.log(nodeAnim1);
-    var nodeAnim2 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.TRANSLATION);
-    nodeAnim2.keyframes = [
-        {
-            time: 0,
-            value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.3,
-            value: [4, 5, 6],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        }
-    ];
-    node.animations = [nodeAnim1, nodeAnim2];
-    (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-    // console.log(gltf.animations)
-    // console.log(gltf.accessors);
-    //
-    var gltfAnim = gltf.animations[0];
-    console.assert(gltfAnim.samplers.length === 3);
-    console.assert(gltfAnim.channels.length === 3);
-    var channel1 = gltfAnim.channels[0]; // path: ROTATION
-    var channel2 = gltfAnim.channels[1]; // path: ROTATION
-    var channel3 = gltfAnim.channels[2]; // path: TRANSLATION
-    var sampler1 = gltfAnim.samplers[0]; // interpolation: LINEAR
-    var sampler2 = gltfAnim.samplers[1]; // interpolation: STEP
-    var sampler3 = gltfAnim.samplers[2]; // interpolation: LINEAR
-    // assert channel targets
-    console.assert(channel1.sampler === 0 && channel2.sampler === 1 && channel3.sampler === 2);
-    console.assert(channel1.target.path == nodeAnim1.path && channel2.target.path == nodeAnim1.path
-        && channel3.target.path == nodeAnim2.path);
-    // assert sampler interpolation types
-    console.assert(sampler1.interpolation == nodeAnim1.keyframes[0].interpType &&
-        sampler2.interpolation == nodeAnim1.keyframes[3].interpType &&
-        sampler3.interpolation == nodeAnim2.keyframes[0].interpType);
-    // assert sampler input/output indices
-    console.assert(sampler1.input === 0 && sampler1.output === 1 &&
-        sampler3.input === 4 && sampler3.output === 5);
-    // assert accessors
-    var accessors = gltf.accessors;
-    console.assert(accessors.length === gltfAnim.samplers.length * 2); // 2 accessors (time, animation) per sampler/channel
-    // time bufferviews are the same (index 0)
-    console.assert(accessors[0].bufferView === 0 && accessors[2].bufferView === 0 &&
-        accessors[4].bufferView === 0 &&
-        accessors[0].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR && accessors[2].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR &&
-        accessors[4].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR);
-    // rotation bufferview
-    console.assert(accessors[1].bufferView === 1 && accessors[3].bufferView === 1
-        && accessors[1].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4 && accessors[3].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4);
-    // translation bufferview
-    console.assert(accessors[5].bufferView === 2 && accessors[5].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3);
-    console.assert(accessors[5].min[0] === 1 && accessors[5].max[2] === 6);
-    {
-        var count = accessors[0].count;
-        console.assert(count === accessors[1].count && count === 3);
-        console.assert(accessors[2].byteOffset === 3 * 4 && accessors[3].byteOffset === 3 * 4 * 4);
-        count = accessors[2].count;
-        console.assert(count === accessors[3].count && count === 2);
-        console.assert(accessors[4].byteOffset === (3 + 2) * 4 && accessors[5].byteOffset === 0);
-        count = accessors[4].count;
-        console.assert(count === accessors[5].count && count === 2);
-    }
-    var num_time = 7;
-    var num_vec4 = 5;
-    var num_vec3 = 2;
-    var time_bytes = num_time * 4;
-    var vec3_bytes = num_vec3 * 3 * 4;
-    var vec4_bytes = num_vec4 * 4 * 4;
-    var total_bytes = time_bytes + vec3_bytes + vec4_bytes;
-    // assert accessors
-    Promise.all(gltf.extras.promises).then(function () {
-        var buffer = gltf.buffers[0];
-        console.assert(gltf.bufferViews.length === 3);
-        var bufferView1 = gltf.bufferViews[0];
-        var bufferView2 = gltf.bufferViews[1];
-        var bufferView3 = gltf.bufferViews[2];
-        console.assert(bufferView1.buffer === 0 && bufferView2.buffer === 0 && bufferView3.buffer === 0);
-        console.assert(buffer.byteLength === total_bytes);
-        console.assert(bufferView1.byteLength === time_bytes);
-        console.assert(bufferView2.byteLength === vec4_bytes);
-        console.assert(bufferView3.byteLength === vec3_bytes);
-        console.assert(bufferView2.byteOffset === time_bytes);
-        console.assert(bufferView3.byteOffset === time_bytes + vec4_bytes);
-        // console.log(gltf);
-        // console.log(buffer.uri);
-        console.log("PASSED");
-    });
-    // GLTFUtils.exportGLTF(asset, {bufferOutputType: GLTFUtils.BufferOutputType.DataURI}).then((value)=>{
-    //     console.log(value["model.gltf"]);
-    // })
-}
-function animation_cubicspline_test() {
-    var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
-    var scene = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Scene();
-    asset.addScene(scene);
-    var gltf = createGLTF();
-    var x = 1;
-    var y = 2;
-    var z = 3;
-    var node = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node();
-    node.setTranslation(x, y, z);
-    node.setRotationRadians(x, y, z);
-    node.setScale(x, y, z);
-    scene.addNode(node);
-    var nodeAnim1 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.TRANSLATION);
-    nodeAnim1.keyframes = [
-        {
-            time: -0.2,
-            value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP,
-        },
-        {
-            time: 0,
-            value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
-            extras: {
-                outTangent: [0.1, 0.1, 0.1]
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
             }
-        },
-        {
-            time: 0.2,
-            value: [4, 5, 6],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
-            extras: {
-                outTangent: [0.2, 0.2, 0.2],
-                inTangent: [0.3, 0.3, 0.3]
-            }
-        },
-        {
-            time: 0.4,
-            value: [7, 8, 9],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
-            extras: {
-                inTangent: [0.5, 0.5, 0.5]
-            }
-        },
-        {
-            time: 0.6,
-            value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
-        },
-    ];
-    node.animations = [nodeAnim1];
-    (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-    var accessors = gltf.accessors;
-    var time_accessor = accessors[2];
-    var anim_accessor = accessors[3];
-    //const BV = gltf.bufferViews!;
-    //const time_BV = BV[0];
-    //const anim_BV = BV[1];
-    console.assert(time_accessor.count * 3 === anim_accessor.count);
-    Promise.all(gltf.extras.promises).then(function () {
-        // console.assert(time_BV.byteLength * 3 * 3 === anim_BV.byteLength);
-    });
-    console.log(gltf);
-}
-function skin_test() {
-    //const M = new GLTFUtils.Matrix(4);
-    var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
-    var scene = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Scene();
-    asset.addScene(scene);
-    var node = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("Root");
-    var node2 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("Skeleton");
-    var node3 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("Pelvis");
-    var node4 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("LeftLeg");
-    var node5 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("RightLeg");
-    var xnode = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("Light");
-    xnode.setTranslation(1, 2, 3);
-    node.setTranslation(0.1, 0.2, -3);
-    node.setRotationDegrees(20, 30, -40);
-    node3.setScale(0.8, 0.8, 0.8);
-    scene.addNode(node);
-    scene.addNode(xnode);
-    node.addNode(node2);
-    node2.addNode(node3);
-    node3.addNode(node4);
-    node3.addNode(node5);
-    var skin_name = "Skin0";
-    node.skin = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Skin(node2, skin_name);
-    {
-        var gltf = createGLTF();
-        (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-        var joints = gltf.skins[0].joints;
-        var nodeIndex = gltf.extras.nodeIndices.get(node);
-        var node2Index = gltf.extras.nodeIndices.get(node2);
-        console.assert(nodeIndex === 0 && gltf.skins[0].skeleton === node2Index);
-        console.assert(joints.length == 4 && joints[0] === node2Index);
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-    var parentNode = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Node("Parent");
-    parentNode.addNode(node);
-    scene.removeNode(node); // remove node from scene children, since no longer root
-    scene.addNode(parentNode);
-    node.skin.skeletonNode = null; // set skeleton root to 'node'
-    {
-        var gltf = createGLTF();
-        (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-        var joints = gltf.skins[0].joints;
-        var nodeIndex = gltf.extras.nodeIndices.get(node);
-        console.assert(nodeIndex === 2);
-        console.assert(joints.length == 5 && joints[0] === nodeIndex);
-    }
-    var x = 10;
-    var y = 20;
-    var z = -30;
-    // use row major to store
-    node3.inverseBindMatrix = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Matrix4x4(); // add some inverse bind matrices
-    node3.inverseBindMatrix.data[0][3] = x; // set x translation
-    node3.inverseBindMatrix.data[1][3] = y; // set y translation
-    node3.inverseBindMatrix.data[2][3] = z; // set z translation
-    // set skeleton root back to node2
-    node.skin.skeletonNode = node2;
-    {
-        var gltf_1 = createGLTF();
-        (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf_1, asset);
-        var joints_1 = gltf_1.skins[0].joints;
-        Promise.all(gltf_1.extras.promises).then(function () {
-            var buffer = gltf_1.buffers[0];
-            var accessor = gltf_1.accessors[0];
-            console.assert(gltf_1.skins[0].inverseBindMatrices === 0);
-            console.assert(buffer.byteLength === joints_1.length * 4 * 16);
-            console.assert(accessor.count === joints_1.length);
-            // GLTF stores as column major (index 12 = M03, 13 = M13, 14 = M23)
-            console.assert(accessor.max[12] == x && accessor.max[13] == y && accessor.min[14] == z);
-            console.log(gltf_1);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var MODEL_NAME_GLTF = "model.gltf";
+var MODEL_NAME_GLB = "model.glb";
+/**
+ * Creates a glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @param options Export options
+ * @returns Promise for an object, each key pointing to a file.
+ */
+function exportGLTF(asset, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var gltf, promises, currentData, currentImg, binChunkBuffer;
+        return __generator(this, function (_a) {
+            options = options || {};
+            gltf = (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.createEmptyGLTF)();
+            gltf.asset.copyright = asset.copyright;
+            gltf.asset.generator = asset.generator;
+            gltf.extras.options = options;
+            (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.addScenes)(gltf, asset);
+            promises = gltf.extras.promises;
+            currentData = 1;
+            currentImg = 1;
+            binChunkBuffer = null;
+            return [2 /*return*/, Promise.all(promises).then(function () {
+                    var output = {};
+                    delete gltf.extras;
+                    var jsonSpacing = typeof options.jsonSpacing === "number" ? options.jsonSpacing : 4;
+                    var gltfString = JSON.stringify(gltf, function (key, value) {
+                        if (key === "extras")
+                            return undefined;
+                        if (value instanceof ArrayBuffer) {
+                            var filename = void 0;
+                            if ((0,_imageutils__WEBPACK_IMPORTED_MODULE_13__.arrayBufferIsPNG)(value)) {
+                                switch (options.imageOutputType) {
+                                    case _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.DataURI:
+                                    case _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB:
+                                        break; // Not applicable
+                                    default: // ImageOutputType.External
+                                        filename = "img" + currentImg + ".png";
+                                        currentImg++;
+                                        output[filename] = value;
+                                        return filename;
+                                }
+                            }
+                            switch (options.bufferOutputType) {
+                                case _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.DataURI:
+                                    return (0,_imageutils__WEBPACK_IMPORTED_MODULE_13__.encodeBase64DataUri)(value);
+                                case _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB:
+                                    if (binChunkBuffer)
+                                        throw new Error("Already encountered an ArrayBuffer, there should only be one in the GLB format.");
+                                    binChunkBuffer = value;
+                                    return undefined;
+                                default: // BufferOutputType.External
+                                    filename = "data" + currentData + ".bin";
+                                    currentData++;
+                                    output[filename] = value;
+                                    return filename;
+                            }
+                        }
+                        return value;
+                    }, jsonSpacing);
+                    var doingGLB = options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB
+                        || options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB;
+                    if (doingGLB) {
+                        output[MODEL_NAME_GLB] = (0,_glb__WEBPACK_IMPORTED_MODULE_14__.createGLBBuffer)(gltfString, binChunkBuffer);
+                    }
+                    else {
+                        output[MODEL_NAME_GLTF] = gltfString;
+                    }
+                    return output;
+                })];
         });
-    }
-    var nodeAnim1 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.ROTATION);
-    nodeAnim1.keyframes = [
-        {
-            time: 0,
-            value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.2,
-            value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.4,
-            value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.6,
-            value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP
-        }
-    ];
-    nodeAnim1.addKeyframe(0.8, [1, 2, 3, 4], _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP);
-    var nodeAnim2 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.TRANSLATION);
-    nodeAnim2.keyframes = [
-        {
-            time: 0,
-            value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        },
-        {
-            time: 0.3,
-            value: [4, 5, 6],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        }
-    ];
-    var nodeAnim3 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.SCALE);
-    nodeAnim3.keyframes = [
-        {
-            time: 0,
-            value: [10, 20, 30],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE
-        },
-        {
-            time: 0.3,
-            value: [40, 50, 60],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE
-        }
-    ];
-    node.animations = [nodeAnim1, nodeAnim2];
-    node2.animations = [nodeAnim3];
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI }).then(function (value) {
-        var result = value["model.gltf"];
-        console.log(result);
-        download(result, "yolo.gltf");
     });
 }
-function matrix_test() {
-    var Matrix = _src_index__WEBPACK_IMPORTED_MODULE_0__.Matrix;
-    var rows = 4;
-    var M = new Matrix(rows);
-    M.data[0][0] = 1;
-    console.assert(Matrix.IsIdentity(M));
-    M.data[0][0] = 2;
-    console.assert(!Matrix.IsIdentity(M));
-    M.data[0][0] = 1;
-    M.data[0][1] = 0.0001;
-    console.assert(!Matrix.IsIdentity(M));
+/**
+ * Creates a ZIP file of a glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @param jsZip JSZip instance
+ * @param options Export options
+ * @returns A Promise to receive a ZIP blob is returned instead.
+ */
+function exportGLTFZip(asset, jsZip, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, exportGLTF(asset, options).then(function (output) {
+                    var zip = new jsZip();
+                    for (var filename in output) {
+                        zip.file(filename, output[filename]);
+                    }
+                    return zip.generateAsync({ type: "blob" });
+                })];
+        });
+    });
 }
-matrix_test();
-// test1();
-animation_test();
-animation_cubicspline_test();
-skin_test();
-// Not executed, ensures API typings work.
-function __typingTests() {
-    var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
-    var isString = function (x) { return x; };
-    var isBuffer = function (x) { return x; };
-    var isEither = function (x) { return x; };
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {}).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { jsonSpacing: 2 }).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI }).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI, jsonSpacing: 2 }).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.External, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.External, jsonSpacing: 2 }).then(function (value) {
-        isString(value["model.gltf"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB }).then(function (value) {
-        isBuffer(value["model.glb"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB }).then(function (value) {
-        isBuffer(value["model.glb"]);
-        isEither(value["something"]);
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB }).then(function (value) {
-        isBuffer(value["model.glb"]);
-        isEither(value["something"]);
+/**
+ * Creates a GLB binary format glTF model from a GLTFAsset structure.
+ * @param asset GLTFAsset model structure
+ * @returns An ArrayBuffer containing the GLB file.
+ */
+function exportGLB(asset) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, exportGLTF(asset, {
+                    bufferOutputType: _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB,
+                    imageOutputType: _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB,
+                    jsonSpacing: 0,
+                }).then(function (output) {
+                    return output[MODEL_NAME_GLB];
+                })];
+        });
     });
 }
 
 })();
 
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
+});

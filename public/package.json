@@ -1,0 +1,24 @@
+{
+  "name": "gltf-js-utils-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Demo page for gltf-js-utils.",
+  "scripts": {
+    "start": "npx webpack-dev-server",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "Will Nayes",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
+    "eslint": "^7.24.0",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.31.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}

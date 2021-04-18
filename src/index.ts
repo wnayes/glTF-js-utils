@@ -8,7 +8,6 @@ export { Vertex } from "./vertex";
 export { Skin } from "./skin";
 export { Animation } from "./animation";
 export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "./math";
-export { glTFAssetFromTHREE } from "./threejs";
 export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
   VertexColorMode, WrappingMode, InterpolationMode, Transformation } from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";

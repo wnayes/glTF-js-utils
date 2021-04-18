@@ -2,15 +2,13 @@
   "name": "gltf-js-utils",
   "version": "4.0.1",
   "description": "Helper library for creating glTF 2.0 models with JavaScript.",
-  "main": "dist/gltfutils.js",
-  "types": "./index.d.ts",
+  "main": "./dist/gltfjsutils.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "start": "npx webpack-dev-server",
-    "build": "webpack --config webpack.dev.config.js & webpack --config webpack.prod.config.js",
-    "build-demo": "webpack --config public/webpack.config.js",
+    "build": "webpack & tsc --emitDeclarationOnly true --declaration --outFile \"./dist/gltfjsutils.d.ts\"",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register test/*.spec.ts"
   },
-  "keywords": [],
+  "keywords": ["glTF"],
   "author": "Will Nayes",
   "license": "MIT",
   "repository": {
@@ -18,21 +16,19 @@
     "url": "https://github.com/wnayes/gltf-js-utils.git"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.14",
+    "@types/chai": "^4.2.16",
     "@types/jszip": "^3.4.1",
-    "@types/mocha": "^8.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
-    "chai": "^4.2.0",
-    "cross-env": "^7.0.2",
-    "eslint": "^7.12.0",
-    "mocha": "^8.2.0",
-    "three": "^0.121.1",
-    "ts-loader": "^8.0.7",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3",
-    "webpack": "^5.2.0",
-    "webpack-cli": "^4.1.0",
-    "webpack-dev-server": "^3.11.0"
+    "@types/mocha": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
+    "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.24.0",
+    "mocha": "^8.3.2",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0"
   }
 }

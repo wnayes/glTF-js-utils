@@ -4,13 +4,17 @@ module.exports = {
         browser: true,
         node: true
     },
-    parser: '@typescript-eslint/parser',
+    ignorePatterns: [
+        "webpack*config.js",
+        "dist/**"
+    ],
+    parser: "@typescript-eslint/parser",
     plugins: [
-        '@typescript-eslint',
+        "@typescript-eslint",
     ],
     extends: [
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended',
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
     ],
     rules: {
         "@typescript-eslint/no-explicit-any": 0,

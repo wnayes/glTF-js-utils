@@ -1,0 +1,7 @@
+src
+test
+examples
+
+tsconfig.json
+*.config.js
+*.config.json
