@@ -127,7 +127,8 @@ exportGLTFZip(asset, JSZip).then(blob => {
 
 #### Create glTF from Three.js object
 
-Use the separate `gtlf-js-utils-three` package to create glTF models from Three.js models.
+Use the separate [`gtlf-js-utils-three` package](https://github.com/wnayes/glTF-js-utils-three)
+to create glTF models from Three.js models.
 See the `gtlf-js-utils-three` documentation for more details.
 
 ```javascript
