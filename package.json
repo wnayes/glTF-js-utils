@@ -1,6 +1,6 @@
 {
   "name": "gltf-js-utils",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Helper library for creating glTF 2.0 models with JavaScript.",
   "main": "./dist/gltfjsutils.js",
   "types": "./dist/index.d.ts",
@@ -8,7 +8,9 @@
     "build": "webpack & tsc --emitDeclarationOnly true --declaration --outFile \"./dist/gltfjsutils.d.ts\"",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register test/*.spec.ts"
   },
-  "keywords": ["glTF"],
+  "keywords": [
+    "glTF"
+  ],
   "author": "Will Nayes",
   "license": "MIT",
   "repository": {
