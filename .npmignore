@@ -1,6 +1,7 @@
 src
 test
 examples
+public/node_modules
 
 tsconfig.json
 *.config.js
