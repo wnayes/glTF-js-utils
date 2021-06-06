@@ -45,14 +45,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mesh__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
 /* harmony import */ var _material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
 /* harmony import */ var _texture__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(10);
-/* harmony import */ var _vertex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var _skin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
+/* harmony import */ var _vertex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
+/* harmony import */ var _skin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(13);
 /* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(7);
-/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(13);
-/* harmony import */ var _gltf__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(14);
-/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(15);
+/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(14);
+/* harmony import */ var _gltf__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(15);
+/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(11);
 /* harmony import */ var _glb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(16);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -800,12 +800,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Texture": () => (/* binding */ Texture)
 /* harmony export */ });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 
+
+/** Represents a model texture. */
 var Texture = /** @class */ (function () {
     function Texture(image) {
-        this.wrapS = _types__WEBPACK_IMPORTED_MODULE_0__.WrappingMode.CLAMP_TO_EDGE;
-        this.wrapT = _types__WEBPACK_IMPORTED_MODULE_0__.WrappingMode.CLAMP_TO_EDGE;
+        this.wrapS = _types__WEBPACK_IMPORTED_MODULE_1__.WrappingMode.CLAMP_TO_EDGE;
+        this.wrapT = _types__WEBPACK_IMPORTED_MODULE_1__.WrappingMode.CLAMP_TO_EDGE;
         this.image = image;
     }
     Object.defineProperty(Texture.prototype, "image", {
@@ -815,6 +818,12 @@ var Texture = /** @class */ (function () {
         set: function (val) {
             if (!val) {
                 throw new Error("Why is the texture image being unset?");
+            }
+            if (val instanceof ArrayBuffer && !(0,_imageutils__WEBPACK_IMPORTED_MODULE_0__.arrayBufferIsPNG)(val)) {
+                throw new Error("Texture was given an ArrayBuffer, but it does not appear to contain PNG image data.");
+            }
+            if (typeof val === "string" && !val.startsWith("data:image/png;base64,")) {
+                throw new Error("Texture was given a string, but it does not appear be a data uri with base64 encoded image/png data.");
             }
             this.__image = val;
         },
@@ -828,6 +837,122 @@ var Texture = /** @class */ (function () {
 
 /***/ }),
 /* 11 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "imageToDataURI": () => (/* binding */ imageToDataURI),
+/* harmony export */   "imageToArrayBuffer": () => (/* binding */ imageToArrayBuffer),
+/* harmony export */   "dataUriToArrayBuffer": () => (/* binding */ dataUriToArrayBuffer),
+/* harmony export */   "encodeBase64DataUri": () => (/* binding */ encodeBase64DataUri),
+/* harmony export */   "arrayBufferIsPNG": () => (/* binding */ arrayBufferIsPNG)
+/* harmony export */ });
+/**
+ * Converts an image into a Data URI string.
+ * @param image
+ */
+function imageToDataURI(image) {
+    if (typeof image === "string") {
+        return image;
+    }
+    if (image instanceof ArrayBuffer) {
+        return encodeBase64DataUri(image, "image/png");
+    }
+    var canvas = _imageTypeToCanvas(image);
+    return canvas.toDataURL();
+}
+/**
+ * Converts an image into an ArrayBuffer.
+ * @param image
+ */
+function imageToArrayBuffer(image) {
+    if (typeof image === "string") {
+        return Promise.resolve(dataUriToArrayBuffer(image));
+    }
+    if (image instanceof ArrayBuffer) {
+        return Promise.resolve(image);
+    }
+    var canvas = _imageTypeToCanvas(image);
+    var promiseResolve, promiseReject;
+    var promise = new Promise(function (resolve, reject) {
+        promiseResolve = resolve;
+        promiseReject = reject;
+    });
+    canvas.toBlob(function (blob) {
+        if (!blob) {
+            promiseReject("Unable to convert image to PNG");
+            return;
+        }
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function () {
+            promiseResolve(reader.result);
+        });
+        reader.readAsArrayBuffer(blob);
+    }, "image/png");
+    return promise;
+}
+function _imageTypeToCanvas(image) {
+    var canvas;
+    if (image instanceof HTMLImageElement) {
+        canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        var context_1 = canvas.getContext("2d");
+        context_1.drawImage(image, 0, 0, image.width, image.height);
+    }
+    else {
+        canvas = image;
+    }
+    return canvas;
+}
+/**
+ * Converts a DataURI to an ArrayBuffer.
+ * @param dataUri DataURI. `data:mimeType;base64,...`
+ */
+function dataUriToArrayBuffer(dataUri) {
+    var binary = atob(dataUri.split(",")[1]);
+    var buffer = new ArrayBuffer(binary.length);
+    var byteArray = new Uint8Array(buffer);
+    for (var i = 0; i < binary.length; i++) {
+        byteArray[i] = binary.charCodeAt(i);
+    }
+    return buffer;
+}
+/**
+ * Converts an ArrayBuffer into a base64 Data URI string.
+ * @param buf Array buffer
+ * @param mimeType Mime type of the data. Default is application/octet-stream.
+ */
+function encodeBase64DataUri(buf, mimeType) {
+    var codes = [];
+    var uint8arr = new Uint8Array(buf);
+    for (var i = 0; i < uint8arr.length; i++) {
+        codes.push(String.fromCharCode(uint8arr[i]));
+    }
+    var mime = mimeType || "application/octet-stream";
+    var b64 = btoa(codes.join(""));
+    var uri = "data:" + mime + ";base64," + b64;
+    return uri;
+}
+/** Determines if an ArrayBuffer holds a PNG format image. */
+function arrayBufferIsPNG(buffer) {
+    // PNG starts with 89 50 4E 47 0D 0A 1A 0A
+    if (buffer.byteLength < 8)
+        return false;
+    var arr = new Uint8Array(buffer);
+    return arr[0] === 0x89
+        && arr[1] === 0x50
+        && arr[2] === 0x4E
+        && arr[3] === 0x47
+        && arr[4] === 0x0D
+        && arr[5] === 0x0A
+        && arr[6] === 0x1A
+        && arr[7] === 0x0A;
+}
+
+
+/***/ }),
+/* 12 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -851,7 +976,7 @@ var Vertex = /** @class */ (function () {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -872,7 +997,7 @@ var Skin = /** @class */ (function () {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1206,7 +1331,7 @@ function makeDivisibleBy(num, by) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1219,8 +1344,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addAccessor": () => (/* binding */ addAccessor)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
-/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 
@@ -1783,94 +1908,6 @@ function objectsEqual(obj1, obj2) {
 
 
 /***/ }),
-/* 15 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "imageToDataURI": () => (/* binding */ imageToDataURI),
-/* harmony export */   "imageToArrayBuffer": () => (/* binding */ imageToArrayBuffer),
-/* harmony export */   "encodeBase64DataUri": () => (/* binding */ encodeBase64DataUri),
-/* harmony export */   "arrayBufferIsPNG": () => (/* binding */ arrayBufferIsPNG)
-/* harmony export */ });
-/**
- * Converts an image into a Data URI string.
- * @param image
- */
-function imageToDataURI(image) {
-    var canvas = _imageTypeToCanvas(image);
-    return canvas.toDataURL();
-}
-/**
- * Converts an image into an ArrayBuffer.
- * @param image
- */
-function imageToArrayBuffer(image) {
-    var canvas = _imageTypeToCanvas(image);
-    var promiseResolve, promiseReject;
-    var promise = new Promise(function (resolve, reject) {
-        promiseResolve = resolve;
-        promiseReject = reject;
-    });
-    canvas.toBlob(function (blob) {
-        if (!blob) {
-            promiseReject("Unable to convert image to PNG");
-            return;
-        }
-        var reader = new FileReader();
-        reader.addEventListener("loadend", function () {
-            promiseResolve(reader.result);
-        });
-        reader.readAsArrayBuffer(blob);
-    }, "image/png");
-    return promise;
-}
-function _imageTypeToCanvas(image) {
-    var canvas;
-    if (image instanceof HTMLImageElement) {
-        canvas = document.createElement("canvas");
-        canvas.width = image.width;
-        canvas.height = image.height;
-        var context_1 = canvas.getContext("2d");
-        context_1.drawImage(image, 0, 0, image.width, image.height);
-    }
-    else {
-        canvas = image;
-    }
-    return canvas;
-}
-/**
- * Converts an ArrayBuffer into a base64 Data URI string.
- * @param buf
- */
-function encodeBase64DataUri(buf) {
-    var codes = [];
-    var uint8arr = new Uint8Array(buf);
-    for (var i = 0; i < uint8arr.length; i++) {
-        codes.push(String.fromCharCode(uint8arr[i]));
-    }
-    var b64 = btoa(codes.join(""));
-    var uri = "data:application/octet-stream;base64," + b64;
-    return uri;
-}
-/** Determines if an ArrayBuffer holds a PNG format image. */
-function arrayBufferIsPNG(buffer) {
-    // PNG starts with 89 50 4E 47 0D 0A 1A 0A
-    if (buffer.byteLength < 8)
-        return false;
-    var arr = new Uint8Array(buffer);
-    return arr[0] === 0x89
-        && arr[1] === 0x50
-        && arr[2] === 0x4E
-        && arr[3] === 0x47
-        && arr[4] === 0x0D
-        && arr[5] === 0x0A
-        && arr[6] === 0x1A
-        && arr[7] === 0x0A;
-}
-
-
-/***/ }),
 /* 16 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2006,7 +2043,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _src_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _src_gltf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _src_gltf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 
 
 
@@ -2466,7 +2503,7 @@ function skin_test() {
     _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI }).then(function (value) {
         var result = value["model.gltf"];
         console.log(result);
-        download(result, "yolo.gltf");
+        download(result, "model.gltf");
     });
 }
 function matrix_test() {
