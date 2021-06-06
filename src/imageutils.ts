@@ -1,10 +1,17 @@
-type ImageType = HTMLImageElement | HTMLCanvasElement;
+import { TextureImageType } from "./texture";
 
 /**
  * Converts an image into a Data URI string.
  * @param image
  */
-export function imageToDataURI(image: ImageType): string {
+export function imageToDataURI(image: TextureImageType): string {
+  if (typeof image === "string") {
+    return image;
+  }
+  if (image instanceof ArrayBuffer) {
+    return encodeBase64DataUri(image, "image/png");
+  }
+
   const canvas = _imageTypeToCanvas(image);
   return canvas.toDataURL();
 }
@@ -13,7 +20,14 @@ export function imageToDataURI(image: ImageType): string {
  * Converts an image into an ArrayBuffer.
  * @param image
  */
-export function imageToArrayBuffer(image: ImageType): Promise<ArrayBuffer> {
+export function imageToArrayBuffer(image: TextureImageType): Promise<ArrayBuffer> {
+  if (typeof image === "string") {
+    return Promise.resolve(dataUriToArrayBuffer(image));
+  }
+  if (image instanceof ArrayBuffer) {
+    return Promise.resolve(image);
+  }
+
   const canvas = _imageTypeToCanvas(image);
 
   let promiseResolve: any, promiseReject: any;
@@ -36,7 +50,7 @@ export function imageToArrayBuffer(image: ImageType): Promise<ArrayBuffer> {
   return promise;
 }
 
-function _imageTypeToCanvas(image: ImageType): HTMLCanvasElement {
+function _imageTypeToCanvas(image: HTMLImageElement | HTMLCanvasElement): HTMLCanvasElement {
   let canvas;
   if (image instanceof HTMLImageElement) {
     canvas = document.createElement("canvas");
@@ -52,17 +66,33 @@ function _imageTypeToCanvas(image: ImageType): HTMLCanvasElement {
 }
 
 /**
- * Converts an ArrayBuffer into a base64 Data URI string.
- * @param buf
+ * Converts a DataURI to an ArrayBuffer.
+ * @param dataUri DataURI. `data:mimeType;base64,...`
  */
-export function encodeBase64DataUri(buf: ArrayBuffer): string {
+export function dataUriToArrayBuffer(dataUri: string): ArrayBuffer {
+  const binary = atob(dataUri.split(",")[1]);
+  const buffer = new ArrayBuffer(binary.length);
+  const byteArray = new Uint8Array(buffer);
+  for (let i = 0; i < binary.length; i++) {
+    byteArray[i] = binary.charCodeAt(i);
+  }
+  return buffer;
+}
+
+/**
+ * Converts an ArrayBuffer into a base64 Data URI string.
+ * @param buf Array buffer
+ * @param mimeType Mime type of the data. Default is application/octet-stream.
+ */
+export function encodeBase64DataUri(buf: ArrayBuffer, mimeType?: string): string {
   const codes: string[] = [];
   const uint8arr = new Uint8Array(buf);
   for (let i = 0; i < uint8arr.length; i++) {
     codes.push(String.fromCharCode(uint8arr[i]));
   }
+  const mime = mimeType || "application/octet-stream";
   const b64 = btoa(codes.join(""));
-  const uri = "data:application/octet-stream;base64," + b64;
+  const uri = `data:${mime};base64,${b64}`;
   return uri;
 }
 

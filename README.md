@@ -25,7 +25,8 @@ node.setScale(x, y, z);
 scene.addNode(node);
 
 const material = new Material();
-const texture = new Texture(image); // HTMLImageElement
+// Supported texture types: HTMLImageElement | HTMLCanvasElement | ArrayBuffer (PNG) | Data URL (PNG)
+const texture = new Texture(image);
 texture.wrapS = WrappingMode.CLAMP_TO_EDGE;
 texture.wrapT = WrappingMode.REPEAT;
 material.pbrMetallicRoughness.baseColorTexture = texture;

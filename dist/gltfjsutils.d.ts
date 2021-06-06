@@ -149,9 +149,41 @@ declare module "src/math" {
         static IsIdentity(matrix: Matrix): boolean;
     }
 }
+declare module "src/imageutils" {
+    import { TextureImageType } from "src/texture";
+    /**
+     * Converts an image into a Data URI string.
+     * @param image
+     */
+    export function imageToDataURI(image: TextureImageType): string;
+    /**
+     * Converts an image into an ArrayBuffer.
+     * @param image
+     */
+    export function imageToArrayBuffer(image: TextureImageType): Promise<ArrayBuffer>;
+    /**
+     * Converts a DataURI to an ArrayBuffer.
+     * @param dataUri DataURI. `data:mimeType;base64,...`
+     */
+    export function dataUriToArrayBuffer(dataUri: string): ArrayBuffer;
+    /**
+     * Converts an ArrayBuffer into a base64 Data URI string.
+     * @param buf Array buffer
+     * @param mimeType Mime type of the data. Default is application/octet-stream.
+     */
+    export function encodeBase64DataUri(buf: ArrayBuffer, mimeType?: string): string;
+    /** Determines if an ArrayBuffer holds a PNG format image. */
+    export function arrayBufferIsPNG(buffer: ArrayBuffer): boolean;
+}
 declare module "src/texture" {
     import { WrappingMode } from "src/types";
-    type TextureImageType = HTMLImageElement | HTMLCanvasElement;
+    /**
+     * Supported texture image types.
+     * For ArrayBuffer, the current assumption is that the buffer contains PNG data.
+     * For string, expectation is an image/png data uri.
+     */
+    export type TextureImageType = HTMLImageElement | HTMLCanvasElement | ArrayBuffer | string;
+    /** Represents a model texture. */
     export class Texture {
         wrapS: WrappingMode;
         wrapT: WrappingMode;
@@ -541,26 +573,6 @@ declare module "src/buffer" {
 declare module "src/glb" {
     export function createGLBBuffer(json: string, bin?: ArrayBuffer | null): ArrayBuffer;
 }
-declare module "src/imageutils" {
-    type ImageType = HTMLImageElement | HTMLCanvasElement;
-    /**
-     * Converts an image into a Data URI string.
-     * @param image
-     */
-    export function imageToDataURI(image: ImageType): string;
-    /**
-     * Converts an image into an ArrayBuffer.
-     * @param image
-     */
-    export function imageToArrayBuffer(image: ImageType): Promise<ArrayBuffer>;
-    /**
-     * Converts an ArrayBuffer into a base64 Data URI string.
-     * @param buf
-     */
-    export function encodeBase64DataUri(buf: ArrayBuffer): string;
-    /** Determines if an ArrayBuffer holds a PNG format image. */
-    export function arrayBufferIsPNG(buffer: ArrayBuffer): boolean;
-}
 declare module "src/gltf" {
     import { glTF } from "src/gltftypes";
     import { GLTFAsset } from "src/asset";
@@ -653,5 +665,8 @@ declare module "test/asset.spec" {
     import "mocha";
 }
 declare module "test/math.spec" {
+    import "mocha";
+}
+declare module "test/texture.spec" {
     import "mocha";
 }

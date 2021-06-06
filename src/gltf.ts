@@ -31,7 +31,7 @@ import { Mesh } from "./mesh";
 import { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
 import { Vertex } from "./vertex";
 import { Material } from "./material";
-import { Texture } from "./texture";
+import { Texture, TextureImageType } from "./texture";
 import { imageToArrayBuffer, imageToDataURI } from "./imageutils";
 import { Animation } from "./animation";
 import { Skin } from "./skin";
@@ -635,7 +635,7 @@ function addTexture(gltf: glTF, texture: Texture): number {
   return addedIndex;
 }
 
-function addImage(gltf: glTF, image: HTMLImageElement | HTMLCanvasElement): number {
+function addImage(gltf: glTF, image: TextureImageType): number {
   if (!gltf.images)
     gltf.images = [];
 
