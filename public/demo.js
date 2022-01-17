@@ -144,7 +144,7 @@ function exportGLTF(asset, options) {
                                     case _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB:
                                         break; // Not applicable
                                     default: // ImageOutputType.External
-                                        filename = "img" + currentImg + ".png";
+                                        filename = "img".concat(currentImg, ".png");
                                         currentImg++;
                                         output[filename] = value;
                                         return filename;
@@ -159,7 +159,7 @@ function exportGLTF(asset, options) {
                                     binChunkBuffer = value;
                                     return undefined;
                                 default: // BufferOutputType.External
-                                    filename = "data" + currentData + ".bin";
+                                    filename = "data".concat(currentData, ".bin");
                                     currentData++;
                                     output[filename] = value;
                                     return filename;
@@ -931,7 +931,7 @@ function encodeBase64DataUri(buf, mimeType) {
     }
     var mime = mimeType || "application/octet-stream";
     var b64 = btoa(codes.join(""));
-    var uri = "data:" + mime + ";base64," + b64;
+    var uri = "data:".concat(mime, ";base64,").concat(b64);
     return uri;
 }
 /** Determines if an ArrayBuffer holds a PNG format image. */
@@ -1069,7 +1069,7 @@ var Buffer = /** @class */ (function () {
     Buffer.prototype.finalize = function () {
         var _this = this;
         if (this._finalizePromise)
-            throw new Error("Buffer " + this._index + " was already finalized");
+            throw new Error("Buffer ".concat(this._index, " was already finalized"));
         this._finalizePromise = new Promise(function (resolve) {
             resolve(Promise.all(_this.getViewFinalizePromises()));
         }).then(function () {
@@ -1278,7 +1278,7 @@ var BufferView = /** @class */ (function () {
             case _types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT:
                 return 4;
         }
-        throw "Unrecognized component type " + this._componentType;
+        throw "Unrecognized component type ".concat(this._componentType);
     };
     BufferView.prototype._numComponentsForDataType = function () {
         switch (this._dataType) {

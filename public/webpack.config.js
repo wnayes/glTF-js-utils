@@ -25,5 +25,8 @@ module.exports = {
     filename: "demo.js",
     path: currentDirectory,
     globalObject: "typeof self !== 'undefined' ? self : this"
-  }
+  },
+  devServer: {
+    static: ".",
+  },
 };
