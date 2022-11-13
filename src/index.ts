@@ -8,8 +8,18 @@ export { Vertex } from "./vertex";
 export { Skin } from "./skin";
 export { Animation } from "./animation";
 export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "./math";
-export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor,
-  VertexColorMode, WrappingMode, InterpolationMode, Transformation } from "./types";
+export {
+  AlphaMode,
+  ComponentType,
+  DataType,
+  MeshMode,
+  RGBColor,
+  RGBAColor,
+  VertexColorMode,
+  WrappingMode,
+  InterpolationMode,
+  Transformation,
+} from "./types";
 export { ImageOutputType, BufferOutputType } from "./types";
 export { Buffer, BufferView } from "./buffer";
 export type { BufferAccessorInfo } from "./buffer";
@@ -57,14 +67,22 @@ export type GLTFExportTypeWithGLB = {
  * @param options Export options
  * @returns Promise for an object, each key pointing to a file.
  */
-export async function exportGLTF(asset: GLTFAsset, options: { imageOutputType: ImageOutputType.GLB } | { bufferOutputType: BufferOutputType.GLB }): Promise<GLTFExportTypeWithGLB>;
+export async function exportGLTF(
+  asset: GLTFAsset,
+  options:
+    | { imageOutputType: ImageOutputType.GLB }
+    | { bufferOutputType: BufferOutputType.GLB }
+): Promise<GLTFExportTypeWithGLB>;
 /**
  * Creates a glTF model from a GLTFAsset structure.
  * @param asset GLTFAsset model structure
  * @param options Export options
  * @returns Promise for an object, each key pointing to a file.
  */
-export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportTypeWithGLTF>;
+export async function exportGLTF(
+  asset: GLTFAsset,
+  options?: GLTFExportOptions
+): Promise<GLTFExportTypeWithGLTF>;
 
 /**
  * Creates a glTF model from a GLTFAsset structure.
@@ -72,7 +90,10 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
  * @param options Export options
  * @returns Promise for an object, each key pointing to a file.
  */
-export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions): Promise<GLTFExportType> {
+export async function exportGLTF(
+  asset: GLTFAsset,
+  options?: GLTFExportOptions
+): Promise<GLTFExportType> {
   options = options || {};
 
   const gltf = createEmptyGLTF();
@@ -82,22 +103,23 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
 
   addScenes(gltf, asset);
 
-  const promises = gltf.extras.promises;
-
   let currentData = 1;
   let currentImg = 1;
 
   let binChunkBuffer: ArrayBuffer | null = null;
 
-  return Promise.all(promises).then(() => {
-    const output: GLTFExportType = {};
+  await Promise.all(gltf.extras.promises);
 
-    delete (gltf as any).extras;
+  delete (gltf as any).extras;
 
-    const jsonSpacing = typeof options!.jsonSpacing === "number" ? options!.jsonSpacing : 4;
-    const gltfString = JSON.stringify(gltf, (key: string, value: any) => {
-      if (key === "extras")
-        return undefined;
+  const output: GLTFExportType = {};
+
+  const jsonSpacing =
+    typeof options!.jsonSpacing === "number" ? options!.jsonSpacing : 4;
+  const gltfString = JSON.stringify(
+    gltf,
+    (key: string, value: any) => {
+      if (key === "extras") return undefined;
 
       if (value instanceof ArrayBuffer) {
         let filename: string;
@@ -121,7 +143,9 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
 
           case BufferOutputType.GLB:
             if (binChunkBuffer)
-              throw new Error("Already encountered an ArrayBuffer, there should only be one in the GLB format.");
+              throw new Error(
+                "Already encountered an ArrayBuffer, there should only be one in the GLB format."
+              );
             binChunkBuffer = value;
             return undefined;
 
@@ -134,19 +158,20 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
       }
 
       return value;
-    }, jsonSpacing);
+    },
+    jsonSpacing
+  );
 
-    const doingGLB = options!.bufferOutputType === BufferOutputType.GLB
-      || options!.imageOutputType === ImageOutputType.GLB;
-    if (doingGLB) {
-      output[MODEL_NAME_GLB] = createGLBBuffer(gltfString, binChunkBuffer);
-    }
-    else {
-      output[MODEL_NAME_GLTF] = gltfString;
-    }
+  const doingGLB =
+    options!.bufferOutputType === BufferOutputType.GLB ||
+    options!.imageOutputType === ImageOutputType.GLB;
+  if (doingGLB) {
+    output[MODEL_NAME_GLB] = createGLBBuffer(gltfString, binChunkBuffer);
+  } else {
+    output[MODEL_NAME_GLTF] = gltfString;
+  }
 
-    return output;
-  });
+  return output;
 }
 
 /**
@@ -156,7 +181,11 @@ export async function exportGLTF(asset: GLTFAsset, options?: GLTFExportOptions):
  * @param options Export options
  * @returns A Promise to receive a ZIP blob is returned instead.
  */
-export async function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTFExportOptions): Promise<Blob> {
+export async function exportGLTFZip(
+  asset: GLTFAsset,
+  jsZip: jsz,
+  options?: GLTFExportOptions
+): Promise<Blob> {
   return exportGLTF(asset, options).then((output) => {
     const zip = new jsZip();
     for (const filename in output) {
@@ -165,7 +194,6 @@ export async function exportGLTFZip(asset: GLTFAsset, jsZip: jsz, options?: GLTF
     return zip.generateAsync({ type: "blob" });
   });
 }
-
 
 /**
  * Creates a GLB binary format glTF model from a GLTFAsset structure.
@@ -177,7 +205,7 @@ export async function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer> {
     bufferOutputType: BufferOutputType.GLB,
     imageOutputType: ImageOutputType.GLB,
     jsonSpacing: 0,
-  }).then(output => {
+  }).then((output) => {
     return output[MODEL_NAME_GLB] as ArrayBuffer;
   });
 }

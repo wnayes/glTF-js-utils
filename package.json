@@ -6,7 +6,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "webpack & tsc --emitDeclarationOnly true --declaration --outFile \"./dist/gltfjsutils.d.ts\"",
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register test/*.spec.ts"
+    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register --recursive --extension spec.ts test"
   },
   "keywords": [
     "glTF"
@@ -26,6 +26,7 @@
     "chai": "^4.3.7",
     "cross-env": "^7.0.3",
     "eslint": "^8.27.0",
+    "gltf-validator": "^2.0.0-dev.3.9",
     "mocha": "^10.1.0",
     "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",

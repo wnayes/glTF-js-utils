@@ -216,15 +216,16 @@ declare module "src/material" {
 }
 declare module "src/vertex" {
     import { RGBColor, RGBAColor } from "src/types";
+    /** Represents a mesh vertex. */
     export class Vertex {
         x: number;
         y: number;
         z: number;
         u: number;
         v: number;
-        normalX: number;
-        normalY: number;
-        normalZ: number;
+        normalX?: number;
+        normalY?: number;
+        normalZ?: number;
         color?: RGBColor | RGBAColor;
     }
 }
@@ -239,7 +240,7 @@ declare module "src/mesh" {
         private _faceColors;
         private _materialIndices;
         addFace(v1: Vertex, v2: Vertex, v3: Vertex, color?: RGBColor | RGBAColor, materialIndex?: number): void;
-        forEachFace(fn: (v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => void): void;
+        forEachFace(fn: (v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => boolean | void): void;
     }
 }
 declare module "src/skin" {
@@ -598,7 +599,7 @@ declare module "src/index" {
     export { Skin } from "src/skin";
     export { Animation } from "src/animation";
     export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "src/math";
-    export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode, InterpolationMode, Transformation } from "src/types";
+    export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode, InterpolationMode, Transformation, } from "src/types";
     export { ImageOutputType, BufferOutputType } from "src/types";
     export { Buffer, BufferView } from "src/buffer";
     export type { BufferAccessorInfo } from "src/buffer";
@@ -670,3 +671,4 @@ declare module "test/math.spec" {
 declare module "test/texture.spec" {
     import "mocha";
 }
+declare module "test/integration/triangle.spec" { }

@@ -1,13 +1,23 @@
-import { AlphaMode, ComponentType, DataType, MeshMode,
-  WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation } from "./types";
+import {
+  AlphaMode,
+  ComponentType,
+  DataType,
+  MeshMode,
+  WrappingMode,
+  BufferOutputType,
+  ImageOutputType,
+  InterpolationMode,
+  Transformation,
+  BufferTarget,
+} from "./types";
 import { Buffer } from "./buffer";
 import { Node } from "./node";
 
 export interface glTF {
   asset: {
-    version: string,
-    copyright?: string,
-    generator?: string,
+    version: string;
+    copyright?: string;
+    generator?: string;
   };
   scene?: number;
   buffers?: glTFBuffer[];
@@ -26,12 +36,12 @@ export interface glTF {
   /** Extras used specifically by gltf-js-utils. */
   extras: {
     options: {
-       bufferOutputType?: BufferOutputType,
-       imageOutputType?: ImageOutputType,
-    },
-    binChunkBuffer: Buffer | null,
-    promises: Promise<any>[],
-    nodeIndices: Map<Node, number>,
+      bufferOutputType?: BufferOutputType;
+      imageOutputType?: ImageOutputType;
+    };
+    binChunkBuffer: Buffer | null;
+    promises: Promise<any>[];
+    nodeIndices: Map<Node, number>;
   };
 }
 
@@ -45,15 +55,15 @@ export interface glTFBuffer {
 export interface glTFAnimationSampler {
   input: number;
   output: number;
-  interpolation: InterpolationMode
+  interpolation: InterpolationMode;
 }
 
 export interface glTFAnimationChannel {
   sampler: number;
   target: {
     node: number;
-    path: Transformation
-  }
+    path: Transformation;
+  };
 }
 
 export interface glTFAnimation {
@@ -104,7 +114,7 @@ export interface glTFBufferView {
   byteLength: number;
   byteOffset?: number;
   byteStride?: number;
-  target?: number;
+  target?: BufferTarget;
   extras?: any;
 }
 
@@ -117,7 +127,24 @@ export interface glTFNode {
   rotation?: [number, number, number, number];
   scale?: [number, number, number];
   translation?: [number, number, number];
-  matrix?: [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+  matrix?: [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ];
   weights?: number;
 }
 
@@ -144,7 +171,7 @@ export interface glTFSparseAccessor {
   indices: {
     bufferView: number;
     byteOffset?: number; // default 0
-    componentType: ComponentType
+    componentType: ComponentType;
     extensions?: Record<string, unknown>;
     extras?: any;
   };
@@ -177,7 +204,7 @@ export interface glTFMeshPrimitiveAttributes {
 }
 
 export type glTFAttribute =
-  "POSITION"
+  | "POSITION"
   | "NORMAL"
   | "TANGENT"
   | "TEXCOORD_0"

@@ -9,7 +9,8 @@ import {
   glTFMesh,
   glTFMeshPrimitives,
   glTFNode,
-  glTFScene, glTFSkin
+  glTFScene,
+  glTFSkin,
 } from "./gltftypes";
 import { GLTFAsset } from "./asset";
 import { Node } from "./node";
@@ -25,7 +26,7 @@ import {
   RGBAColor,
   RGBColor,
   Transformation,
-  VertexColorMode
+  VertexColorMode,
 } from "./types";
 import { Mesh } from "./mesh";
 import { Buffer, BufferAccessorInfo, BufferView } from "./buffer";
@@ -47,7 +48,7 @@ export function createEmptyGLTF(): glTF {
       binChunkBuffer: null,
       promises: [],
       nodeIndices: new Map(),
-    }
+    },
   };
 }
 
@@ -55,8 +56,8 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
   gltf.scene = asset.defaultScene;
 
   const doingGLB =
-    gltf.extras.options.bufferOutputType === BufferOutputType.GLB
-    || gltf.extras.options.imageOutputType === ImageOutputType.GLB;
+    gltf.extras.options.bufferOutputType === BufferOutputType.GLB ||
+    gltf.extras.options.imageOutputType === ImageOutputType.GLB;
   if (doingGLB) {
     gltf.extras.binChunkBuffer = addBuffer(gltf);
   }
@@ -71,16 +72,13 @@ export function addScenes(gltf: glTF, asset: GLTFAsset): void {
 }
 
 function addScene(gltf: glTF, scene: Scene): void {
-  if (!gltf.scenes)
-    gltf.scenes = [];
+  if (!gltf.scenes) gltf.scenes = [];
 
   const gltfScene: glTFScene = {};
-  if (scene.name)
-    gltfScene.name = scene.name;
+  if (scene.name) gltfScene.name = scene.name;
 
   scene.forEachNode((node: Node) => {
-    if (!gltfScene.nodes)
-      gltfScene.nodes = [];
+    if (!gltfScene.nodes) gltfScene.nodes = [];
 
     const index = addNode(gltf, node);
     gltfScene.nodes.push(index);
@@ -95,19 +93,22 @@ function addNode(gltf: glTF, node: Node): number {
     return existingIndex;
   }
 
-  if (!gltf.nodes)
-    gltf.nodes = [];
+  if (!gltf.nodes) gltf.nodes = [];
 
   const gltfNode: glTFNode = {};
-  if (node.name)
-    gltfNode.name = node.name;
+  if (node.name) gltfNode.name = node.name;
 
   const translation = node.getTranslation();
   if (translation.x !== 0 || translation.y !== 0 || translation.z !== 0)
     gltfNode.translation = translation.toArray();
 
   const rotation = node.getRotationQuaternion();
-  if (rotation.x !== 0 || rotation.y !== 0 || rotation.z !== 0 || rotation.w !== 1)
+  if (
+    rotation.x !== 0 ||
+    rotation.y !== 0 ||
+    rotation.z !== 0 ||
+    rotation.w !== 1
+  )
     gltfNode.rotation = rotation.toArray();
 
   const scale = node.getScale();
@@ -127,8 +128,7 @@ function addNode(gltf: glTF, node: Node): number {
   }
 
   node.forEachNode((node: Node) => {
-    if (!gltfNode.children)
-      gltfNode.children = [];
+    if (!gltfNode.children) gltfNode.children = [];
 
     const index = addNode(gltf, node);
     gltfNode.children.push(index);
@@ -141,10 +141,15 @@ function addNode(gltf: glTF, node: Node): number {
   return addedIndex;
 }
 
-function getJointIndexAndInverseBindMatrices(gltf: glTF, node: Node): [number[], (Matrix4x4 | undefined)[]] {
+function getJointIndexAndInverseBindMatrices(
+  gltf: glTF,
+  node: Node
+): [number[], (Matrix4x4 | undefined)[]] {
   const nodeIndex = getNodeIndex(gltf, node);
   if (nodeIndex === -1) {
-    throw new Error("Node should be added to gltf before calling getJointIndexAndInverseBindMatrices");
+    throw new Error(
+      "Node should be added to gltf before calling getJointIndexAndInverseBindMatrices"
+    );
   }
 
   let joints: number[] = [nodeIndex];
@@ -164,13 +169,12 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
 
   const addedIndex = gltf.skins.length;
   const gltfSkin: glTFSkin = {
-    joints: []
+    joints: [],
   };
   gltf.skins.push(gltfSkin);
 
   // add name (if exists)
-  if (skin.name.length > 0)
-    gltfSkin.name = skin.name;
+  if (skin.name.length > 0) gltfSkin.name = skin.name;
 
   // add skeleton (if exists)
   const skeletonNode = skin.skeletonNode;
@@ -178,8 +182,7 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
     const existingIndex = getNodeIndex(gltf, skeletonNode);
     if (existingIndex === -1) {
       gltfSkin.skeleton = addNode(gltf, skeletonNode);
-    }
-    else {
+    } else {
       gltfSkin.skeleton = existingIndex;
     }
   }
@@ -204,11 +207,17 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
   }
 
   // init skin buffer
-  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
-  const skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
+  const singleGLBBuffer =
+    gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  const skinBuffer = singleGLBBuffer
+    ? gltf.extras.binChunkBuffer!
+    : addBuffer(gltf);
 
   // init skin bufferView
-  const skinBufferView = skinBuffer.addBufferView(ComponentType.FLOAT, DataType.MAT4);
+  const skinBufferView = skinBuffer.addBufferView(
+    ComponentType.FLOAT,
+    DataType.MAT4
+  );
 
   // init skin accessor
   skinBufferView.startAccessor();
@@ -224,61 +233,86 @@ export function addSkin(gltf: glTF, skin: Skin, node: Node): number {
 
   // complete and clean up
   const skinAccessor = skinBufferView.endAccessor();
-  const skinAccessor_idx = addAccessor(gltf, skinBufferView.getIndex(), skinAccessor);
+  const skinAccessor_idx = addAccessor(
+    gltf,
+    skinBufferView.getIndex(),
+    skinAccessor
+  );
 
   gltfSkin.inverseBindMatrices = skinAccessor_idx;
 
   skinBufferView.finalize();
 
-  if (!singleGLBBuffer)
-    skinBuffer.finalize();
+  if (!singleGLBBuffer) skinBuffer.finalize();
 
   return addedIndex;
 }
 
-export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: number): void {
-  if (animations.length === 0)
-    return;
+export function addAnimations(
+  gltf: glTF,
+  animations: Animation[],
+  nodeIndex: number
+): void {
+  if (animations.length === 0) return;
 
-  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
-  const animBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer! : addBuffer(gltf);
+  const singleGLBBuffer =
+    gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  const animBuffer = singleGLBBuffer
+    ? gltf.extras.binChunkBuffer!
+    : addBuffer(gltf);
 
-  const timeBufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.SCALAR);
+  const timeBufferView = animBuffer.addBufferView(
+    ComponentType.FLOAT,
+    DataType.SCALAR
+  );
   let vec4BufferView: BufferView | undefined; // ComponentType.FLOAT, DataType.VEC4
   let vec3BufferView: BufferView | undefined; // ComponentType.FLOAT, DataType.VEC3
 
   if (!gltf.animations || gltf.animations.length === 0) {
     const gltfAnim: glTFAnimation = {
       channels: [],
-      samplers: []
+      samplers: [],
     };
     gltf.animations = [gltfAnim];
   }
 
   const gltfAnim = gltf.animations[0];
-  if (animations[0].name && !gltfAnim.name) // TODO: Animation names
+  if (animations[0].name && !gltfAnim.name)
+    // TODO: Animation names
     gltfAnim.name = animations[0].name;
 
-  function _completeAnimation(animBufferView: BufferView, interpType: InterpolationMode, path: Transformation) {
+  function _completeAnimation(
+    animBufferView: BufferView,
+    interpType: InterpolationMode,
+    path: Transformation
+  ) {
     const timeAccessor = timeBufferView.endAccessor();
-    const timeAccessor_idx = addAccessor(gltf, timeBufferView.getIndex(), timeAccessor);
+    const timeAccessor_idx = addAccessor(
+      gltf,
+      timeBufferView.getIndex(),
+      timeAccessor
+    );
 
     const animAccessor = animBufferView.endAccessor();
-    const animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
+    const animAccessor_idx = addAccessor(
+      gltf,
+      animBufferView.getIndex(),
+      animAccessor
+    );
 
     // then create samplers (input: times accessor idx, output: values accessor idx)
     const sampler: glTFAnimationSampler = {
-      "input": timeAccessor_idx,
-      "output": animAccessor_idx,
-      "interpolation": interpType
+      input: timeAccessor_idx,
+      output: animAccessor_idx,
+      interpolation: interpType,
     };
     // then create channels (sampler: get sampler idx from above)
     const channel: glTFAnimationChannel = {
-      "sampler": gltfAnim.samplers.length,
-      "target": {
-        "node": nodeIndex,
-        "path": path
-      }
+      sampler: gltfAnim.samplers.length,
+      target: {
+        node: nodeIndex,
+        path: path,
+      },
     };
 
     gltfAnim.samplers.push(sampler);
@@ -296,13 +330,18 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
     let animBufferView: BufferView;
     if (isVec4) {
       if (!vec4BufferView) {
-        vec4BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC4);
+        vec4BufferView = animBuffer.addBufferView(
+          ComponentType.FLOAT,
+          DataType.VEC4
+        );
       }
       animBufferView = vec4BufferView;
-    }
-    else {
+    } else {
       if (!vec3BufferView) {
-        vec3BufferView = animBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
+        vec3BufferView = animBuffer.addBufferView(
+          ComponentType.FLOAT,
+          DataType.VEC3
+        );
       }
       animBufferView = vec3BufferView;
     }
@@ -339,9 +378,11 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
         if (spline_info?.inTangent && ix > 0) {
           inTangent = spline_info.inTangent;
         }
-        if (spline_info?.outTangent
-          && (idx < total_kf - 1)
-          && anim.keyframes[idx+1].interpType === InterpolationMode.CUBICSPLINE) {
+        if (
+          spline_info?.outTangent &&
+          idx < total_kf - 1 &&
+          anim.keyframes[idx + 1].interpType === InterpolationMode.CUBICSPLINE
+        ) {
           outTangent = spline_info.outTangent;
         }
 
@@ -351,8 +392,7 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
             animBufferView.push(d[j]); // aaavvvbbb, a=inTangent, v=value, b=outTangent
           }
         }
-      }
-      else {
+      } else {
         const tj = isVec4 ? 4 : 3;
         for (let j = 0; j < tj; ++j) {
           animBufferView.push(value[j]);
@@ -366,17 +406,13 @@ export function addAnimations(gltf: glTF, animations: Animation[], nodeIndex: nu
   }
 
   timeBufferView.finalize();
-  if (vec4BufferView)
-    vec4BufferView.finalize();
-  if (vec3BufferView)
-    vec3BufferView.finalize();
-  if (!singleGLBBuffer)
-    animBuffer.finalize();
+  if (vec4BufferView) vec4BufferView.finalize();
+  if (vec3BufferView) vec3BufferView.finalize();
+  if (!singleGLBBuffer) animBuffer.finalize();
 }
 
 function addMesh(gltf: glTF, mesh: Mesh): number {
-  if (!gltf.meshes)
-    gltf.meshes = [];
+  if (!gltf.meshes) gltf.meshes = [];
 
   if (mesh.mode !== MeshMode.TRIANGLES)
     throw "MeshMode other than TRIANGLES not currently supported";
@@ -390,49 +426,87 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   const addedIndex = gltf.meshes.length;
   gltf.meshes.push(gltfMesh);
 
-  const singleGLBBuffer = gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
+  const singleGLBBuffer =
+    gltf.extras.options.bufferOutputType === BufferOutputType.GLB;
   let meshBuffer: Buffer;
   if (singleGLBBuffer) {
     meshBuffer = gltf.extras.binChunkBuffer!;
-  }
-  else {
+  } else {
     meshBuffer = addBuffer(gltf);
   }
 
-  const vertexBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
-  const vertexNormalBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC3);
-  const vertexUVBufferView = meshBuffer.addBufferView(ComponentType.FLOAT, DataType.VEC2);
+  const vertexBufferView = meshBuffer.addBufferView(
+    ComponentType.FLOAT,
+    DataType.VEC3
+  );
+
+  const hasNormals = meshHasVertexNormals(mesh);
+  let vertexNormalBufferView: BufferView | undefined;
+  if (hasNormals) {
+    vertexNormalBufferView = meshBuffer.addBufferView(
+      ComponentType.FLOAT,
+      DataType.VEC3
+    );
+  }
+
+  const vertexUVBufferView = meshBuffer.addBufferView(
+    ComponentType.FLOAT,
+    DataType.VEC2
+  );
 
   let vertexColorBufferView: BufferView | undefined;
   function _ensureColorBufferView() {
-    if (vertexColorBufferView)
-      return;
+    if (vertexColorBufferView) return;
 
-    vertexColorBufferView = meshBuffer.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.VEC4);
+    vertexColorBufferView = meshBuffer.addBufferView(
+      ComponentType.UNSIGNED_BYTE,
+      DataType.VEC4
+    );
   }
 
   function _completeMeshPrimitive(materialIndex: number): glTFMeshPrimitives {
     const vertexBufferAccessorInfo = vertexBufferView.endAccessor();
-    const vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
+    const vertexNormalBufferAccessorInfo =
+      vertexNormalBufferView?.endAccessor();
     const vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
 
     const primitive: glTFMeshPrimitives = {
       attributes: {
-        POSITION: addAccessor(gltf, vertexBufferView.getIndex(), vertexBufferAccessorInfo),
-        NORMAL: addAccessor(gltf, vertexNormalBufferView.getIndex(), vertexNormalBufferAccessorInfo),
-        TEXCOORD_0: addAccessor(gltf, vertexUVBufferView.getIndex(), vertexUVBufferAccessorInfo),
+        POSITION: addAccessor(
+          gltf,
+          vertexBufferView.getIndex(),
+          vertexBufferAccessorInfo
+        ),
+        TEXCOORD_0: addAccessor(
+          gltf,
+          vertexUVBufferView.getIndex(),
+          vertexUVBufferAccessorInfo
+        ),
       },
       mode: mesh.mode,
     };
+
+    if (vertexNormalBufferAccessorInfo && vertexNormalBufferView) {
+      primitive.attributes.NORMAL = addAccessor(
+        gltf,
+        vertexNormalBufferView.getIndex(),
+        vertexNormalBufferAccessorInfo
+      );
+    }
+
     if (materialIndex >= 0) {
       primitive.material = materialIndex;
 
       // Only add color data if it is per-face/vertex.
       const material = mesh.material[materialIndex];
       if (material.vertexColorMode !== VertexColorMode.NoColors) {
-        const vertexColorBufferAccessorInfo = vertexColorBufferView!.endAccessor();
-        primitive.attributes["COLOR_0"] =
-          addAccessor(gltf, vertexColorBufferView!.getIndex(), vertexColorBufferAccessorInfo);
+        const vertexColorBufferAccessorInfo =
+          vertexColorBufferView!.endAccessor();
+        primitive.attributes["COLOR_0"] = addAccessor(
+          gltf,
+          vertexColorBufferView!.getIndex(),
+          vertexColorBufferAccessorInfo
+        );
       }
     }
 
@@ -440,86 +514,110 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   }
 
   let lastMaterialIndex: number | null = null;
-  mesh.forEachFace((v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => {
-    let currentMaterial: Material | null = null;
-    if (materialIndex >= 0)
-      currentMaterial = mesh.material[materialIndex];
+  mesh.forEachFace(
+    (
+      v1: Vertex,
+      v2: Vertex,
+      v3: Vertex,
+      color: RGBColor | RGBAColor | undefined,
+      materialIndex: number
+    ) => {
+      let currentMaterial: Material | null = null;
+      if (materialIndex >= 0) currentMaterial = mesh.material[materialIndex];
 
-    // Need to start new accessors
-    if (lastMaterialIndex !== materialIndex) {
-      // And end the previous ones.
-      if (lastMaterialIndex !== null) {
-        const primitive = _completeMeshPrimitive(lastMaterialIndex);
-        gltfMesh.primitives.push(primitive);
+      // Need to start new accessors
+      if (lastMaterialIndex !== materialIndex) {
+        // And end the previous ones.
+        if (lastMaterialIndex !== null) {
+          const primitive = _completeMeshPrimitive(lastMaterialIndex);
+          gltfMesh.primitives.push(primitive);
+        }
+
+        vertexBufferView.startAccessor("POSITION");
+        vertexNormalBufferView?.startAccessor("NORMAL");
+        vertexUVBufferView.startAccessor("TEXCOORD_0");
+        if (
+          currentMaterial &&
+          currentMaterial.vertexColorMode !== VertexColorMode.NoColors
+        ) {
+          _ensureColorBufferView();
+          vertexColorBufferView!.startAccessor("COLOR_0");
+        }
+
+        lastMaterialIndex = materialIndex;
       }
 
-      vertexBufferView.startAccessor("POSITION");
-      vertexNormalBufferView.startAccessor("NORMAL");
-      vertexUVBufferView.startAccessor("TEXCOORD_0");
-      if (currentMaterial && currentMaterial.vertexColorMode !== VertexColorMode.NoColors) {
-        _ensureColorBufferView();
-        vertexColorBufferView!.startAccessor("COLOR_0");
+      // Positions
+      vertexBufferView.push(v1.x);
+      vertexBufferView.push(v1.y);
+      vertexBufferView.push(v1.z);
+
+      vertexBufferView.push(v2.x);
+      vertexBufferView.push(v2.y);
+      vertexBufferView.push(v2.z);
+
+      vertexBufferView.push(v3.x);
+      vertexBufferView.push(v3.y);
+      vertexBufferView.push(v3.z);
+
+      // Vertex normals
+      if (vertexNormalBufferView) {
+        vertexNormalBufferView.push(v1.normalX!);
+        vertexNormalBufferView.push(v1.normalY!);
+        vertexNormalBufferView.push(v1.normalZ!);
+
+        vertexNormalBufferView.push(v2.normalX!);
+        vertexNormalBufferView.push(v2.normalY!);
+        vertexNormalBufferView.push(v2.normalZ!);
+
+        vertexNormalBufferView.push(v3.normalX!);
+        vertexNormalBufferView.push(v3.normalY!);
+        vertexNormalBufferView.push(v3.normalZ!);
       }
 
-      lastMaterialIndex = materialIndex;
+      // Texture UV coords
+      vertexUVBufferView.push(v1.u);
+      vertexUVBufferView.push(v1.v);
+
+      vertexUVBufferView.push(v2.u);
+      vertexUVBufferView.push(v2.v);
+
+      vertexUVBufferView.push(v3.u);
+      vertexUVBufferView.push(v3.v);
+
+      if (currentMaterial) {
+        // Vertex colors
+        switch (currentMaterial.vertexColorMode) {
+          case VertexColorMode.FaceColors:
+            // Just duplicate the face colors 3 times.
+            for (let v = 0; v < 3; v++) {
+              addColorToBufferView(
+                vertexColorBufferView!,
+                color || new RGBColor()
+              );
+            }
+            break;
+
+          case VertexColorMode.VertexColors:
+            addColorToBufferView(
+              vertexColorBufferView!,
+              v1.color || new RGBColor()
+            );
+            addColorToBufferView(
+              vertexColorBufferView!,
+              v2.color || new RGBColor()
+            );
+            addColorToBufferView(
+              vertexColorBufferView!,
+              v3.color || new RGBColor()
+            );
+            break;
+
+          // NoColors? We won't have an accessor.
+        }
+      }
     }
-
-    // Positions
-    vertexBufferView.push(v1.x);
-    vertexBufferView.push(v1.y);
-    vertexBufferView.push(v1.z);
-
-    vertexBufferView.push(v2.x);
-    vertexBufferView.push(v2.y);
-    vertexBufferView.push(v2.z);
-
-    vertexBufferView.push(v3.x);
-    vertexBufferView.push(v3.y);
-    vertexBufferView.push(v3.z);
-
-    // Vertex normals
-    vertexNormalBufferView.push(v1.normalX);
-    vertexNormalBufferView.push(v1.normalY);
-    vertexNormalBufferView.push(v1.normalZ);
-
-    vertexNormalBufferView.push(v2.normalX);
-    vertexNormalBufferView.push(v2.normalY);
-    vertexNormalBufferView.push(v2.normalZ);
-
-    vertexNormalBufferView.push(v3.normalX);
-    vertexNormalBufferView.push(v3.normalY);
-    vertexNormalBufferView.push(v3.normalZ);
-
-    // Texture UV coords
-    vertexUVBufferView.push(v1.u);
-    vertexUVBufferView.push(v1.v);
-
-    vertexUVBufferView.push(v2.u);
-    vertexUVBufferView.push(v2.v);
-
-    vertexUVBufferView.push(v3.u);
-    vertexUVBufferView.push(v3.v);
-
-    if (currentMaterial) {
-      // Vertex colors
-      switch (currentMaterial.vertexColorMode) {
-        case VertexColorMode.FaceColors:
-          // Just duplicate the face colors 3 times.
-          for (let v = 0; v < 3; v++) {
-            addColorToBufferView(vertexColorBufferView!, color || new RGBColor());
-          }
-          break;
-
-        case VertexColorMode.VertexColors:
-          addColorToBufferView(vertexColorBufferView!, v1.color || new RGBColor());
-          addColorToBufferView(vertexColorBufferView!, v2.color || new RGBColor());
-          addColorToBufferView(vertexColorBufferView!, v3.color || new RGBColor());
-          break;
-
-        // NoColors? We won't have an accessor.
-      }
-    }
-  });
+  );
 
   if (lastMaterialIndex !== null) {
     const primitive = _completeMeshPrimitive(lastMaterialIndex);
@@ -527,26 +625,35 @@ function addMesh(gltf: glTF, mesh: Mesh): number {
   }
 
   vertexBufferView.finalize();
-  vertexNormalBufferView.finalize();
+  vertexNormalBufferView?.finalize();
   vertexUVBufferView.finalize();
-  if (vertexColorBufferView)
-    vertexColorBufferView.finalize();
+  vertexColorBufferView?.finalize();
 
-  if (!singleGLBBuffer)
-    meshBuffer.finalize();
+  if (!singleGLBBuffer) meshBuffer.finalize();
 
   return addedIndex;
 }
 
-function addColorToBufferView(bufferView: BufferView, color: RGBColor | RGBAColor) {
+function meshHasVertexNormals(mesh: Mesh): boolean {
+  let hasNormals = false;
+  mesh.forEachFace((v1) => {
+    hasNormals = typeof v1.normalX === "number";
+    return true;
+  });
+  return hasNormals;
+}
+
+function addColorToBufferView(
+  bufferView: BufferView,
+  color: RGBColor | RGBAColor
+) {
   bufferView.push((color.r * 255) | 0);
   bufferView.push((color.g * 255) | 0);
   bufferView.push((color.b * 255) | 0);
   if ("a" in color) {
     bufferView.push((color.a * 255) | 0);
-  }
-  else {
-    bufferView.push(0xFF);
+  } else {
+    bufferView.push(0xff);
   }
 }
 
@@ -554,9 +661,12 @@ export function addBuffer(gltf: glTF): Buffer {
   return new Buffer(gltf);
 }
 
-export function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAccessorInfo): number {
-  if (!gltf.accessors)
-    gltf.accessors = [];
+export function addAccessor(
+  gltf: glTF,
+  bufferViewIndex: number,
+  accessorInfo: BufferAccessorInfo
+): number {
+  if (!gltf.accessors) gltf.accessors = [];
 
   const addedIndex = gltf.accessors.length;
 
@@ -589,28 +699,31 @@ function addMaterials(gltf: glTF, materials: Material[]): number[] {
 }
 
 function addMaterial(gltf: glTF, material: Material): number {
-  if (!gltf.materials)
-    gltf.materials = [];
+  if (!gltf.materials) gltf.materials = [];
 
   const gltfMaterial: glTFMaterial = {};
-  if (material.name)
-    gltfMaterial.name = material.name;
+  if (material.name) gltfMaterial.name = material.name;
   if (material.alphaMode !== AlphaMode.OPAQUE)
     gltfMaterial.alphaMode = material.alphaMode;
   if (material.alphaCutoff !== 0.5)
     gltfMaterial.alphaCutoff = material.alphaCutoff;
-  if (material.doubleSided)
-    gltfMaterial.doubleSided = true;
+  if (material.doubleSided) gltfMaterial.doubleSided = true;
   if (material.pbrMetallicRoughness) {
     if (material.pbrMetallicRoughness.baseColorFactor) {
       gltfMaterial.pbrMetallicRoughness = {};
-      gltfMaterial.pbrMetallicRoughness.baseColorFactor = material.pbrMetallicRoughness.baseColorFactor;
+      gltfMaterial.pbrMetallicRoughness.baseColorFactor =
+        material.pbrMetallicRoughness.baseColorFactor;
     }
     if (material.pbrMetallicRoughness.baseColorTexture) {
       if (!gltfMaterial.pbrMetallicRoughness)
         gltfMaterial.pbrMetallicRoughness = {};
-      const textureIndex = addTexture(gltf, material.pbrMetallicRoughness.baseColorTexture);
-      gltfMaterial.pbrMetallicRoughness.baseColorTexture = { index: textureIndex };
+      const textureIndex = addTexture(
+        gltf,
+        material.pbrMetallicRoughness.baseColorTexture
+      );
+      gltfMaterial.pbrMetallicRoughness.baseColorTexture = {
+        index: textureIndex,
+      };
     }
   }
 
@@ -621,8 +734,7 @@ function addMaterial(gltf: glTF, material: Material): number {
 }
 
 function addTexture(gltf: glTF, texture: Texture): number {
-  if (!gltf.textures)
-    gltf.textures = [];
+  if (!gltf.textures) gltf.textures = [];
 
   const gltfTexture = {
     sampler: addSampler(gltf, texture),
@@ -636,8 +748,7 @@ function addTexture(gltf: glTF, texture: Texture): number {
 }
 
 function addImage(gltf: glTF, image: TextureImageType): number {
-  if (!gltf.images)
-    gltf.images = [];
+  if (!gltf.images) gltf.images = [];
 
   for (let i = 0; i < gltf.images.length; i++) {
     if (image === gltf.images[i].extras) {
@@ -652,7 +763,10 @@ function addImage(gltf: glTF, image: TextureImageType): number {
   let bufferView: BufferView;
   switch (gltf.extras.options.imageOutputType) {
     case ImageOutputType.GLB:
-      bufferView = gltf.extras.binChunkBuffer!.addBufferView(ComponentType.UNSIGNED_BYTE, DataType.SCALAR);
+      bufferView = gltf.extras.binChunkBuffer!.addBufferView(
+        ComponentType.UNSIGNED_BYTE,
+        DataType.SCALAR
+      );
       bufferView.writeAsync(imageToArrayBuffer(image)).then(() => {
         bufferView.finalize();
       });
@@ -665,9 +779,11 @@ function addImage(gltf: glTF, image: TextureImageType): number {
       break;
 
     default: // ImageOutputType.External
-      gltf.extras.promises.push(imageToArrayBuffer(image).then((pngBuffer: ArrayBuffer) => {
-        gltfImage.uri = (pngBuffer as any); // Processed later
-      }));
+      gltf.extras.promises.push(
+        imageToArrayBuffer(image).then((pngBuffer: ArrayBuffer) => {
+          gltfImage.uri = pngBuffer as any; // Processed later
+        })
+      );
       break;
   }
 
@@ -678,8 +794,7 @@ function addImage(gltf: glTF, image: TextureImageType): number {
 }
 
 function addSampler(gltf: glTF, texture: Texture): number {
-  if (!gltf.samplers)
-    gltf.samplers = [];
+  if (!gltf.samplers) gltf.samplers = [];
 
   const gltfSampler = {
     wrapS: texture.wrapS,

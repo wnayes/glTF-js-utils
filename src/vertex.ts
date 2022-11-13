@@ -1,5 +1,6 @@
 import { RGBColor, RGBAColor } from "./types";
 
+/** Represents a mesh vertex. */
 export class Vertex {
   public x = 0;
   public y = 0;
@@ -8,9 +9,9 @@ export class Vertex {
   public u = 0;
   public v = 0;
 
-  public normalX = 0;
-  public normalY = 0;
-  public normalZ = 0;
+  public normalX?: number;
+  public normalY?: number;
+  public normalZ?: number;
 
   public color?: RGBColor | RGBAColor;
 }

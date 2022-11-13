@@ -538,6 +538,9 @@ var Mesh = /** @class */ (function () {
         this._materialIndices = [];
     }
     Mesh.prototype.addFace = function (v1, v2, v3, color, materialIndex) {
+        if (!v1 || !v2 || !v3) {
+            throw new Error("Vertex passed to addFace was null or undefined");
+        }
         this._vertices.push(v1);
         this._vertices.push(v2);
         this._vertices.push(v3);
@@ -547,8 +550,11 @@ var Mesh = /** @class */ (function () {
         this._materialIndices.push(materialIndex);
     };
     Mesh.prototype.forEachFace = function (fn) {
-        for (var i = 0; i < this._vertices.length / 3; i++) {
-            fn(this._vertices[(i * 3)], this._vertices[(i * 3) + 1], this._vertices[(i * 3) + 2], this._faceColors[i], this._materialIndices[i]);
+        var faceCount = this._vertices.length / 3;
+        for (var i = 0; i < faceCount; i++) {
+            if (fn(this._vertices[i * 3], this._vertices[i * 3 + 1], this._vertices[i * 3 + 2], this._faceColors[i], this._materialIndices[i])) {
+                break;
+            }
         }
     };
     return Mesh;
@@ -750,6 +756,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Vertex": () => (/* binding */ Vertex)
 /* harmony export */ });
+/** Represents a mesh vertex. */
 var Vertex = /** @class */ (function () {
     function Vertex() {
         this.x = 0;
@@ -757,9 +764,6 @@ var Vertex = /** @class */ (function () {
         this.z = 0;
         this.u = 0;
         this.v = 0;
-        this.normalX = 0;
-        this.normalY = 0;
-        this.normalZ = 0;
     }
     return Vertex;
 }());
@@ -1152,13 +1156,13 @@ function createEmptyGLTF() {
             binChunkBuffer: null,
             promises: [],
             nodeIndices: new Map(),
-        }
+        },
     };
 }
 function addScenes(gltf, asset) {
     gltf.scene = asset.defaultScene;
-    var doingGLB = gltf.extras.options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB
-        || gltf.extras.options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB;
+    var doingGLB = gltf.extras.options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB ||
+        gltf.extras.options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB;
     if (doingGLB) {
         gltf.extras.binChunkBuffer = addBuffer(gltf);
     }
@@ -1197,7 +1201,10 @@ function addNode(gltf, node) {
     if (translation.x !== 0 || translation.y !== 0 || translation.z !== 0)
         gltfNode.translation = translation.toArray();
     var rotation = node.getRotationQuaternion();
-    if (rotation.x !== 0 || rotation.y !== 0 || rotation.z !== 0 || rotation.w !== 1)
+    if (rotation.x !== 0 ||
+        rotation.y !== 0 ||
+        rotation.z !== 0 ||
+        rotation.w !== 1)
         gltfNode.rotation = rotation.toArray();
     var scale = node.getScale();
     if (scale.x !== 1 || scale.y !== 1 || scale.z !== 1)
@@ -1242,7 +1249,7 @@ function addSkin(gltf, skin, node) {
     }
     var addedIndex = gltf.skins.length;
     var gltfSkin = {
-        joints: []
+        joints: [],
     };
     gltf.skins.push(gltfSkin);
     // add name (if exists)
@@ -1278,7 +1285,9 @@ function addSkin(gltf, skin, node) {
     }
     // init skin buffer
     var singleGLBBuffer = gltf.extras.options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB;
-    var skinBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer : addBuffer(gltf);
+    var skinBuffer = singleGLBBuffer
+        ? gltf.extras.binChunkBuffer
+        : addBuffer(gltf);
     // init skin bufferView
     var skinBufferView = skinBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.MAT4);
     // init skin accessor
@@ -1306,19 +1315,22 @@ function addAnimations(gltf, animations, nodeIndex) {
     if (animations.length === 0)
         return;
     var singleGLBBuffer = gltf.extras.options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB;
-    var animBuffer = singleGLBBuffer ? gltf.extras.binChunkBuffer : addBuffer(gltf);
+    var animBuffer = singleGLBBuffer
+        ? gltf.extras.binChunkBuffer
+        : addBuffer(gltf);
     var timeBufferView = animBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR);
     var vec4BufferView; // ComponentType.FLOAT, DataType.VEC4
     var vec3BufferView; // ComponentType.FLOAT, DataType.VEC3
     if (!gltf.animations || gltf.animations.length === 0) {
         var gltfAnim_1 = {
             channels: [],
-            samplers: []
+            samplers: [],
         };
         gltf.animations = [gltfAnim_1];
     }
     var gltfAnim = gltf.animations[0];
-    if (animations[0].name && !gltfAnim.name) // TODO: Animation names
+    if (animations[0].name && !gltfAnim.name)
+        // TODO: Animation names
         gltfAnim.name = animations[0].name;
     function _completeAnimation(animBufferView, interpType, path) {
         var timeAccessor = timeBufferView.endAccessor();
@@ -1327,17 +1339,17 @@ function addAnimations(gltf, animations, nodeIndex) {
         var animAccessor_idx = addAccessor(gltf, animBufferView.getIndex(), animAccessor);
         // then create samplers (input: times accessor idx, output: values accessor idx)
         var sampler = {
-            "input": timeAccessor_idx,
-            "output": animAccessor_idx,
-            "interpolation": interpType
+            input: timeAccessor_idx,
+            output: animAccessor_idx,
+            interpolation: interpType,
         };
         // then create channels (sampler: get sampler idx from above)
         var channel = {
-            "sampler": gltfAnim.samplers.length,
-            "target": {
-                "node": nodeIndex,
-                "path": path
-            }
+            sampler: gltfAnim.samplers.length,
+            target: {
+                node: nodeIndex,
+                path: path,
+            },
         };
         gltfAnim.samplers.push(sampler);
         gltfAnim.channels.push(channel);
@@ -1390,9 +1402,9 @@ function addAnimations(gltf, animations, nodeIndex) {
                 if ((spline_info === null || spline_info === void 0 ? void 0 : spline_info.inTangent) && ix > 0) {
                     inTangent = spline_info.inTangent;
                 }
-                if ((spline_info === null || spline_info === void 0 ? void 0 : spline_info.outTangent)
-                    && (idx < total_kf - 1)
-                    && anim.keyframes[idx + 1].interpType === _types__WEBPACK_IMPORTED_MODULE_0__.InterpolationMode.CUBICSPLINE) {
+                if ((spline_info === null || spline_info === void 0 ? void 0 : spline_info.outTangent) &&
+                    idx < total_kf - 1 &&
+                    anim.keyframes[idx + 1].interpType === _types__WEBPACK_IMPORTED_MODULE_0__.InterpolationMode.CUBICSPLINE) {
                     outTangent = spline_info.outTangent;
                 }
                 var data = [inTangent, value, outTangent];
@@ -1442,7 +1454,11 @@ function addMesh(gltf, mesh) {
         meshBuffer = addBuffer(gltf);
     }
     var vertexBufferView = meshBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3);
-    var vertexNormalBufferView = meshBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3);
+    var hasNormals = meshHasVertexNormals(mesh);
+    var vertexNormalBufferView;
+    if (hasNormals) {
+        vertexNormalBufferView = meshBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3);
+    }
     var vertexUVBufferView = meshBuffer.addBufferView(_types__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _types__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC2);
     var vertexColorBufferView;
     function _ensureColorBufferView() {
@@ -1452,24 +1468,25 @@ function addMesh(gltf, mesh) {
     }
     function _completeMeshPrimitive(materialIndex) {
         var vertexBufferAccessorInfo = vertexBufferView.endAccessor();
-        var vertexNormalBufferAccessorInfo = vertexNormalBufferView.endAccessor();
+        var vertexNormalBufferAccessorInfo = vertexNormalBufferView === null || vertexNormalBufferView === void 0 ? void 0 : vertexNormalBufferView.endAccessor();
         var vertexUVBufferAccessorInfo = vertexUVBufferView.endAccessor();
         var primitive = {
             attributes: {
                 POSITION: addAccessor(gltf, vertexBufferView.getIndex(), vertexBufferAccessorInfo),
-                NORMAL: addAccessor(gltf, vertexNormalBufferView.getIndex(), vertexNormalBufferAccessorInfo),
                 TEXCOORD_0: addAccessor(gltf, vertexUVBufferView.getIndex(), vertexUVBufferAccessorInfo),
             },
             mode: mesh.mode,
         };
+        if (vertexNormalBufferAccessorInfo && vertexNormalBufferView) {
+            primitive.attributes.NORMAL = addAccessor(gltf, vertexNormalBufferView.getIndex(), vertexNormalBufferAccessorInfo);
+        }
         if (materialIndex >= 0) {
             primitive.material = materialIndex;
             // Only add color data if it is per-face/vertex.
             var material = mesh.material[materialIndex];
             if (material.vertexColorMode !== _types__WEBPACK_IMPORTED_MODULE_0__.VertexColorMode.NoColors) {
                 var vertexColorBufferAccessorInfo = vertexColorBufferView.endAccessor();
-                primitive.attributes["COLOR_0"] =
-                    addAccessor(gltf, vertexColorBufferView.getIndex(), vertexColorBufferAccessorInfo);
+                primitive.attributes["COLOR_0"] = addAccessor(gltf, vertexColorBufferView.getIndex(), vertexColorBufferAccessorInfo);
             }
         }
         return primitive;
@@ -1487,9 +1504,10 @@ function addMesh(gltf, mesh) {
                 gltfMesh.primitives.push(primitive);
             }
             vertexBufferView.startAccessor("POSITION");
-            vertexNormalBufferView.startAccessor("NORMAL");
+            vertexNormalBufferView === null || vertexNormalBufferView === void 0 ? void 0 : vertexNormalBufferView.startAccessor("NORMAL");
             vertexUVBufferView.startAccessor("TEXCOORD_0");
-            if (currentMaterial && currentMaterial.vertexColorMode !== _types__WEBPACK_IMPORTED_MODULE_0__.VertexColorMode.NoColors) {
+            if (currentMaterial &&
+                currentMaterial.vertexColorMode !== _types__WEBPACK_IMPORTED_MODULE_0__.VertexColorMode.NoColors) {
                 _ensureColorBufferView();
                 vertexColorBufferView.startAccessor("COLOR_0");
             }
@@ -1506,15 +1524,17 @@ function addMesh(gltf, mesh) {
         vertexBufferView.push(v3.y);
         vertexBufferView.push(v3.z);
         // Vertex normals
-        vertexNormalBufferView.push(v1.normalX);
-        vertexNormalBufferView.push(v1.normalY);
-        vertexNormalBufferView.push(v1.normalZ);
-        vertexNormalBufferView.push(v2.normalX);
-        vertexNormalBufferView.push(v2.normalY);
-        vertexNormalBufferView.push(v2.normalZ);
-        vertexNormalBufferView.push(v3.normalX);
-        vertexNormalBufferView.push(v3.normalY);
-        vertexNormalBufferView.push(v3.normalZ);
+        if (vertexNormalBufferView) {
+            vertexNormalBufferView.push(v1.normalX);
+            vertexNormalBufferView.push(v1.normalY);
+            vertexNormalBufferView.push(v1.normalZ);
+            vertexNormalBufferView.push(v2.normalX);
+            vertexNormalBufferView.push(v2.normalY);
+            vertexNormalBufferView.push(v2.normalZ);
+            vertexNormalBufferView.push(v3.normalX);
+            vertexNormalBufferView.push(v3.normalY);
+            vertexNormalBufferView.push(v3.normalZ);
+        }
         // Texture UV coords
         vertexUVBufferView.push(v1.u);
         vertexUVBufferView.push(v1.v);
@@ -1545,13 +1565,20 @@ function addMesh(gltf, mesh) {
         gltfMesh.primitives.push(primitive);
     }
     vertexBufferView.finalize();
-    vertexNormalBufferView.finalize();
+    vertexNormalBufferView === null || vertexNormalBufferView === void 0 ? void 0 : vertexNormalBufferView.finalize();
     vertexUVBufferView.finalize();
-    if (vertexColorBufferView)
-        vertexColorBufferView.finalize();
+    vertexColorBufferView === null || vertexColorBufferView === void 0 ? void 0 : vertexColorBufferView.finalize();
     if (!singleGLBBuffer)
         meshBuffer.finalize();
     return addedIndex;
+}
+function meshHasVertexNormals(mesh) {
+    var hasNormals = false;
+    mesh.forEachFace(function (v1) {
+        hasNormals = typeof v1.normalX === "number";
+        return true;
+    });
+    return hasNormals;
 }
 function addColorToBufferView(bufferView, color) {
     bufferView.push((color.r * 255) | 0);
@@ -1561,7 +1588,7 @@ function addColorToBufferView(bufferView, color) {
         bufferView.push((color.a * 255) | 0);
     }
     else {
-        bufferView.push(0xFF);
+        bufferView.push(0xff);
     }
 }
 function addBuffer(gltf) {
@@ -1610,13 +1637,16 @@ function addMaterial(gltf, material) {
     if (material.pbrMetallicRoughness) {
         if (material.pbrMetallicRoughness.baseColorFactor) {
             gltfMaterial.pbrMetallicRoughness = {};
-            gltfMaterial.pbrMetallicRoughness.baseColorFactor = material.pbrMetallicRoughness.baseColorFactor;
+            gltfMaterial.pbrMetallicRoughness.baseColorFactor =
+                material.pbrMetallicRoughness.baseColorFactor;
         }
         if (material.pbrMetallicRoughness.baseColorTexture) {
             if (!gltfMaterial.pbrMetallicRoughness)
                 gltfMaterial.pbrMetallicRoughness = {};
             var textureIndex = addTexture(gltf, material.pbrMetallicRoughness.baseColorTexture);
-            gltfMaterial.pbrMetallicRoughness.baseColorTexture = { index: textureIndex };
+            gltfMaterial.pbrMetallicRoughness.baseColorTexture = {
+                index: textureIndex,
+            };
         }
     }
     var addedIndex = gltf.materials.length;
@@ -1943,23 +1973,26 @@ var MODEL_NAME_GLB = "model.glb";
  */
 function exportGLTF(asset, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var gltf, promises, currentData, currentImg, binChunkBuffer;
+        var gltf, currentData, currentImg, binChunkBuffer, output, jsonSpacing, gltfString, doingGLB;
         return __generator(this, function (_a) {
-            options = options || {};
-            gltf = (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.createEmptyGLTF)();
-            gltf.asset.copyright = asset.copyright;
-            gltf.asset.generator = asset.generator;
-            gltf.extras.options = options;
-            (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.addScenes)(gltf, asset);
-            promises = gltf.extras.promises;
-            currentData = 1;
-            currentImg = 1;
-            binChunkBuffer = null;
-            return [2 /*return*/, Promise.all(promises).then(function () {
-                    var output = {};
+            switch (_a.label) {
+                case 0:
+                    options = options || {};
+                    gltf = (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.createEmptyGLTF)();
+                    gltf.asset.copyright = asset.copyright;
+                    gltf.asset.generator = asset.generator;
+                    gltf.extras.options = options;
+                    (0,_gltf__WEBPACK_IMPORTED_MODULE_12__.addScenes)(gltf, asset);
+                    currentData = 1;
+                    currentImg = 1;
+                    binChunkBuffer = null;
+                    return [4 /*yield*/, Promise.all(gltf.extras.promises)];
+                case 1:
+                    _a.sent();
                     delete gltf.extras;
-                    var jsonSpacing = typeof options.jsonSpacing === "number" ? options.jsonSpacing : 4;
-                    var gltfString = JSON.stringify(gltf, function (key, value) {
+                    output = {};
+                    jsonSpacing = typeof options.jsonSpacing === "number" ? options.jsonSpacing : 4;
+                    gltfString = JSON.stringify(gltf, function (key, value) {
                         if (key === "extras")
                             return undefined;
                         if (value instanceof ArrayBuffer) {
@@ -1993,16 +2026,16 @@ function exportGLTF(asset, options) {
                         }
                         return value;
                     }, jsonSpacing);
-                    var doingGLB = options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB
-                        || options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB;
+                    doingGLB = options.bufferOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType.GLB ||
+                        options.imageOutputType === _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType.GLB;
                     if (doingGLB) {
                         output[MODEL_NAME_GLB] = (0,_glb__WEBPACK_IMPORTED_MODULE_14__.createGLBBuffer)(gltfString, binChunkBuffer);
                     }
                     else {
                         output[MODEL_NAME_GLTF] = gltfString;
                     }
-                    return output;
-                })];
+                    return [2 /*return*/, output];
+            }
         });
     });
 }

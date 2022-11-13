@@ -91,11 +91,16 @@ export enum VertexColorMode {
 export enum InterpolationMode {
   LINEAR = "LINEAR",
   STEP = "STEP",
-  CUBICSPLINE = "CUBICSPLINE"
+  CUBICSPLINE = "CUBICSPLINE",
 }
 
 export enum Transformation {
   TRANSLATION = "translation",
   ROTATION = "rotation",
-  SCALE = "scale"
+  SCALE = "scale",
+}
+
+export enum BufferTarget {
+  ARRAY_BUFFER = 34962,
+  ELEMENT_ARRAY_BUFFER = 34963,
 }
