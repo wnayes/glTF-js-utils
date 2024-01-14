@@ -725,6 +725,17 @@ function addMaterial(gltf: glTF, material: Material): number {
         index: textureIndex,
       };
     }
+    if (material.pbrMetallicRoughness.metallicRoughnessTexture) {
+      if (!gltfMaterial.pbrMetallicRoughness)
+        gltfMaterial.pbrMetallicRoughness = {};
+      const textureRougnessIndex = addTexture(
+        gltf,
+        material.pbrMetallicRoughness.metallicRoughnessTexture
+      );
+      gltfMaterial.pbrMetallicRoughness.metallicRoughnessTexture = {
+        index: textureRougnessIndex,
+      };
+    }
   }
 
   const addedIndex = gltf.materials.length;
