@@ -1648,6 +1648,14 @@ function addMaterial(gltf, material) {
                 index: textureIndex,
             };
         }
+        if (material.pbrMetallicRoughness.metallicRoughnessTexture) {
+            if (!gltfMaterial.pbrMetallicRoughness)
+                gltfMaterial.pbrMetallicRoughness = {};
+            var textureRoughnessIndex = addTexture(gltf, material.pbrMetallicRoughness.metallicRoughnessTexture);
+            gltfMaterial.pbrMetallicRoughness.metallicRoughnessTexture = {
+                index: textureRoughnessIndex,
+            };
+        }
     }
     var addedIndex = gltf.materials.length;
     gltf.materials.push(gltfMaterial);

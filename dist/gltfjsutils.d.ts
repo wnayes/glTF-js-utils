@@ -212,6 +212,7 @@ declare module "src/material" {
         roughnessFactor: number;
         baseColorFactor?: [number, number, number, number];
         baseColorTexture?: Texture;
+        metallicRoughnessTexture?: Texture;
     }
 }
 declare module "src/vertex" {
