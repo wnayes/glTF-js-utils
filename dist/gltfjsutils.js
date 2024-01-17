@@ -386,6 +386,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AlphaMode": () => (/* binding */ AlphaMode),
 /* harmony export */   "BufferOutputType": () => (/* binding */ BufferOutputType),
+/* harmony export */   "BufferTarget": () => (/* binding */ BufferTarget),
 /* harmony export */   "ComponentType": () => (/* binding */ ComponentType),
 /* harmony export */   "DataType": () => (/* binding */ DataType),
 /* harmony export */   "ImageOutputType": () => (/* binding */ ImageOutputType),
@@ -517,6 +518,11 @@ var Transformation;
     Transformation["ROTATION"] = "rotation";
     Transformation["SCALE"] = "scale";
 })(Transformation || (Transformation = {}));
+var BufferTarget;
+(function (BufferTarget) {
+    BufferTarget[BufferTarget["ARRAY_BUFFER"] = 34962] = "ARRAY_BUFFER";
+    BufferTarget[BufferTarget["ELEMENT_ARRAY_BUFFER"] = 34963] = "ELEMENT_ARRAY_BUFFER";
+})(BufferTarget || (BufferTarget = {}));
 
 
 /***/ }),

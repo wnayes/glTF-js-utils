@@ -82,6 +82,10 @@ declare module "src/types" {
         ROTATION = "rotation",
         SCALE = "scale"
     }
+    export enum BufferTarget {
+        ARRAY_BUFFER = 34962,
+        ELEMENT_ARRAY_BUFFER = 34963
+    }
 }
 declare module "src/animation" {
     import { InterpolationMode, Transformation } from "src/types";
@@ -308,7 +312,7 @@ declare module "src/asset" {
     }
 }
 declare module "src/gltftypes" {
-    import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation } from "src/types";
+    import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation, BufferTarget } from "src/types";
     import { Buffer } from "src/buffer";
     import { Node } from "src/node";
     export interface glTF {
@@ -403,7 +407,7 @@ declare module "src/gltftypes" {
         byteLength: number;
         byteOffset?: number;
         byteStride?: number;
-        target?: number;
+        target?: BufferTarget;
         extras?: any;
     }
     export interface glTFNode {
@@ -415,7 +419,24 @@ declare module "src/gltftypes" {
         rotation?: [number, number, number, number];
         scale?: [number, number, number];
         translation?: [number, number, number];
-        matrix?: [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+        matrix?: [
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number
+        ];
         weights?: number;
     }
     export interface glTFScene {
