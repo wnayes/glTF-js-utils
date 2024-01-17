@@ -7,37 +7,37 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AlphaMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
-/* harmony export */   "Animation": () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
-/* harmony export */   "Buffer": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
-/* harmony export */   "BufferOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
-/* harmony export */   "BufferView": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
-/* harmony export */   "ComponentType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
-/* harmony export */   "DataType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
-/* harmony export */   "GLTFAsset": () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
-/* harmony export */   "ImageOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
-/* harmony export */   "InterpolationMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
-/* harmony export */   "Material": () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
-/* harmony export */   "Matrix": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
-/* harmony export */   "Matrix3x3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
-/* harmony export */   "Matrix4x4": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
-/* harmony export */   "Mesh": () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
-/* harmony export */   "MeshMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
-/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
-/* harmony export */   "Quaternion": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
-/* harmony export */   "RGBAColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
-/* harmony export */   "RGBColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
-/* harmony export */   "Scene": () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
-/* harmony export */   "Skin": () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
-/* harmony export */   "Texture": () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
-/* harmony export */   "Transformation": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
-/* harmony export */   "Vector3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
-/* harmony export */   "Vertex": () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
-/* harmony export */   "VertexColorMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
-/* harmony export */   "WrappingMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
-/* harmony export */   "exportGLB": () => (/* binding */ exportGLB),
-/* harmony export */   "exportGLTF": () => (/* binding */ exportGLTF),
-/* harmony export */   "exportGLTFZip": () => (/* binding */ exportGLTFZip)
+/* harmony export */   AlphaMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
+/* harmony export */   Animation: () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
+/* harmony export */   Buffer: () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
+/* harmony export */   BufferOutputType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
+/* harmony export */   BufferView: () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
+/* harmony export */   ComponentType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
+/* harmony export */   DataType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
+/* harmony export */   GLTFAsset: () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
+/* harmony export */   ImageOutputType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
+/* harmony export */   InterpolationMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
+/* harmony export */   Material: () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
+/* harmony export */   Matrix: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
+/* harmony export */   Matrix3x3: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
+/* harmony export */   Matrix4x4: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
+/* harmony export */   Mesh: () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
+/* harmony export */   MeshMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
+/* harmony export */   Node: () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
+/* harmony export */   Quaternion: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
+/* harmony export */   RGBAColor: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
+/* harmony export */   RGBColor: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
+/* harmony export */   Scene: () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
+/* harmony export */   Skin: () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
+/* harmony export */   Texture: () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
+/* harmony export */   Transformation: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
+/* harmony export */   Vector3: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
+/* harmony export */   Vertex: () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
+/* harmony export */   VertexColorMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
+/* harmony export */   WrappingMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
+/* harmony export */   exportGLB: () => (/* binding */ exportGLB),
+/* harmony export */   exportGLTF: () => (/* binding */ exportGLTF),
+/* harmony export */   exportGLTFZip: () => (/* binding */ exportGLTFZip)
 /* harmony export */ });
 /* harmony import */ var _asset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _scene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
@@ -69,7 +69,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -229,7 +229,7 @@ function exportGLB(asset) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GLTFAsset": () => (/* binding */ GLTFAsset)
+/* harmony export */   GLTFAsset: () => (/* binding */ GLTFAsset)
 /* harmony export */ });
 var GLTFAsset = /** @class */ (function () {
     function GLTFAsset() {
@@ -272,7 +272,7 @@ var GLTFAsset = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Scene": () => (/* binding */ Scene)
+/* harmony export */   Scene: () => (/* binding */ Scene)
 /* harmony export */ });
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 
@@ -309,7 +309,7 @@ var Scene = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Node": () => (/* binding */ Node)
+/* harmony export */   Node: () => (/* binding */ Node)
 /* harmony export */ });
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
@@ -382,13 +382,13 @@ var Node = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Matrix": () => (/* binding */ Matrix),
-/* harmony export */   "Matrix3x3": () => (/* binding */ Matrix3x3),
-/* harmony export */   "Matrix4x4": () => (/* binding */ Matrix4x4),
-/* harmony export */   "Quaternion": () => (/* binding */ Quaternion),
-/* harmony export */   "Vector3": () => (/* binding */ Vector3),
-/* harmony export */   "degreesToRadians": () => (/* binding */ degreesToRadians),
-/* harmony export */   "toQuaternion": () => (/* binding */ toQuaternion)
+/* harmony export */   Matrix: () => (/* binding */ Matrix),
+/* harmony export */   Matrix3x3: () => (/* binding */ Matrix3x3),
+/* harmony export */   Matrix4x4: () => (/* binding */ Matrix4x4),
+/* harmony export */   Quaternion: () => (/* binding */ Quaternion),
+/* harmony export */   Vector3: () => (/* binding */ Vector3),
+/* harmony export */   degreesToRadians: () => (/* binding */ degreesToRadians),
+/* harmony export */   toQuaternion: () => (/* binding */ toQuaternion)
 /* harmony export */ });
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -548,7 +548,7 @@ var Matrix4x4 = /** @class */ (function (_super) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Animation": () => (/* binding */ Animation)
+/* harmony export */   Animation: () => (/* binding */ Animation)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
@@ -596,19 +596,19 @@ var Animation = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AlphaMode": () => (/* binding */ AlphaMode),
-/* harmony export */   "BufferOutputType": () => (/* binding */ BufferOutputType),
-/* harmony export */   "BufferTarget": () => (/* binding */ BufferTarget),
-/* harmony export */   "ComponentType": () => (/* binding */ ComponentType),
-/* harmony export */   "DataType": () => (/* binding */ DataType),
-/* harmony export */   "ImageOutputType": () => (/* binding */ ImageOutputType),
-/* harmony export */   "InterpolationMode": () => (/* binding */ InterpolationMode),
-/* harmony export */   "MeshMode": () => (/* binding */ MeshMode),
-/* harmony export */   "RGBAColor": () => (/* binding */ RGBAColor),
-/* harmony export */   "RGBColor": () => (/* binding */ RGBColor),
-/* harmony export */   "Transformation": () => (/* binding */ Transformation),
-/* harmony export */   "VertexColorMode": () => (/* binding */ VertexColorMode),
-/* harmony export */   "WrappingMode": () => (/* binding */ WrappingMode)
+/* harmony export */   AlphaMode: () => (/* binding */ AlphaMode),
+/* harmony export */   BufferOutputType: () => (/* binding */ BufferOutputType),
+/* harmony export */   BufferTarget: () => (/* binding */ BufferTarget),
+/* harmony export */   ComponentType: () => (/* binding */ ComponentType),
+/* harmony export */   DataType: () => (/* binding */ DataType),
+/* harmony export */   ImageOutputType: () => (/* binding */ ImageOutputType),
+/* harmony export */   InterpolationMode: () => (/* binding */ InterpolationMode),
+/* harmony export */   MeshMode: () => (/* binding */ MeshMode),
+/* harmony export */   RGBAColor: () => (/* binding */ RGBAColor),
+/* harmony export */   RGBColor: () => (/* binding */ RGBColor),
+/* harmony export */   Transformation: () => (/* binding */ Transformation),
+/* harmony export */   VertexColorMode: () => (/* binding */ VertexColorMode),
+/* harmony export */   WrappingMode: () => (/* binding */ WrappingMode)
 /* harmony export */ });
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -743,7 +743,7 @@ var BufferTarget;
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */   Mesh: () => (/* binding */ Mesh)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
@@ -786,7 +786,7 @@ var Mesh = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Material": () => (/* binding */ Material)
+/* harmony export */   Material: () => (/* binding */ Material)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
@@ -813,7 +813,7 @@ var Material = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Texture": () => (/* binding */ Texture)
+/* harmony export */   Texture: () => (/* binding */ Texture)
 /* harmony export */ });
 /* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
@@ -856,11 +856,11 @@ var Texture = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "arrayBufferIsPNG": () => (/* binding */ arrayBufferIsPNG),
-/* harmony export */   "dataUriToArrayBuffer": () => (/* binding */ dataUriToArrayBuffer),
-/* harmony export */   "encodeBase64DataUri": () => (/* binding */ encodeBase64DataUri),
-/* harmony export */   "imageToArrayBuffer": () => (/* binding */ imageToArrayBuffer),
-/* harmony export */   "imageToDataURI": () => (/* binding */ imageToDataURI)
+/* harmony export */   arrayBufferIsPNG: () => (/* binding */ arrayBufferIsPNG),
+/* harmony export */   dataUriToArrayBuffer: () => (/* binding */ dataUriToArrayBuffer),
+/* harmony export */   encodeBase64DataUri: () => (/* binding */ encodeBase64DataUri),
+/* harmony export */   imageToArrayBuffer: () => (/* binding */ imageToArrayBuffer),
+/* harmony export */   imageToDataURI: () => (/* binding */ imageToDataURI)
 /* harmony export */ });
 /**
  * Converts an image into a Data URI string.
@@ -972,7 +972,7 @@ function arrayBufferIsPNG(buffer) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Vertex": () => (/* binding */ Vertex)
+/* harmony export */   Vertex: () => (/* binding */ Vertex)
 /* harmony export */ });
 /** Represents a mesh vertex. */
 var Vertex = /** @class */ (function () {
@@ -994,7 +994,7 @@ var Vertex = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Skin": () => (/* binding */ Skin)
+/* harmony export */   Skin: () => (/* binding */ Skin)
 /* harmony export */ });
 var Skin = /** @class */ (function () {
     function Skin(skeletonNode, name) {
@@ -1015,8 +1015,8 @@ var Skin = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Buffer": () => (/* binding */ Buffer),
-/* harmony export */   "BufferView": () => (/* binding */ BufferView)
+/* harmony export */   Buffer: () => (/* binding */ Buffer),
+/* harmony export */   BufferView: () => (/* binding */ BufferView)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
@@ -1217,7 +1217,7 @@ var BufferView = /** @class */ (function () {
                 this._accessorMax[i] = 0;
         }
         var info = {
-            byteOffset: elementSize * (this._accessorIndex / numComponentsForDataType),
+            byteOffset: elementSize * (this._accessorIndex / numComponentsForDataType), // All previous data
             componentType: this._componentType,
             count: numElements,
             type: this._dataType,
@@ -1349,12 +1349,12 @@ function makeDivisibleBy(num, by) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addAccessor": () => (/* binding */ addAccessor),
-/* harmony export */   "addAnimations": () => (/* binding */ addAnimations),
-/* harmony export */   "addBuffer": () => (/* binding */ addBuffer),
-/* harmony export */   "addScenes": () => (/* binding */ addScenes),
-/* harmony export */   "addSkin": () => (/* binding */ addSkin),
-/* harmony export */   "createEmptyGLTF": () => (/* binding */ createEmptyGLTF)
+/* harmony export */   addAccessor: () => (/* binding */ addAccessor),
+/* harmony export */   addAnimations: () => (/* binding */ addAnimations),
+/* harmony export */   addBuffer: () => (/* binding */ addBuffer),
+/* harmony export */   addScenes: () => (/* binding */ addScenes),
+/* harmony export */   addSkin: () => (/* binding */ addSkin),
+/* harmony export */   createEmptyGLTF: () => (/* binding */ createEmptyGLTF)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
@@ -1866,6 +1866,14 @@ function addMaterial(gltf, material) {
                 index: textureIndex,
             };
         }
+        if (material.pbrMetallicRoughness.metallicRoughnessTexture) {
+            if (!gltfMaterial.pbrMetallicRoughness)
+                gltfMaterial.pbrMetallicRoughness = {};
+            var textureRoughnessIndex = addTexture(gltf, material.pbrMetallicRoughness.metallicRoughnessTexture);
+            gltfMaterial.pbrMetallicRoughness.metallicRoughnessTexture = {
+                index: textureRoughnessIndex,
+            };
+        }
     }
     var addedIndex = gltf.materials.length;
     gltf.materials.push(gltfMaterial);
@@ -1952,7 +1960,7 @@ function objectsEqual(obj1, obj2) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createGLBBuffer": () => (/* binding */ createGLBBuffer)
+/* harmony export */   createGLBBuffer: () => (/* binding */ createGLBBuffer)
 /* harmony export */ });
 var GLB_HEADER_SIZE = 12;
 var GLB_CHUNK_HEADER_SIZE = 8;
@@ -2100,6 +2108,7 @@ function download(content, fileName, contentType) {
 function createGLTF() {
     return (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.createEmptyGLTF)();
 }
+// eslint-disable-next-line
 function test1() {
     var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
     var scene = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Scene();
@@ -2114,7 +2123,9 @@ function test1() {
     node.setScale(x, y, z);
     scene.addNode(node);
     (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
-    console.assert(gltf.scenes.length === 1 && gltf.nodes.length === 1 && gltf.scenes[0].nodes[0] === 0);
+    console.assert(gltf.scenes.length === 1 &&
+        gltf.nodes.length === 1 &&
+        gltf.scenes[0].nodes[0] === 0);
     var buffer = (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addBuffer)(gltf); // for translation
     var bufferView = buffer.addBufferView(_src_index__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3); // add translation
     var bufferView2 = buffer.addBufferView(_src_index__WEBPACK_IMPORTED_MODULE_0__.ComponentType.FLOAT, _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4); // add quat
@@ -2134,10 +2145,16 @@ function test1() {
     }
     createAccessor(bufferView, 1);
     var acc1 = gltf.accessors[0];
-    console.assert(acc1.count === 1 && acc1.max[0] === 0 && acc1.min[0] === 0 && acc1.min[1] === 1);
+    console.assert(acc1.count === 1 &&
+        acc1.max[0] === 0 &&
+        acc1.min[0] === 0 &&
+        acc1.min[1] === 1);
     createAccessor(bufferView, 2);
     acc1 = gltf.accessors[1];
-    console.assert(acc1.count === 2 && acc1.byteOffset === 3 * 4 && acc1.max[0] === 3 && acc1.min[0] === 0);
+    console.assert(acc1.count === 2 &&
+        acc1.byteOffset === 3 * 4 &&
+        acc1.max[0] === 3 &&
+        acc1.min[0] === 0);
     function createAnimation() {
         // const animation_sample = [
         //     {
@@ -2160,7 +2177,7 @@ function test1() {
         var node_idx = 0;
         var myAnimation = {
             channels: [],
-            samplers: []
+            samplers: [],
         };
         var times = [0, 0.2, 0.4, 0.6, 0.8];
         var values = [];
@@ -2186,19 +2203,19 @@ function test1() {
         var accessor2_idx = (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addAccessor)(gltf, bufferView2.getIndex(), accessor2);
         // then create samplers (input: times accessor idx, output: values accessor idx)
         var sampler = {
-            "input": accessor_idx,
-            "output": accessor2_idx,
-            "interpolation": interpType
+            input: accessor_idx,
+            output: accessor2_idx,
+            interpolation: interpType,
         };
         myAnimation.samplers.push(sampler);
         var sampler_idx = myAnimation.samplers.length;
         // then create channels (sampler: get sampler idx from above)
         var channel = {
-            "sampler": sampler_idx,
-            "target": {
-                "node": node_idx,
-                "path": _src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.ROTATION
-            }
+            sampler: sampler_idx,
+            target: {
+                node: node_idx,
+                path: _src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.ROTATION,
+            },
         };
         myAnimation.channels.push(channel);
         if (!gltf.animations)
@@ -2241,23 +2258,23 @@ function animation_test() {
         {
             time: 0,
             value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.2,
             value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.4,
             value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.6,
             value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP
-        }
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP,
+        },
     ];
     nodeAnim1.addKeyframe(0.8, [1, 2, 3, 4], _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP);
     console.log(nodeAnim1);
@@ -2266,13 +2283,13 @@ function animation_test() {
         {
             time: 0,
             value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.3,
             value: [4, 5, 6],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        }
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
+        },
     ];
     node.animations = [nodeAnim1, nodeAnim2];
     (0,_src_gltf__WEBPACK_IMPORTED_MODULE_2__.addScenes)(gltf, asset);
@@ -2290,26 +2307,33 @@ function animation_test() {
     var sampler3 = gltfAnim.samplers[2]; // interpolation: LINEAR
     // assert channel targets
     console.assert(channel1.sampler === 0 && channel2.sampler === 1 && channel3.sampler === 2);
-    console.assert(channel1.target.path == nodeAnim1.path && channel2.target.path == nodeAnim1.path
-        && channel3.target.path == nodeAnim2.path);
+    console.assert(channel1.target.path == nodeAnim1.path &&
+        channel2.target.path == nodeAnim1.path &&
+        channel3.target.path == nodeAnim2.path);
     // assert sampler interpolation types
     console.assert(sampler1.interpolation == nodeAnim1.keyframes[0].interpType &&
         sampler2.interpolation == nodeAnim1.keyframes[3].interpType &&
         sampler3.interpolation == nodeAnim2.keyframes[0].interpType);
     // assert sampler input/output indices
-    console.assert(sampler1.input === 0 && sampler1.output === 1 &&
-        sampler3.input === 4 && sampler3.output === 5);
+    console.assert(sampler1.input === 0 &&
+        sampler1.output === 1 &&
+        sampler3.input === 4 &&
+        sampler3.output === 5);
     // assert accessors
     var accessors = gltf.accessors;
     console.assert(accessors.length === gltfAnim.samplers.length * 2); // 2 accessors (time, animation) per sampler/channel
     // time bufferviews are the same (index 0)
-    console.assert(accessors[0].bufferView === 0 && accessors[2].bufferView === 0 &&
+    console.assert(accessors[0].bufferView === 0 &&
+        accessors[2].bufferView === 0 &&
         accessors[4].bufferView === 0 &&
-        accessors[0].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR && accessors[2].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR &&
+        accessors[0].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR &&
+        accessors[2].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR &&
         accessors[4].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.SCALAR);
     // rotation bufferview
-    console.assert(accessors[1].bufferView === 1 && accessors[3].bufferView === 1
-        && accessors[1].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4 && accessors[3].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4);
+    console.assert(accessors[1].bufferView === 1 &&
+        accessors[3].bufferView === 1 &&
+        accessors[1].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4 &&
+        accessors[3].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC4);
     // translation bufferview
     console.assert(accessors[5].bufferView === 2 && accessors[5].type === _src_index__WEBPACK_IMPORTED_MODULE_0__.DataType.VEC3);
     console.assert(accessors[5].min[0] === 1 && accessors[5].max[2] === 6);
@@ -2337,7 +2361,9 @@ function animation_test() {
         var bufferView1 = gltf.bufferViews[0];
         var bufferView2 = gltf.bufferViews[1];
         var bufferView3 = gltf.bufferViews[2];
-        console.assert(bufferView1.buffer === 0 && bufferView2.buffer === 0 && bufferView3.buffer === 0);
+        console.assert(bufferView1.buffer === 0 &&
+            bufferView2.buffer === 0 &&
+            bufferView3.buffer === 0);
         console.assert(buffer.byteLength === total_bytes);
         console.assert(bufferView1.byteLength === time_bytes);
         console.assert(bufferView2.byteLength === vec4_bytes);
@@ -2377,8 +2403,8 @@ function animation_cubicspline_test() {
             value: [1, 2, 3],
             interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
             extras: {
-                outTangent: [0.1, 0.1, 0.1]
-            }
+                outTangent: [0.1, 0.1, 0.1],
+            },
         },
         {
             time: 0.2,
@@ -2386,16 +2412,16 @@ function animation_cubicspline_test() {
             interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
             extras: {
                 outTangent: [0.2, 0.2, 0.2],
-                inTangent: [0.3, 0.3, 0.3]
-            }
+                inTangent: [0.3, 0.3, 0.3],
+            },
         },
         {
             time: 0.4,
             value: [7, 8, 9],
             interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
             extras: {
-                inTangent: [0.5, 0.5, 0.5]
-            }
+                inTangent: [0.5, 0.5, 0.5],
+            },
         },
         {
             time: 0.6,
@@ -2483,7 +2509,9 @@ function skin_test() {
             console.assert(buffer.byteLength === joints_1.length * 4 * 16);
             console.assert(accessor.count === joints_1.length);
             // GLTF stores as column major (index 12 = M03, 13 = M13, 14 = M23)
-            console.assert(accessor.max[12] == x && accessor.max[13] == y && accessor.min[14] == z);
+            console.assert(accessor.max[12] == x &&
+                accessor.max[13] == y &&
+                accessor.min[14] == z);
             console.log(gltf_1);
         });
     }
@@ -2492,23 +2520,23 @@ function skin_test() {
         {
             time: 0,
             value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.2,
             value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.4,
             value: [2, 3, 4, 5],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.6,
             value: [1, 2, 3, 4],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP
-        }
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP,
+        },
     ];
     nodeAnim1.addKeyframe(0.8, [1, 2, 3, 4], _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.STEP);
     var nodeAnim2 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.TRANSLATION);
@@ -2516,30 +2544,32 @@ function skin_test() {
         {
             time: 0,
             value: [1, 2, 3],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
         },
         {
             time: 0.3,
             value: [4, 5, 6],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR
-        }
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.LINEAR,
+        },
     ];
     var nodeAnim3 = new _src_index__WEBPACK_IMPORTED_MODULE_0__.Animation(_src_types__WEBPACK_IMPORTED_MODULE_1__.Transformation.SCALE);
     nodeAnim3.keyframes = [
         {
             time: 0,
-            value: [10, 20, 30],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE
+            value: [10, 20, 30], // degrees
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
         },
         {
             time: 0.3,
-            value: [40, 50, 60],
-            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE
-        }
+            value: [40, 50, 60], // degrees
+            interpType: _src_types__WEBPACK_IMPORTED_MODULE_1__.InterpolationMode.CUBICSPLINE,
+        },
     ];
     node.animations = [nodeAnim1, nodeAnim2];
     node2.animations = [nodeAnim3];
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI,
+    }).then(function (value) {
         var result = value["model.gltf"];
         console.log(result);
         download(result, "model.gltf");
@@ -2563,7 +2593,9 @@ animation_test();
 animation_cubicspline_test();
 skin_test();
 // Not executed, ensures API typings work.
+// eslint-disable-next-line
 function __typingTests() {
+    // eslint-disable-line
     var asset = new _src_index__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset();
     var isString = function (x) { return x; };
     var isBuffer = function (x) { return x; };
@@ -2580,27 +2612,45 @@ function __typingTests() {
         isString(value["model.gltf"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI,
+        imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI,
+    }).then(function (value) {
         isString(value["model.gltf"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI, jsonSpacing: 2 }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.DataURI,
+        imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.DataURI,
+        jsonSpacing: 2,
+    }).then(function (value) {
         isString(value["model.gltf"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.External, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.External, jsonSpacing: 2 }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.External,
+        imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.External,
+        jsonSpacing: 2,
+    }).then(function (value) {
         isString(value["model.gltf"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB,
+    }).then(function (value) {
         isBuffer(value["model.glb"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB,
+    }).then(function (value) {
         isBuffer(value["model.glb"]);
         isEither(value["something"]);
     });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, { bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB, imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB }).then(function (value) {
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.exportGLTF(asset, {
+        bufferOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.BufferOutputType.GLB,
+        imageOutputType: _src_index__WEBPACK_IMPORTED_MODULE_0__.ImageOutputType.GLB,
+    }).then(function (value) {
         isBuffer(value["model.glb"]);
         isEither(value["something"]);
     });
