@@ -17,7 +17,7 @@ return /******/ (() => { // webpackBootstrap
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GLTFAsset": () => (/* binding */ GLTFAsset)
+/* harmony export */   GLTFAsset: () => (/* binding */ GLTFAsset)
 /* harmony export */ });
 var GLTFAsset = /** @class */ (function () {
     function GLTFAsset() {
@@ -60,7 +60,7 @@ var GLTFAsset = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Scene": () => (/* binding */ Scene)
+/* harmony export */   Scene: () => (/* binding */ Scene)
 /* harmony export */ });
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
@@ -97,7 +97,7 @@ var Scene = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Node": () => (/* binding */ Node)
+/* harmony export */   Node: () => (/* binding */ Node)
 /* harmony export */ });
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
@@ -170,13 +170,13 @@ var Node = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Matrix": () => (/* binding */ Matrix),
-/* harmony export */   "Matrix3x3": () => (/* binding */ Matrix3x3),
-/* harmony export */   "Matrix4x4": () => (/* binding */ Matrix4x4),
-/* harmony export */   "Quaternion": () => (/* binding */ Quaternion),
-/* harmony export */   "Vector3": () => (/* binding */ Vector3),
-/* harmony export */   "degreesToRadians": () => (/* binding */ degreesToRadians),
-/* harmony export */   "toQuaternion": () => (/* binding */ toQuaternion)
+/* harmony export */   Matrix: () => (/* binding */ Matrix),
+/* harmony export */   Matrix3x3: () => (/* binding */ Matrix3x3),
+/* harmony export */   Matrix4x4: () => (/* binding */ Matrix4x4),
+/* harmony export */   Quaternion: () => (/* binding */ Quaternion),
+/* harmony export */   Vector3: () => (/* binding */ Vector3),
+/* harmony export */   degreesToRadians: () => (/* binding */ degreesToRadians),
+/* harmony export */   toQuaternion: () => (/* binding */ toQuaternion)
 /* harmony export */ });
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -336,7 +336,7 @@ var Matrix4x4 = /** @class */ (function (_super) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Animation": () => (/* binding */ Animation)
+/* harmony export */   Animation: () => (/* binding */ Animation)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
@@ -384,19 +384,19 @@ var Animation = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AlphaMode": () => (/* binding */ AlphaMode),
-/* harmony export */   "BufferOutputType": () => (/* binding */ BufferOutputType),
-/* harmony export */   "BufferTarget": () => (/* binding */ BufferTarget),
-/* harmony export */   "ComponentType": () => (/* binding */ ComponentType),
-/* harmony export */   "DataType": () => (/* binding */ DataType),
-/* harmony export */   "ImageOutputType": () => (/* binding */ ImageOutputType),
-/* harmony export */   "InterpolationMode": () => (/* binding */ InterpolationMode),
-/* harmony export */   "MeshMode": () => (/* binding */ MeshMode),
-/* harmony export */   "RGBAColor": () => (/* binding */ RGBAColor),
-/* harmony export */   "RGBColor": () => (/* binding */ RGBColor),
-/* harmony export */   "Transformation": () => (/* binding */ Transformation),
-/* harmony export */   "VertexColorMode": () => (/* binding */ VertexColorMode),
-/* harmony export */   "WrappingMode": () => (/* binding */ WrappingMode)
+/* harmony export */   AlphaMode: () => (/* binding */ AlphaMode),
+/* harmony export */   BufferOutputType: () => (/* binding */ BufferOutputType),
+/* harmony export */   BufferTarget: () => (/* binding */ BufferTarget),
+/* harmony export */   ComponentType: () => (/* binding */ ComponentType),
+/* harmony export */   DataType: () => (/* binding */ DataType),
+/* harmony export */   ImageOutputType: () => (/* binding */ ImageOutputType),
+/* harmony export */   InterpolationMode: () => (/* binding */ InterpolationMode),
+/* harmony export */   MeshMode: () => (/* binding */ MeshMode),
+/* harmony export */   RGBAColor: () => (/* binding */ RGBAColor),
+/* harmony export */   RGBColor: () => (/* binding */ RGBColor),
+/* harmony export */   Transformation: () => (/* binding */ Transformation),
+/* harmony export */   VertexColorMode: () => (/* binding */ VertexColorMode),
+/* harmony export */   WrappingMode: () => (/* binding */ WrappingMode)
 /* harmony export */ });
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -531,7 +531,7 @@ var BufferTarget;
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */   Mesh: () => (/* binding */ Mesh)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
@@ -574,7 +574,7 @@ var Mesh = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Material": () => (/* binding */ Material)
+/* harmony export */   Material: () => (/* binding */ Material)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
@@ -601,7 +601,7 @@ var Material = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Texture": () => (/* binding */ Texture)
+/* harmony export */   Texture: () => (/* binding */ Texture)
 /* harmony export */ });
 /* harmony import */ var _imageutils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
@@ -644,11 +644,11 @@ var Texture = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "arrayBufferIsPNG": () => (/* binding */ arrayBufferIsPNG),
-/* harmony export */   "dataUriToArrayBuffer": () => (/* binding */ dataUriToArrayBuffer),
-/* harmony export */   "encodeBase64DataUri": () => (/* binding */ encodeBase64DataUri),
-/* harmony export */   "imageToArrayBuffer": () => (/* binding */ imageToArrayBuffer),
-/* harmony export */   "imageToDataURI": () => (/* binding */ imageToDataURI)
+/* harmony export */   arrayBufferIsPNG: () => (/* binding */ arrayBufferIsPNG),
+/* harmony export */   dataUriToArrayBuffer: () => (/* binding */ dataUriToArrayBuffer),
+/* harmony export */   encodeBase64DataUri: () => (/* binding */ encodeBase64DataUri),
+/* harmony export */   imageToArrayBuffer: () => (/* binding */ imageToArrayBuffer),
+/* harmony export */   imageToDataURI: () => (/* binding */ imageToDataURI)
 /* harmony export */ });
 /**
  * Converts an image into a Data URI string.
@@ -760,7 +760,7 @@ function arrayBufferIsPNG(buffer) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Vertex": () => (/* binding */ Vertex)
+/* harmony export */   Vertex: () => (/* binding */ Vertex)
 /* harmony export */ });
 /** Represents a mesh vertex. */
 var Vertex = /** @class */ (function () {
@@ -782,7 +782,7 @@ var Vertex = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Skin": () => (/* binding */ Skin)
+/* harmony export */   Skin: () => (/* binding */ Skin)
 /* harmony export */ });
 var Skin = /** @class */ (function () {
     function Skin(skeletonNode, name) {
@@ -803,8 +803,8 @@ var Skin = /** @class */ (function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Buffer": () => (/* binding */ Buffer),
-/* harmony export */   "BufferView": () => (/* binding */ BufferView)
+/* harmony export */   Buffer: () => (/* binding */ Buffer),
+/* harmony export */   BufferView: () => (/* binding */ BufferView)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
@@ -1005,7 +1005,7 @@ var BufferView = /** @class */ (function () {
                 this._accessorMax[i] = 0;
         }
         var info = {
-            byteOffset: elementSize * (this._accessorIndex / numComponentsForDataType),
+            byteOffset: elementSize * (this._accessorIndex / numComponentsForDataType), // All previous data
             componentType: this._componentType,
             count: numElements,
             type: this._dataType,
@@ -1137,12 +1137,12 @@ function makeDivisibleBy(num, by) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addAccessor": () => (/* binding */ addAccessor),
-/* harmony export */   "addAnimations": () => (/* binding */ addAnimations),
-/* harmony export */   "addBuffer": () => (/* binding */ addBuffer),
-/* harmony export */   "addScenes": () => (/* binding */ addScenes),
-/* harmony export */   "addSkin": () => (/* binding */ addSkin),
-/* harmony export */   "createEmptyGLTF": () => (/* binding */ createEmptyGLTF)
+/* harmony export */   addAccessor: () => (/* binding */ addAccessor),
+/* harmony export */   addAnimations: () => (/* binding */ addAnimations),
+/* harmony export */   addBuffer: () => (/* binding */ addBuffer),
+/* harmony export */   addScenes: () => (/* binding */ addScenes),
+/* harmony export */   addSkin: () => (/* binding */ addSkin),
+/* harmony export */   createEmptyGLTF: () => (/* binding */ createEmptyGLTF)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 /* harmony import */ var _buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
@@ -1748,7 +1748,7 @@ function objectsEqual(obj1, obj2) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createGLBBuffer": () => (/* binding */ createGLBBuffer)
+/* harmony export */   createGLBBuffer: () => (/* binding */ createGLBBuffer)
 /* harmony export */ });
 var GLB_HEADER_SIZE = 12;
 var GLB_CHUNK_HEADER_SIZE = 8;
@@ -1877,37 +1877,37 @@ var __webpack_exports__ = {};
 (() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AlphaMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
-/* harmony export */   "Animation": () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
-/* harmony export */   "Buffer": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
-/* harmony export */   "BufferOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
-/* harmony export */   "BufferView": () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
-/* harmony export */   "ComponentType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
-/* harmony export */   "DataType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
-/* harmony export */   "GLTFAsset": () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
-/* harmony export */   "ImageOutputType": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
-/* harmony export */   "InterpolationMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
-/* harmony export */   "Material": () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
-/* harmony export */   "Matrix": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
-/* harmony export */   "Matrix3x3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
-/* harmony export */   "Matrix4x4": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
-/* harmony export */   "Mesh": () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
-/* harmony export */   "MeshMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
-/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
-/* harmony export */   "Quaternion": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
-/* harmony export */   "RGBAColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
-/* harmony export */   "RGBColor": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
-/* harmony export */   "Scene": () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
-/* harmony export */   "Skin": () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
-/* harmony export */   "Texture": () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
-/* harmony export */   "Transformation": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
-/* harmony export */   "Vector3": () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
-/* harmony export */   "Vertex": () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
-/* harmony export */   "VertexColorMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
-/* harmony export */   "WrappingMode": () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
-/* harmony export */   "exportGLB": () => (/* binding */ exportGLB),
-/* harmony export */   "exportGLTF": () => (/* binding */ exportGLTF),
-/* harmony export */   "exportGLTFZip": () => (/* binding */ exportGLTFZip)
+/* harmony export */   AlphaMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
+/* harmony export */   Animation: () => (/* reexport safe */ _animation__WEBPACK_IMPORTED_MODULE_8__.Animation),
+/* harmony export */   Buffer: () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.Buffer),
+/* harmony export */   BufferOutputType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.BufferOutputType),
+/* harmony export */   BufferView: () => (/* reexport safe */ _buffer__WEBPACK_IMPORTED_MODULE_11__.BufferView),
+/* harmony export */   ComponentType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ComponentType),
+/* harmony export */   DataType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.DataType),
+/* harmony export */   GLTFAsset: () => (/* reexport safe */ _asset__WEBPACK_IMPORTED_MODULE_0__.GLTFAsset),
+/* harmony export */   ImageOutputType: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.ImageOutputType),
+/* harmony export */   InterpolationMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.InterpolationMode),
+/* harmony export */   Material: () => (/* reexport safe */ _material__WEBPACK_IMPORTED_MODULE_4__.Material),
+/* harmony export */   Matrix: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix),
+/* harmony export */   Matrix3x3: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix3x3),
+/* harmony export */   Matrix4x4: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Matrix4x4),
+/* harmony export */   Mesh: () => (/* reexport safe */ _mesh__WEBPACK_IMPORTED_MODULE_3__.Mesh),
+/* harmony export */   MeshMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.MeshMode),
+/* harmony export */   Node: () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_2__.Node),
+/* harmony export */   Quaternion: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Quaternion),
+/* harmony export */   RGBAColor: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBAColor),
+/* harmony export */   RGBColor: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.RGBColor),
+/* harmony export */   Scene: () => (/* reexport safe */ _scene__WEBPACK_IMPORTED_MODULE_1__.Scene),
+/* harmony export */   Skin: () => (/* reexport safe */ _skin__WEBPACK_IMPORTED_MODULE_7__.Skin),
+/* harmony export */   Texture: () => (/* reexport safe */ _texture__WEBPACK_IMPORTED_MODULE_5__.Texture),
+/* harmony export */   Transformation: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.Transformation),
+/* harmony export */   Vector3: () => (/* reexport safe */ _math__WEBPACK_IMPORTED_MODULE_9__.Vector3),
+/* harmony export */   Vertex: () => (/* reexport safe */ _vertex__WEBPACK_IMPORTED_MODULE_6__.Vertex),
+/* harmony export */   VertexColorMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.VertexColorMode),
+/* harmony export */   WrappingMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.WrappingMode),
+/* harmony export */   exportGLB: () => (/* binding */ exportGLB),
+/* harmony export */   exportGLTF: () => (/* binding */ exportGLTF),
+/* harmony export */   exportGLTFZip: () => (/* binding */ exportGLTFZip)
 /* harmony export */ });
 /* harmony import */ var _asset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _scene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
@@ -1939,7 +1939,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {

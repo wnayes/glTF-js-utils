@@ -1,4 +1,4 @@
-declare module "src/types" {
+declare module "types" {
     export enum BufferOutputType {
         /** Create separate files for binary buffers (default) */
         External = 0,
@@ -87,8 +87,8 @@ declare module "src/types" {
         ELEMENT_ARRAY_BUFFER = 34963
     }
 }
-declare module "src/animation" {
-    import { InterpolationMode, Transformation } from "src/types";
+declare module "animation" {
+    import { InterpolationMode, Transformation } from "types";
     export interface KeyframeExtras {
         outTangent?: [number, number, number];
         outTangentWeight?: [number, number, number];
@@ -109,7 +109,7 @@ declare module "src/animation" {
         addKeyframe(time: number, value: number[], interpType: InterpolationMode, extras?: KeyframeExtras): void;
     }
 }
-declare module "src/math" {
+declare module "math" {
     export class Vector3 {
         constructor(x: number, y: number, z: number);
         x: number;
@@ -153,8 +153,8 @@ declare module "src/math" {
         static IsIdentity(matrix: Matrix): boolean;
     }
 }
-declare module "src/imageutils" {
-    import { TextureImageType } from "src/texture";
+declare module "imageutils" {
+    import { TextureImageType } from "texture";
     /**
      * Converts an image into a Data URI string.
      * @param image
@@ -179,8 +179,8 @@ declare module "src/imageutils" {
     /** Determines if an ArrayBuffer holds a PNG format image. */
     export function arrayBufferIsPNG(buffer: ArrayBuffer): boolean;
 }
-declare module "src/texture" {
-    import { WrappingMode } from "src/types";
+declare module "texture" {
+    import { WrappingMode } from "types";
     /**
      * Supported texture image types.
      * For ArrayBuffer, the current assumption is that the buffer contains PNG data.
@@ -197,9 +197,9 @@ declare module "src/texture" {
         constructor(image: TextureImageType);
     }
 }
-declare module "src/material" {
-    import { Texture } from "src/texture";
-    import { AlphaMode, VertexColorMode } from "src/types";
+declare module "material" {
+    import { Texture } from "texture";
+    import { AlphaMode, VertexColorMode } from "types";
     export class Material {
         name: string;
         alphaCutoff: number;
@@ -219,8 +219,8 @@ declare module "src/material" {
         metallicRoughnessTexture?: Texture;
     }
 }
-declare module "src/vertex" {
-    import { RGBColor, RGBAColor } from "src/types";
+declare module "vertex" {
+    import { RGBColor, RGBAColor } from "types";
     /** Represents a mesh vertex. */
     export class Vertex {
         x: number;
@@ -234,10 +234,10 @@ declare module "src/vertex" {
         color?: RGBColor | RGBAColor;
     }
 }
-declare module "src/mesh" {
-    import { Material } from "src/material";
-    import { Vertex } from "src/vertex";
-    import { MeshMode, RGBColor, RGBAColor } from "src/types";
+declare module "mesh" {
+    import { Material } from "material";
+    import { Vertex } from "vertex";
+    import { MeshMode, RGBColor, RGBAColor } from "types";
     export class Mesh {
         material: Material[];
         mode: MeshMode;
@@ -248,19 +248,19 @@ declare module "src/mesh" {
         forEachFace(fn: (v1: Vertex, v2: Vertex, v3: Vertex, color: RGBColor | RGBAColor | undefined, materialIndex: number) => boolean | void): void;
     }
 }
-declare module "src/skin" {
-    import { Node } from "src/node";
+declare module "skin" {
+    import { Node } from "node";
     export class Skin {
         name: string;
         skeletonNode: Node | null;
         constructor(skeletonNode?: Node | null, name?: string);
     }
 }
-declare module "src/node" {
-    import { Vector3, Quaternion, Matrix4x4 } from "src/math";
-    import { Mesh } from "src/mesh";
-    import { Animation } from "src/animation";
-    import { Skin } from "src/skin";
+declare module "node" {
+    import { Vector3, Quaternion, Matrix4x4 } from "math";
+    import { Mesh } from "mesh";
+    import { Animation } from "animation";
+    import { Skin } from "skin";
     export class Node {
         name: string;
         mesh?: Mesh;
@@ -287,8 +287,8 @@ declare module "src/node" {
         getScale(): Vector3;
     }
 }
-declare module "src/scene" {
-    import { Node } from "src/node";
+declare module "scene" {
+    import { Node } from "node";
     export class Scene {
         name: string;
         private _nodes;
@@ -298,8 +298,8 @@ declare module "src/scene" {
         forEachNode(fn: (node: Node) => void): void;
     }
 }
-declare module "src/asset" {
-    import { Scene } from "src/scene";
+declare module "asset" {
+    import { Scene } from "scene";
     export class GLTFAsset {
         copyright: string;
         defaultScene: number;
@@ -311,10 +311,10 @@ declare module "src/asset" {
         forEachScene(fn: (scene: Scene) => void): void;
     }
 }
-declare module "src/gltftypes" {
-    import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation, BufferTarget } from "src/types";
-    import { Buffer } from "src/buffer";
-    import { Node } from "src/node";
+declare module "gltftypes" {
+    import { AlphaMode, ComponentType, DataType, MeshMode, WrappingMode, BufferOutputType, ImageOutputType, InterpolationMode, Transformation, BufferTarget } from "types";
+    import { Buffer } from "buffer";
+    import { Node } from "node";
     export interface glTF {
         asset: {
             version: string;
@@ -531,9 +531,9 @@ declare module "src/gltftypes" {
         scale?: number;
     }
 }
-declare module "src/buffer" {
-    import { ComponentType, DataType } from "src/types";
-    import { glTF, glTFAttribute } from "src/gltftypes";
+declare module "buffer" {
+    import { ComponentType, DataType } from "types";
+    import { glTF, glTFAttribute } from "gltftypes";
     export class Buffer {
         private _gltf;
         private _gltfBuffer;
@@ -593,16 +593,16 @@ declare module "src/buffer" {
         normalized?: boolean;
     }
 }
-declare module "src/glb" {
+declare module "glb" {
     export function createGLBBuffer(json: string, bin?: ArrayBuffer | null): ArrayBuffer;
 }
-declare module "src/gltf" {
-    import { glTF } from "src/gltftypes";
-    import { GLTFAsset } from "src/asset";
-    import { Node } from "src/node";
-    import { Buffer, BufferAccessorInfo } from "src/buffer";
-    import { Animation } from "src/animation";
-    import { Skin } from "src/skin";
+declare module "gltf" {
+    import { glTF } from "gltftypes";
+    import { GLTFAsset } from "asset";
+    import { Node } from "node";
+    import { Buffer, BufferAccessorInfo } from "buffer";
+    import { Animation } from "animation";
+    import { Skin } from "skin";
     export function createEmptyGLTF(): glTF;
     export function addScenes(gltf: glTF, asset: GLTFAsset): void;
     export function addSkin(gltf: glTF, skin: Skin, node: Node): number;
@@ -610,23 +610,23 @@ declare module "src/gltf" {
     export function addBuffer(gltf: glTF): Buffer;
     export function addAccessor(gltf: glTF, bufferViewIndex: number, accessorInfo: BufferAccessorInfo): number;
 }
-declare module "src/index" {
-    export { GLTFAsset } from "src/asset";
-    export { Scene } from "src/scene";
-    export { Node } from "src/node";
-    export { Mesh } from "src/mesh";
-    export { Material } from "src/material";
-    export { Texture } from "src/texture";
-    export { Vertex } from "src/vertex";
-    export { Skin } from "src/skin";
-    export { Animation } from "src/animation";
-    export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "src/math";
-    export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode, InterpolationMode, Transformation, } from "src/types";
-    export { ImageOutputType, BufferOutputType } from "src/types";
-    export { Buffer, BufferView } from "src/buffer";
-    export type { BufferAccessorInfo } from "src/buffer";
-    import { GLTFAsset } from "src/asset";
-    import { ImageOutputType, BufferOutputType } from "src/types";
+declare module "index" {
+    export { GLTFAsset } from "asset";
+    export { Scene } from "scene";
+    export { Node } from "node";
+    export { Mesh } from "mesh";
+    export { Material } from "material";
+    export { Texture } from "texture";
+    export { Vertex } from "vertex";
+    export { Skin } from "skin";
+    export { Animation } from "animation";
+    export { Vector3, Quaternion, Matrix, Matrix3x3, Matrix4x4 } from "math";
+    export { AlphaMode, ComponentType, DataType, MeshMode, RGBColor, RGBAColor, VertexColorMode, WrappingMode, InterpolationMode, Transformation, } from "types";
+    export { ImageOutputType, BufferOutputType } from "types";
+    export { Buffer, BufferView } from "buffer";
+    export type { BufferAccessorInfo } from "buffer";
+    import { GLTFAsset } from "asset";
+    import { ImageOutputType, BufferOutputType } from "types";
     import * as jsz from "jszip";
     /** Options for glTF export APIs. */
     export interface GLTFExportOptions {
@@ -684,13 +684,3 @@ declare module "src/index" {
      */
     export function exportGLB(asset: GLTFAsset): Promise<ArrayBuffer>;
 }
-declare module "test/asset.spec" {
-    import "mocha";
-}
-declare module "test/math.spec" {
-    import "mocha";
-}
-declare module "test/texture.spec" {
-    import "mocha";
-}
-declare module "test/integration/triangle.spec" { }

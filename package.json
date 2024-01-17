@@ -5,8 +5,8 @@
   "main": "./dist/gltfjsutils.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "webpack & tsc --emitDeclarationOnly true --declaration --outFile \"./dist/gltfjsutils.d.ts\"",
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register --recursive --extension spec.ts test"
+    "build": "webpack & tsc -p ./src --emitDeclarationOnly true --declaration --outFile \"./dist/gltfjsutils.d.ts\"",
+    "test": "cross-env TS_NODE_PROJECT='./test/tsconfig.json' mocha --require ts-node/register --recursive --extension spec.ts test"
   },
   "keywords": [
     "glTF"
@@ -18,20 +18,20 @@
     "url": "https://github.com/wnayes/gltf-js-utils.git"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.11",
     "@types/jszip": "^3.4.1",
-    "@types/mocha": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
-    "chai": "^4.3.7",
+    "@types/mocha": "^10.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "chai": "^4.4.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.27.0",
+    "eslint": "^8.56.0",
     "gltf-validator": "^2.0.0-dev.3.9",
-    "mocha": "^10.1.0",
-    "ts-loader": "^9.4.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.4",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^4.10.0"
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }
