@@ -2085,8 +2085,6 @@ function makeDivisibleBy(num, by) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _src_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
@@ -2655,8 +2653,6 @@ function __typingTests() {
         isEither(value["something"]);
     });
 }
-
-})();
 
 /******/ })()
 ;
