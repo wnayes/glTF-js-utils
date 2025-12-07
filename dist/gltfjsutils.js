@@ -1752,7 +1752,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var GLB_HEADER_SIZE = 12;
 var GLB_CHUNK_HEADER_SIZE = 8;
-var GLB_MAGIC = 0x46546C67;
+var GLB_MAGIC = 0x46546c67;
 var GLTF_VERSION = 2;
 var GLBChunkType;
 (function (GLBChunkType) {
@@ -1793,8 +1793,8 @@ function writeChunk(out, chunk, offset, chunkType, pad) {
     if (pad === void 0) { pad = 0; }
     var chunkLength = makeDivisibleBy(chunk.byteLength, 4);
     out.setUint32(offset, chunkLength, true);
-    out.setUint32(offset += 4, chunkType, true);
-    writeArrayBuffer(out.buffer, chunk, offset += 4, 0, chunk.byteLength);
+    out.setUint32((offset += 4), chunkType, true);
+    writeArrayBuffer(out.buffer, chunk, (offset += 4), 0, chunk.byteLength);
     offset += chunk.byteLength;
     while (offset % 4) {
         if (pad) {
@@ -1805,7 +1805,7 @@ function writeChunk(out, chunk, offset, chunkType, pad) {
     return offset;
 }
 function textToArrayBuffer(json) {
-    return (new TextEncoder()).encode(json).buffer;
+    return new TextEncoder().encode(json).buffer;
 }
 function writeArrayBuffer(target, src, targetOffset, srcOffset, byteLength) {
     new Uint8Array(target, targetOffset, byteLength).set(new Uint8Array(src, srcOffset, byteLength), 0);
@@ -1934,8 +1934,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
