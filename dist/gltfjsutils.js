@@ -7,7 +7,7 @@
 		exports["GLTFUtils"] = factory();
 	else
 		root["GLTFUtils"] = factory();
-})(typeof self !== 'undefined' ? self : this, () => {
+})(Object(typeof self !== 'undefined' ? self : this), () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
@@ -1873,6 +1873,8 @@ function makeDivisibleBy(num, by) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   AlphaMode: () => (/* reexport safe */ _types__WEBPACK_IMPORTED_MODULE_10__.AlphaMode),
@@ -2089,6 +2091,8 @@ function exportGLB(asset) {
         });
     });
 }
+
+})();
 
 /******/ 	return __webpack_exports__;
 /******/ })()
